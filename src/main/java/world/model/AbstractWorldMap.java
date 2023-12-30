@@ -1,6 +1,6 @@
-package agh.ics.oop.model;
+package world.model;
 
-import agh.ics.oop.model.util.MapVisualizer;
+import world.model.util.MapVisualizer;
 
 import java.util.*;
 

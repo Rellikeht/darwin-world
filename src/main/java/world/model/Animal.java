@@ -1,6 +1,6 @@
-package agh.ics.oop.model;
+package world.model;
 
-import static agh.ics.oop.model.MapDirection.*;
+import static world.model.MapDirection.*;
 
 public class Animal implements WorldElement {
 

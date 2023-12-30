@@ -1,6 +1,6 @@
-package agh.ics.oop;
+package world;
 
-import agh.ics.oop.model.*;
+import world.model.*;
 
 import java.util.ArrayList;
 import java.util.List;

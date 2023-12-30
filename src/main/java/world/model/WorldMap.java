@@ -1,7 +1,7 @@
-package agh.ics.oop.model;
+package world.model;
 
-import agh.ics.oop.model.MoveDirection;
-import agh.ics.oop.model.Vector2d;
+import world.model.MoveDirection;
+import world.model.Vector2d;
 
 import java.util.List;
 

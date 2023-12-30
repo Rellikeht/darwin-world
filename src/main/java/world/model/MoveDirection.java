@@ -1,4 +1,4 @@
-package agh.ics.oop.model;
+package world.model;
 
 public enum MoveDirection {
     FORWARD, BACKWARD, LEFT, RIGHT

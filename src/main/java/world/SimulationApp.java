@@ -1,10 +1,10 @@
-package agh.ics.oop;
+package world;
 
-import agh.ics.oop.model.GrassField;
-import agh.ics.oop.model.MoveDirection;
-import agh.ics.oop.model.Vector2d;
-import agh.ics.oop.model.WorldMap;
-import agh.ics.oop.presenter.SimulationPresenter;
+import world.model.GrassField;
+import world.model.MoveDirection;
+import world.model.Vector2d;
+import world.model.WorldMap;
+//import world.presenter.SimulationPresenter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -22,10 +22,10 @@ public class SimulationApp extends Application {
         BorderPane viewRoot = loader.load();
         configureStage(primaryStage, viewRoot);
 
-        SimulationPresenter presenter = loader.getController();
-        WorldMap map = new GrassField(10);
-        presenter.setWorldMap(map);
-        map.addListener(presenter);
+//        SimulationPresenter presenter = loader.getController();
+//        WorldMap map = new GrassField(10);
+//        presenter.setWorldMap(map);
+//        map.addListener(presenter);
 
         primaryStage.show();
     }

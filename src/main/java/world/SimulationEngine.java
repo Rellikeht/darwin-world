@@ -1,4 +1,4 @@
-package agh.ics.oop;
+package world;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
