@@ -6,6 +6,15 @@ public class Animal implements WorldElement {
 
     private MapDirection orientation = NORTH;
     private Vector2d position = new Vector2d(2, 2);
+
+    public int getEnergy() {
+        return energy;
+    }
+
+    public void setEnergy(int energy) {
+        this.energy = energy;
+    }
+
     private int energy;
 
     public Animal() {
