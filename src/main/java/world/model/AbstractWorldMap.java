@@ -6,6 +6,7 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     protected final Map<Vector2d, List<Animal>> animals;
     protected final Map<Vector2d, Grass> grass;
+    protected int grassEnergy;
 
     protected final Vector2d upperRight, lowerLeft;
     protected final Boundary boundary;
@@ -17,10 +18,10 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected final int id;
 
     //public AbstractWorldMap(int initialSize) {
-    public AbstractWorldMap(int width, int height, int animal_amount, int grass_amount) {
+    public AbstractWorldMap(int width, int height, int animal_amount, int grass_amount,int grassEnergyy) {
         animals = new HashMap<>(animal_amount);
         grass = new HashMap<>(grass_amount);
-
+        grassEnergy=grassEnergyy;
         //listeners = new LinkedHashSet<>();
 
         lowerLeft = new Vector2d(0, 0);
@@ -40,15 +41,19 @@ public abstract class AbstractWorldMap implements WorldMap {
         //mapChanged("Animal at %s is moving".formatted(
         //        animal.getPosition().toString())
         //);
-        Vector2d firstPosition=animal.getPosition();
-        List<Animal> animalsAtBefore=animals.get(firstPosition);
-        animals.remove(firstPosition);
+        Vector2d beforePosition=animal.getPosition();
+        List<Animal> animalsAtBefore=animals.get(beforePosition);
+        animals.remove(beforePosition);
         animalsAtBefore.remove(animal);
         animal.move(direction, this);
-        List<Animal> animalsAtAfter=animals.get(animal.getPosition());
+        Vector2d afterPosition=animal.getPosition();
+        if(!beforePosition.equals(afterPosition) && grass.containsKey(afterPosition)){
+            animal.setEnergy(animal.getEnergy()+grassEnergy);
+        }
+        List<Animal> animalsAtAfter=animals.get(afterPosition);
         animalsAtAfter.add(animal);
-        animals.put(animal.getPosition(), animalsAtBefore);
-        animals.put(animal.getPosition(), animalsAtAfter);
+        animals.put(beforePosition, animalsAtBefore);
+        animals.put(afterPosition, animalsAtAfter);
     }
 
     // obiektów może być wiele
