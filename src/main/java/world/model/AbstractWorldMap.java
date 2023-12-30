@@ -1,6 +1,10 @@
 package world.model;
 
+import world.util.MapVisualizer;
+
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class AbstractWorldMap implements WorldMap {
 
@@ -10,7 +14,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected final Vector2d upperRight, lowerLeft;
 //    protected final Boundary boundary;
     protected final Set<MapChangeListener> listeners;
-    //protected final MapVisualizer visualizer = new MapVisualizer(this);
+    protected final MapVisualizer visualizer = new MapVisualizer(this);
 
     protected static int curId = 0;
     protected final int id;
@@ -25,10 +29,14 @@ public abstract class AbstractWorldMap implements WorldMap {
     public int getId() { return this.id; }
     public Vector2d getUpperRight() { return upperRight; }
 
-    //public AbstractWorldMap(int initialSize) {
-    public AbstractWorldMap(int width, int height, int animal_amount, int grass_amount) {
-        animals = new HashMap<>(animal_amount);
-        grass = new HashMap<>(grass_amount);
+    // To jest raczej źle
+    // animal amount nic nie robi
+    // Nie wiem, jak to zrobić w sumie
+    // Chociaż można też zostawić i generować na sztywno
+    // ze stałych w simulation
+    public AbstractWorldMap(int width, int height, int initialAnimalAmount, int initialGrassAmount) {
+        animals = new HashMap<>(initialAnimalAmount);
+        grass = new HashMap<>(initialGrassAmount);
         listeners = new LinkedHashSet<>();
 
         // TODO staty
@@ -51,10 +59,12 @@ public abstract class AbstractWorldMap implements WorldMap {
         animals.put(animal.getPosition(), animalsAt);
     }
 
-    public void move(Animal animal, MoveDirection direction) {
-        //mapChanged("Animal at %s is moving".formatted(
-        //        animal.getPosition().toString())
-        //);
+    public void move(Animal animal, Direction direction) {
+        // TODO praktycznie cały ruch do zrobienia
+
+        mapChanged("Animal at %s is moving".formatted(
+                animal.getPosition().toString())
+        );
         Vector2d beforePosition=animal.getPosition();
         List<Animal> animalsAtBefore=animals.getOrDefault(beforePosition, new ArrayList<>());
         animals.remove(beforePosition);
@@ -87,9 +97,16 @@ public abstract class AbstractWorldMap implements WorldMap {
 //        return !animals.containsKey(position);
 //    }
 
-    @Override
+//    @Override
     public boolean isOccupied(Vector2d position) {
         return animals.containsKey(position);
+    }
+
+    public List<Animal> getAnimals() {
+        // Przyjemne, trzeba przyznać
+        return animals.values().stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
     }
 
 //    @Override
@@ -99,23 +116,35 @@ public abstract class AbstractWorldMap implements WorldMap {
 //        return lst;
 //    }
 
-    //public String toString() {
-    //    Boundary bounds = getCurrentBounds();
-    //    return visualizer.draw(bounds.lowerLeft(), bounds.upperRight());
-    //}
+    public String toString() {
+        return visualizer.draw(lowerLeft, upperRight);
+    }
 
     @Override
-    public void addListener(MapChangeListener listener) {listeners.add(listener);}
+    public void addListener(MapChangeListener listener) { listeners.add(listener); }
     @Override
-    public void removeListener(MapChangeListener listener) {listeners.remove(listener);}
+    public void removeListener(MapChangeListener listener) { listeners.remove(listener); }
     private void mapChanged(String message) {
         for (MapChangeListener listener : listeners) {
             listener.mapChanged(this, message);
         }
     }
 
-    public int amountAt(Vector2d position) {
-        return 0;
+    public String getAt(Vector2d position) {
+        List<Animal> animalsAt = animals.get(position);
+        if (animalsAt != null) {
+            if (animalsAt.size() == 1) {
+                return animalsAt.get(0).toString();
+            } else if (animalsAt.size() > 1 && animalsAt.size() < 10) {
+                return Integer.toString(animalsAt.size());
+            } else if (animalsAt.size() >= 10) {
+                return "#";
+            }
+        }
+
+        Grass grassAt = grass.get(position);
+        if (grassAt != null) { return grassAt.toString(); }
+        return "";
     }
 
 //    @Override

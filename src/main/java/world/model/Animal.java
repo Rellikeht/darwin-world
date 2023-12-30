@@ -28,15 +28,19 @@ public class Animal implements WorldElement {
         // TODO staty
     }
 
-//    @Override
-//    public String toString() {
-//        return switch (this.orientation) {
-//            case NORTH -> "u";
-//            case EAST -> "r";
-//            case SOUTH -> "d";
-//            case WEST -> "l";
-//        };
-//    }
+    @Override
+    public String toString() {
+        return switch (this.direction) {
+            case D0 -> "↑";
+            case D45 -> "↗";
+            case D90 -> "→";
+            case D135 -> "↘";
+            case D180 -> "↓";
+            case D225 -> "↙";
+            case D270 -> "←";
+            case D315 -> "↖";
+        };
+    }
 
     //public boolean isAt(Vector2d position) { return this.position.equals(position); }
 

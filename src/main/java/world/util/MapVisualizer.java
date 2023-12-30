@@ -79,14 +79,8 @@ public class MapVisualizer {
     // Tu by trzeba ostro modyfikować logikę, żeby wyświetlać ilość obiektów
     // albo obiekt, tu by w sumie się jakiś variant (typ algebraiczny) przydał
     private String drawObject(Vector2d currentPosition) {
-        if (this.map.isOccupied(currentPosition)) {
-//            Object object = this.map.amountAt(currentPosition);
-            int amount = this.map.amountAt(currentPosition);
-            if (amount != 0) {
-//                return object.toString();
-                return Integer.toString(amount);
-            }
-        }
+        String obj = map.getAt(currentPosition);
+        if (obj.length() == 1) { return obj; }
         return EMPTY_CELL;
     }
 }

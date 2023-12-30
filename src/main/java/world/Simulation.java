@@ -1,5 +1,6 @@
 package world;
 
+import javafx.geometry.Orientation;
 import world.model.*;
 
 import java.util.ArrayList;
@@ -34,15 +35,14 @@ public class Simulation implements Runnable {
     private int totalAnimalAmount = INITIAL_ANIMAL_AMOUNT;
 
     // To raczej jest zbędne
-    private int frameNum;
+    private int frameNum = 0;
 
-
-    public Simulation(WorldMap map) {
-        this.animals = new ArrayList<Animal>();
+    public Simulation(WorldMap map, int initialAnimalAmount) {
+        this.animals = new ArrayList<Animal>(initialAnimalAmount);
         this.map = map;
         Vector2d maxPos = map.getUpperRight();
 
-        for (int i = 0; i < INITIAL_ANIMAL_AMOUNT; i++) {
+        for (int i = 0; i < initialAnimalAmount; i++) {
             Random random = new Random();
             Genome genome = new Genome(GENOME_LENGTH);
 
@@ -63,17 +63,25 @@ public class Simulation implements Runnable {
         }
     }
 
-    private void prepare() {
-        this.frameNum = 0;
+    public Simulation(WorldMap map) {
+        this(map, INITIAL_ANIMAL_AMOUNT);
     }
+
+//    private void prepare() {
+//        this.frameNum = 0;
+//    }
 
     private void frame() {
 //        map.move(curAnimal, moves.get(frameNum));
+        List<Animal> animals = map.getAnimals();
+        for (Animal a : animals) {
+            map.move(a, Direction.D0);
+        }
+
         frameNum++;
     }
 
     public void run() {
-//        for (int i = 0; i < moves.size(); i++) {
         while (true) {
             frame();
             try {

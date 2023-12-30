@@ -1,8 +1,5 @@
 package world.model;
 
-import world.model.MoveDirection;
-import world.model.Vector2d;
-
 import java.util.List;
 
 /**
@@ -11,7 +8,7 @@ import java.util.List;
  *
  * @author apohllo, idzik
  */
-public interface WorldMap extends MoveValidator {
+public interface WorldMap {
 
     //void place(Animal animal) throws PositionAlreadyOccupiedException;
     void place(Animal animal);
@@ -20,7 +17,7 @@ public interface WorldMap extends MoveValidator {
      * Moves an animal (if it is present on the map) according to specified direction.
      * If the move is not possible, this method has no effect.
      */
-    //void move(Animal animal, MoveDirection direction);
+    void move(Animal animal, Direction direction);
 
     /**
      * Return true if given position on the map is occupied. Should not be
@@ -52,5 +49,7 @@ public interface WorldMap extends MoveValidator {
     // Tutaj generalnie można by zrobić logikę, żeby wywalać obiekt lub ilość na danym polu,
     // albo tylko ilość, jak będziemy leniwi
     //WorldElement objectAt(Vector2d position);
-    int amountAt(Vector2d currentPosition);
+    String getAt(Vector2d currentPosition);
+    public List<Animal> getAnimals();
+
 }
