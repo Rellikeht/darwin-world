@@ -4,6 +4,8 @@ import world.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.Vector;
 
 public class Simulation implements Runnable {
     private static final int MAP_HEIGHT = 30;
@@ -27,12 +29,21 @@ public class Simulation implements Runnable {
     private final WorldMap map;
     private int frameNum;
 
+
     public Simulation(WorldMap map) {
-        animals = new ArrayList<Animal>();
+        this.animals = new ArrayList<Animal>();
         this.map = map;
+        Vector2d maxPos = map.getUpperRight();
+
         for (int i = 0; i < INITIAL_ANIMAL_AMOUNT; i++) {
-            Genome genome=new Genome(GENOME_LENGTH);
-            //Animal animal = new Animal(startingPositions.get(i), 10,genome);
+            Genome genome = new Genome(GENOME_LENGTH);
+            Random random = new Random();
+            Animal animal = new Animal(
+                    new Vector2d(random.nextInt(maxPos.getX()), random.nextInt(maxPos.getY())),
+                    Orientation.values()[random.nextInt(Orientation.values().length)],
+                    INITIAL_ANIMAL_ENERGY,
+                    genome
+            );
 //            try {
 //                map.place(animal);
 //                animals.add(animal);

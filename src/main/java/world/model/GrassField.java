@@ -1,17 +1,9 @@
 package world.model;
 
-import world.model.util.MapVisualizer;
-
-import javax.swing.*;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+// Ta klasa jest tu tylko po to, żeby mieć kod blisko
 public class GrassField extends AbstractWorldMap {
-    public GrassField(int width, int height) {
-        super(width, height);
+    public GrassField(int width, int height, int animal_amount, int grass_amount, int grassEnergy) {
+        super(width, height, animal_amount, grass_amount, grassEnergy);
     }
 
 

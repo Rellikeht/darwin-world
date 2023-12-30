@@ -9,7 +9,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected int grassEnergy;
 
     protected final Vector2d upperRight, lowerLeft;
-    protected final Boundary boundary;
+//    protected final Boundary boundary;
 
     //protected final Set<MapChangeListener> listeners;
     //protected final MapVisualizer visualizer = new MapVisualizer(this);
@@ -18,17 +18,17 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected final int id;
 
     //public AbstractWorldMap(int initialSize) {
-    public AbstractWorldMap(int width, int height, int animal_amount, int grass_amount,int grassEnergyy) {
+    public AbstractWorldMap(int width, int height, int animal_amount, int grass_amount, int grassEnergy) {
         animals = new HashMap<>(animal_amount);
         grass = new HashMap<>(grass_amount);
-        grassEnergy=grassEnergyy;
+        grassEnergy = grassEnergy;
         //listeners = new LinkedHashSet<>();
 
         lowerLeft = new Vector2d(0, 0);
         upperRight = new Vector2d(width-1, height-1);
         this.id = curId;
         curId += 1;
-        boundary = new Boundary(lowerLeft, upperRight);
+//        boundary = new Boundary(lowerLeft, upperRight);
     }
 
     public void place(Animal animal)  {
@@ -45,7 +45,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         List<Animal> animalsAtBefore=animals.getOrDefault(beforePosition, new ArrayList<>());
         animals.remove(beforePosition);
         animalsAtBefore.remove(animal);
-        animal.move(direction, this);
+        //animal.move(direction, this);
         Vector2d afterPosition=animal.getPosition();
         if(!beforePosition.equals(afterPosition) && grass.containsKey(afterPosition)){
             animal.setEnergy(animal.getEnergy()+grassEnergy);
@@ -66,12 +66,12 @@ public abstract class AbstractWorldMap implements WorldMap {
 //    public boolean canMoveTo(Vector2d position) {
 //        return !animals.containsKey(position);
 //    }
-//
-//    @Override
-//    public boolean isOccupied(Vector2d position) {
-//        return animals.containsKey(position);
-//    }
-//
+
+    @Override
+    public boolean isOccupied(Vector2d position) {
+        return animals.containsKey(position);
+    }
+
 //    @Override
 //    public List<WorldElement> getElements() {
 //        List<WorldElement> lst = new ArrayList<>(animals.size());
@@ -98,7 +98,15 @@ public abstract class AbstractWorldMap implements WorldMap {
         return this.id;
     }
 
-    @Override
-    public Boundary getCurrentBounds() {return boundary;}
+    public Vector2d getUpperRight() {
+        return upperRight;
+    }
+
+    public int amountAt(Vector2d position) {
+        return 0;
+    }
+
+//    @Override
+//    public Boundary getCurrentBounds() {return boundary;}
 
 }

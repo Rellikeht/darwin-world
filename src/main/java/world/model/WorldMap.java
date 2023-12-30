@@ -29,7 +29,7 @@ public interface WorldMap extends MoveValidator {
      * @param position Position to check.
      * @return True if the position is occupied.
      */
-    //boolean isOccupied(Vector2d position);
+    boolean isOccupied(Vector2d position);
 
     /**
      * Return an animal at a given position.
@@ -37,15 +37,20 @@ public interface WorldMap extends MoveValidator {
      * @param position The position of the animal.
      * @return animal or null if the position is not occupied.
      */
-    //WorldElement objectAt(Vector2d position);
 
     //List<WorldElement> getElements();
 
-    Boundary getCurrentBounds();
+    //Boundary getCurrentBounds();
+    Vector2d getUpperRight();
 
     //void addListener(MapChangeListener listener);
 
     //void removeListener(MapChangeListener listener);
 
     int getId();
+
+    // Tutaj generalnie można by zrobić logikę, żeby wywalać obiekt lub ilość na danym polu,
+    // albo tylko ilość, jak będziemy leniwi
+    //WorldElement objectAt(Vector2d position);
+    int amountAt(Vector2d currentPosition);
 }

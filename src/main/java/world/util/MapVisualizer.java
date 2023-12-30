@@ -1,4 +1,4 @@
-package world.model.util;
+package world.util;
 
 import world.model.Vector2d;
 import world.model.WorldMap;
@@ -9,6 +9,9 @@ import world.model.WorldMap;
  *
  * @author apohllo, idzik
  */
+
+    // Zmuszenie tego do działania w naszych warunkach może być nieco niewykonalne
+    // ale może się przydać
 public class MapVisualizer {
     private static final String EMPTY_CELL = " ";
     private static final String FRAME_SEGMENT = "-";
@@ -73,11 +76,15 @@ public class MapVisualizer {
         return builder.toString();
     }
 
+    // Tu by trzeba ostro modyfikować logikę, żeby wyświetlać ilość obiektów
+    // albo obiekt, tu by w sumie się jakiś variant (typ algebraiczny) przydał
     private String drawObject(Vector2d currentPosition) {
         if (this.map.isOccupied(currentPosition)) {
-            Object object = this.map.objectAt(currentPosition);
-            if (object != null) {
-                return object.toString();
+//            Object object = this.map.amountAt(currentPosition);
+            int amount = this.map.amountAt(currentPosition);
+            if (amount != 0) {
+//                return object.toString();
+                return Integer.toString(amount);
             }
         }
         return EMPTY_CELL;
