@@ -42,7 +42,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         //        animal.getPosition().toString())
         //);
         Vector2d beforePosition=animal.getPosition();
-        List<Animal> animalsAtBefore=animals.get(beforePosition);
+        List<Animal> animalsAtBefore=animals.getOrDefault(beforePosition, new ArrayList<>());
         animals.remove(beforePosition);
         animalsAtBefore.remove(animal);
         animal.move(direction, this);
@@ -50,7 +50,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         if(!beforePosition.equals(afterPosition) && grass.containsKey(afterPosition)){
             animal.setEnergy(animal.getEnergy()+grassEnergy);
         }
-        List<Animal> animalsAtAfter=animals.get(afterPosition);
+        List<Animal> animalsAtAfter=animals.getOrDefault(afterPosition, new ArrayList<>());
         animalsAtAfter.add(animal);
         animals.put(beforePosition, animalsAtBefore);
         animals.put(afterPosition, animalsAtAfter);
