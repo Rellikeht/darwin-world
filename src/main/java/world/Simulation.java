@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Random;
 
 public class Simulation implements Runnable {
+
+    // Stałe
     private static final int MAP_HEIGHT = 30;
     private static final int MAP_WIDTH = 100;
     private static final int INITIAL_GRASS_AMOUNT = 300;
@@ -21,13 +23,17 @@ public class Simulation implements Runnable {
     private static final int GENOME_LENGTH = 10;
     private static final int INITIAL_JUNGLE_SIZE = 5;
 
+    // Dane i elementy
     private final boolean behaviorVariant = false;
     private final boolean mapVariant = false;
     private final boolean growthVariant = false;
     private final List<Animal> animals;
     private final WorldMap map;
 
-    private int animalAmount = INITIAL_ANIMAL_AMOUNT;
+    // Staty
+    private int totalAnimalAmount = INITIAL_ANIMAL_AMOUNT;
+
+    // To raczej jest zbędne
     private int frameNum;
 
 
@@ -39,6 +45,8 @@ public class Simulation implements Runnable {
         for (int i = 0; i < INITIAL_ANIMAL_AMOUNT; i++) {
             Random random = new Random();
             Genome genome = new Genome(GENOME_LENGTH);
+
+            // TODO staty
 
             Animal animal = new Animal(
                     new Vector2d(
@@ -68,8 +76,11 @@ public class Simulation implements Runnable {
 //        for (int i = 0; i < moves.size(); i++) {
         while (true) {
             frame();
-            try { Thread.sleep(250); }
-            catch (InterruptedException e) { throw new RuntimeException(e); }
+            try {
+                Thread.sleep(250);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

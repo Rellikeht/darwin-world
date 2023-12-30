@@ -2,10 +2,14 @@ package world.model;
 
 public class Animal implements WorldElement {
 
+    // Atrybuty
     private Direction direction;
     private Vector2d position;
-    private int energy;
     private final Genome genes;
+    private int energy;
+
+    // Staty
+    private int grassEaten = 0;
 
     public int getEnergy() {
         return energy;
@@ -20,6 +24,8 @@ public class Animal implements WorldElement {
         this.direction = direction;
         this.genes = genes;
         this.energy = energy;
+
+        // TODO staty
     }
 
 //    @Override
@@ -32,7 +38,7 @@ public class Animal implements WorldElement {
 //        };
 //    }
 
-    public boolean isAt(Vector2d position) { return this.position.equals(position); }
+    //public boolean isAt(Vector2d position) { return this.position.equals(position); }
 
     public Vector2d getPosition() { return this.position; }
     public Direction getOrientation() { return this.direction; }

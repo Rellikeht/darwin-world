@@ -3,7 +3,7 @@ v Składa się ze zwykłej, prostokątnej połaci podzielonej na kwadratowe pola
  Niektóre rejeony porasta jednak dżungla, gdzie rośliny rosną dużo szybciej.
  Rośliny będą wyrastały w losowych miejscach, ale ich koncentracja będzie większa w dżungli niż na stepie.
  
- Nasze zwierzęta, które są roślinożercami, będą przemierzały ten świat w poszukiwaniu pożywienia.
+v Nasze zwierzęta, które są roślinożercami, będą przemierzały ten świat w poszukiwaniu pożywienia.
 v Każdy zwierzak ma określoną energię,
  która zmniejsza się co dnia.
  Znalezienie i zjedzenie rośliny zwiększa poziom energii o pewną wartość.
