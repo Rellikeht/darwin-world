@@ -43,9 +43,9 @@ public interface WorldMap extends MoveValidator {
 
     Boundary getCurrentBounds();
 
-    void addListener(MapChangeListener listener);
+    //void addListener(MapChangeListener listener);
 
-    void removeListener(MapChangeListener listener);
+    //void removeListener(MapChangeListener listener);
 
     int getId();
 }

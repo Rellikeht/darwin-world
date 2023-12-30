@@ -29,17 +29,11 @@ public class Vector2d {
     }
 
     public Vector2d upperRight(Vector2d other) {
-        return new Vector2d(
-                (x > other.x) ? x : other.x,
-                (y > other.y) ? y : other.y
-        );
+        return new Vector2d( Math.max(x, other.x), Math.max(y, other.y) );
     }
 
     public Vector2d lowerLeft(Vector2d other) {
-        return new Vector2d(
-                (x < other.x) ? x : other.x,
-                (y < other.y) ? y : other.y
-        );
+        return new Vector2d( Math.min(x, other.x), Math.min(y, other.y) );
     }
 
     public Vector2d opposite() { return new Vector2d(-x, -y); }
