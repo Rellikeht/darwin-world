@@ -6,12 +6,15 @@ public class Animal implements WorldElement {
 
     private MapDirection orientation = NORTH;
     private Vector2d position = new Vector2d(2, 2);
+    private int energy;
 
     public Animal() {
         // simply default constructor
     }
-    public Animal(Vector2d position) {
+    public Animal(Vector2d position,int energy) {
+
         this.position = position;
+        this.energy=energy;
     }
 
     @Override

@@ -19,7 +19,7 @@ public class Simulation implements Runnable {
         this.map = map;
 
         for (int i = 0; i < amount; i++) {
-            Animal animal = new Animal(startingPositions.get(i));
+            Animal animal = new Animal(startingPositions.get(i),10);
             try {
                 map.place(animal);
                 animals.add(animal);
