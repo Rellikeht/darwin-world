@@ -1,7 +1,9 @@
 package world;
 
 public class Main {
+
     public static void main(String[] args) {
-        System.out.println("Hello");
+        int[] gene_amount = new int[5];
+        System.out.println(gene_amount[0]);
     }
 }

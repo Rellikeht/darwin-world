@@ -1,11 +1,15 @@
 package world.model;
 
+import java.util.ArrayList;
+
 import static world.model.MapDirection.*;
 
 public class Animal implements WorldElement {
 
     private MapDirection orientation = NORTH;
     private Vector2d position = new Vector2d(2, 2);
+    private int energy;
+    private Genome genes;
 
     public int getEnergy() {
         return energy;
@@ -15,34 +19,24 @@ public class Animal implements WorldElement {
         this.energy = energy;
     }
 
-    private int energy;
-
-    public Animal() {
-        // simply default constructor
-    }
-    public Animal(Vector2d position,int energy) {
-
+    public Animal(Vector2d position, int energy, Genome genes) {
+        this.genes = genes;
         this.position = position;
-        this.energy=energy;
+        this.energy = energy;
     }
 
     @Override
     public String toString() {
         return switch (this.orientation) {
-            case NORTH -> "↑";
-            case EAST -> "→";
-            case SOUTH -> "↓";
-            case WEST -> "←";
+            case NORTH -> "u";
+            case EAST -> "r";
+            case SOUTH -> "d";
+            case WEST -> "l";
         };
-
-        //return "Pozycja: %s\nOrientacja: %s"
-        //        .formatted(this.position.toString(),
-        //                this.orientation.toString());
     }
 
     public boolean isAt(Vector2d position) { return this.position.equals(position); }
 
-    // Czy to jest dobrze i dlaczego jest źle
     public Vector2d getPosition() { return this.position; }
     public MapDirection getOrientation() {return this.orientation;}
 
@@ -57,7 +51,11 @@ public class Animal implements WorldElement {
     public void move(MoveDirection direction, MoveValidator validator) {
         Vector2d newPos = newPos(position, orientation, direction);
         switch (direction) {
-            case FORWARD, BACKWARD -> { if (validator.canMoveTo(newPos)) { this.position = newPos; }; }
+            case FORWARD, BACKWARD -> {
+//                if (validator.canMoveTo(newPos)) {
+                    this.position = newPos;
+//                };
+            }
             case LEFT -> this.orientation = this.orientation.previous();
             case RIGHT -> this.orientation = this.orientation.next();
         }

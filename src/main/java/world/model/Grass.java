@@ -10,5 +10,4 @@ public class Grass implements WorldElement {
 
     public Vector2d getPosition() { return this.position; }
     public String toString() { return "*"; }
-
 }

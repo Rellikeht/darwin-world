@@ -2,9 +2,7 @@ package world.model;
 
 import java.util.Objects;
 
-public class Vector2d {
-
-    private final int x, y;
+public record Vector2d(int x, int y) {
 
     public int getX() {
         return x;
