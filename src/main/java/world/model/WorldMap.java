@@ -14,6 +14,7 @@ import java.util.List;
 public interface WorldMap extends MoveValidator {
 
     //void place(Animal animal) throws PositionAlreadyOccupiedException;
+    void place(Animal animal);
 
     /**
      * Moves an animal (if it is present on the map) according to specified direction.

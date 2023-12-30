@@ -1,29 +1,34 @@
 package world.model;
 
-public enum Orientation {
+public enum Direction {
 
     // To z numeracją pozwoli nieco łatwiej je dodawać
-    N(0),
-    NE(1),
-    E(2),
-    SE(3),
-    S(4),
-    SW(5),
-    W(6),
-    NW(7);
+    // Nazwy nie sugerujące kierunków świata będą mniej kuły w oczy,
+    // jak użyjemy ich też do zmiany kierunku
+    D0(0),
+    D45(1),
+    D90(2),
+    D135(3),
+    D180(4),
+    D225(5),
+    D270(6),
+    D315(7);
 
     private final Vector2d vector;
 
-    Orientation(int num) {
+    // Czysto na wszelki wypadek
+    private final int number;
+
+    Direction(int number) {
+        this.number = number;
         this.vector = new Vector2d( // Działa jakby co
-                (int) Math.round(Math.sin(num*Math.PI/4)),
-                (int) Math.round(Math.cos(num*Math.PI/4))
+                (int) Math.round(Math.sin(number*Math.PI/4)),
+                (int) Math.round(Math.cos(number*Math.PI/4))
         );
     }
 
-    public Vector2d toUnitVector() {
-        return vector;
-    }
+    public Vector2d toUnitVector() { return vector; }
+    public int getNumber() { return number; }
 
     // Jakby się miało przydać to lepiej to wsadzić tam u góry
 //    public String toString() {

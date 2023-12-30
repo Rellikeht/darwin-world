@@ -18,10 +18,9 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected final int id;
 
     //public AbstractWorldMap(int initialSize) {
-    public AbstractWorldMap(int width, int height, int animal_amount, int grass_amount, int grassEnergy) {
+    public AbstractWorldMap(int width, int height, int animal_amount, int grass_amount) {
         animals = new HashMap<>(animal_amount);
         grass = new HashMap<>(grass_amount);
-        grassEnergy = grassEnergy;
         //listeners = new LinkedHashSet<>();
 
         lowerLeft = new Vector2d(0, 0);
@@ -45,7 +44,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         List<Animal> animalsAtBefore=animals.getOrDefault(beforePosition, new ArrayList<>());
         animals.remove(beforePosition);
         animalsAtBefore.remove(animal);
-        //animal.move(direction, this);
+//        animal.move(direction, this);
         Vector2d afterPosition=animal.getPosition();
         if(!beforePosition.equals(afterPosition) && grass.containsKey(afterPosition)){
             animal.setEnergy(animal.getEnergy()+grassEnergy);

@@ -2,8 +2,8 @@ package world.model;
 
 // Ta klasa jest tu tylko po to, żeby mieć kod blisko
 public class GrassField extends AbstractWorldMap {
-    public GrassField(int width, int height, int animal_amount, int grass_amount, int grassEnergy) {
-        super(width, height, animal_amount, grass_amount, grassEnergy);
+    public GrassField(int width, int height, int animal_amount, int grass_amount) {
+        super(width, height, animal_amount, grass_amount);
     }
 
 

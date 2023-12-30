@@ -5,16 +5,13 @@ import world.model.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Vector;
 
 public class Simulation implements Runnable {
     private static final int MAP_HEIGHT = 30;
     private static final int MAP_WIDTH = 100;
-    private final boolean mapVariant = false;
     private static final int INITIAL_GRASS_AMOUNT = 300;
     private static final int GRASS_ENERGY = 20;
     private static final int DAILY_GRASS_AMOUNT = 50;
-    private final boolean growthVariant = false;
     private static final int INITIAL_ANIMAL_AMOUNT = 20;
     private static final int INITIAL_ANIMAL_ENERGY = 120;
     private static final int ENERGY_NEEDED_FOR_PROCREATION = 50;
@@ -22,11 +19,15 @@ public class Simulation implements Runnable {
     private static final int MIN_AMOUNT_OF_MUTATIONS = 0;
     private static final int MAX_AMOUNT_OF_MUTATIONS = 100;
     private static final int GENOME_LENGTH = 10;
-    private final boolean behaviorVariant = false;
     private static final int INITIAL_JUNGLE_SIZE = 5;
+
+    private final boolean behaviorVariant = false;
+    private final boolean mapVariant = false;
+    private final boolean growthVariant = false;
     private final List<Animal> animals;
-    private int animalAmount = INITIAL_ANIMAL_AMOUNT;
     private final WorldMap map;
+
+    private int animalAmount = INITIAL_ANIMAL_AMOUNT;
     private int frameNum;
 
 
@@ -36,18 +37,21 @@ public class Simulation implements Runnable {
         Vector2d maxPos = map.getUpperRight();
 
         for (int i = 0; i < INITIAL_ANIMAL_AMOUNT; i++) {
-            Genome genome = new Genome(GENOME_LENGTH);
             Random random = new Random();
+            Genome genome = new Genome(GENOME_LENGTH);
+
             Animal animal = new Animal(
-                    new Vector2d(random.nextInt(maxPos.getX()), random.nextInt(maxPos.getY())),
-                    Orientation.values()[random.nextInt(Orientation.values().length)],
+                    new Vector2d(
+                            random.nextInt(maxPos.getX()),
+                            random.nextInt(maxPos.getY())
+                    ),
+                    Direction.values()[random.nextInt(Direction.values().length)],
                     INITIAL_ANIMAL_ENERGY,
                     genome
             );
-//            try {
-//                map.place(animal);
-//                animals.add(animal);
-//            } catch (PositionAlreadyOccupiedException ignored) {}
+
+            map.place(animal);
+            animals.add(animal);
         }
     }
 

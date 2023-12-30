@@ -2,10 +2,10 @@ package world.model;
 
 public class Animal implements WorldElement {
 
-    private Orientation orientation;
+    private Direction direction;
     private Vector2d position;
     private int energy;
-    private Genome genes;
+    private final Genome genes;
 
     public int getEnergy() {
         return energy;
@@ -15,9 +15,9 @@ public class Animal implements WorldElement {
         this.energy = energy;
     }
 
-    public Animal(Vector2d position, Orientation orientation, int energy, Genome genes) {
+    public Animal(Vector2d position, Direction direction, int energy, Genome genes) {
         this.position = position;
-        this.orientation = orientation;
+        this.direction = direction;
         this.genes = genes;
         this.energy = energy;
     }
@@ -35,16 +35,16 @@ public class Animal implements WorldElement {
     public boolean isAt(Vector2d position) { return this.position.equals(position); }
 
     public Vector2d getPosition() { return this.position; }
-    public Orientation getOrientation() { return this.orientation; }
+    public Direction getOrientation() { return this.direction; }
 
-    private static Vector2d newPos(Vector2d position, Orientation orientation, MoveDirection direction) {
-        return switch (direction) {
-            case FORWARD -> position.add(orientation.toUnitVector());
-            case BACKWARD -> position.subtract(orientation.toUnitVector());
-            default -> position;
-        };
-    }
-//
+//    private static Vector2d newPos(Vector2d position, Orientation orientation, MoveDirection direction) {
+//        return switch (direction) {
+//            case FORWARD -> position.add(orientation.toUnitVector());
+//            case BACKWARD -> position.subtract(orientation.toUnitVector());
+//            default -> position;
+//        };
+//    }
+
 //    public void move(MoveDirection direction, MoveValidator validator) {
 //        Vector2d newPos = newPos(position, orientation, direction);
 //        switch (direction) {
