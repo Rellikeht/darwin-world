@@ -36,15 +36,20 @@ public abstract class AbstractWorldMap implements WorldMap {
         animals.put(animal.getPosition(), animalsAt);
     }
 
-//    @Override
-//    public void move(Animal animal, MoveDirection direction) {
-//        //mapChanged("Animal at %s is moving".formatted(
-//        //        animal.getPosition().toString())
-//        //);
-//        animals.remove(animal.getPosition());
-//        animal.move(direction, this);
-//        animals.put(animal.getPosition(), animal);
-//    }
+    public void move(Animal animal, MoveDirection direction) {
+        //mapChanged("Animal at %s is moving".formatted(
+        //        animal.getPosition().toString())
+        //);
+        Vector2d firstPosition=animal.getPosition();
+        List<Animal> animalsAtBefore=animals.get(firstPosition);
+        animals.remove(firstPosition);
+        animalsAtBefore.remove(animal);
+        animal.move(direction, this);
+        List<Animal> animalsAtAfter=animals.get(animal.getPosition());
+        animalsAtAfter.add(animal);
+        animals.put(animal.getPosition(), animalsAtBefore);
+        animals.put(animal.getPosition(), animalsAtAfter);
+    }
 
     // obiektów może być wiele
     //@Override
