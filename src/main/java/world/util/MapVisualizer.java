@@ -76,8 +76,7 @@ public class MapVisualizer {
         return builder.toString();
     }
 
-    // Tu by trzeba ostro modyfikować logikę, żeby wyświetlać ilość obiektów
-    // albo obiekt, tu by w sumie się jakiś variant (typ algebraiczny) przydał
+    // Słabo ale stabilnie
     private String drawObject(Vector2d currentPosition) {
         String obj = map.getAt(currentPosition);
         if (obj.length() == 1) { return obj; }

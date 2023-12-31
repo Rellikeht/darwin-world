@@ -70,7 +70,7 @@ public class Simulation implements Runnable {
 
     }
 
-    public Simulation(WorldMap map) {
+    public Simulation() {
         this(INITIAL_ANIMAL_AMOUNT);
     }
 
@@ -79,11 +79,20 @@ public class Simulation implements Runnable {
 //    }
 
     private void frame() {
-//        map.move(curAnimal, moves.get(frameNum));
+        // To jest właśnie ten dylemat, czy robić to wszystko tu, czy nie
         List<Animal> animals = map.getAnimals();
+
+        // TODO RUCH
         for (Animal a : animals) {
-            map.move(a, Direction.D0);
+//            map.move(a, Direction.D0);
+            map.move(a);
         }
+
+        // TODO JEDZENIE
+
+        // TODO ROZMNAŻANIE
+
+        // TODO UMIERANIE
 
         frameNum++;
     }
@@ -98,4 +107,13 @@ public class Simulation implements Runnable {
             }
         }
     }
+
+    public void addListener(MapChangeListener listener) {
+        map.addListener(listener);
+    }
+
+    public void removeListener(MapChangeListener listener) {
+        map.removeListener(listener);
+    }
+
 }

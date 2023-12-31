@@ -2,54 +2,24 @@ package world.model;
 
 import java.util.List;
 
-/**
- * The interface responsible for interacting with the map of the world.
- * Assumes that Vector2d and MoveDirection classes are defined.
- *
- * @author apohllo, idzik
- */
 public interface WorldMap {
 
-    //void place(Animal animal) throws PositionAlreadyOccupiedException;
-    void place(Animal animal);
-
-    /**
-     * Moves an animal (if it is present on the map) according to specified direction.
-     * If the move is not possible, this method has no effect.
-     */
-    void move(Animal animal, Direction direction);
-
-    /**
-     * Return true if given position on the map is occupied. Should not be
-     * confused with canMove since there might be empty positions where the animal
-     * cannot move.
-     *
-     * @param position Position to check.
-     * @return True if the position is occupied.
-     */
-    boolean isOccupied(Vector2d position);
-
-    /**
-     * Return an animal at a given position.
-     *
-     * @param position The position of the animal.
-     * @return animal or null if the position is not occupied.
-     */
-
-    //List<WorldElement> getElements();
-
-    //Boundary getCurrentBounds();
     Vector2d getUpperRight();
+    void place(Animal animal); // throws PositionAlreadyOccupiedException;
+    void move(Animal animal);
+    int getId();
+    List<Animal> getAnimals();
+    List<Animal> animalsAt(Vector2d position);
 
     void addListener(MapChangeListener listener);
     void removeListener(MapChangeListener listener);
 
-    int getId();
-
-    // Tutaj generalnie można by zrobić logikę, żeby wywalać obiekt lub ilość na danym polu,
-    // albo tylko ilość, jak będziemy leniwi
-    //WorldElement objectAt(Vector2d position);
     String getAt(Vector2d currentPosition);
-    public List<Animal> getAnimals();
+    //WorldElement objectAt(Vector2d position);
+
+    // ??
+//    boolean isOccupied(Vector2d position);
+    //List<WorldElement> getElements();
+    //Boundary getCurrentBounds();
 
 }
