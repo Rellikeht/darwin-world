@@ -1,6 +1,7 @@
 package world.model;
 
 import java.util.List;
+import java.util.Set;
 
 public interface WorldMap {
 
@@ -10,6 +11,7 @@ public interface WorldMap {
     int getId();
     List<Animal> getAnimals();
     List<Animal> animalsAt(Vector2d position);
+    Set<Vector2d> grassPositions();
 
     void addListener(MapChangeListener listener);
     void removeListener(MapChangeListener listener);

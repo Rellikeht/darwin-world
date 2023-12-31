@@ -1,8 +1,6 @@
 package world;
 
 import world.model.ConsoleMapDisplay;
-import world.model.EarthMap;
-import world.model.WorldMap;
 
 public class Main {
 

@@ -21,7 +21,7 @@ public enum Direction {
 
     Direction(int number) {
         this.number = number;
-        this.vector = new Vector2d( // Działa jakby co
+        this.vector = new Vector2d(
                 (int) Math.round(Math.sin(number*Math.PI/4)),
                 (int) Math.round(Math.cos(number*Math.PI/4))
         );

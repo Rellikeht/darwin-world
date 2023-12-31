@@ -1,17 +1,10 @@
 package world;
 
-import world.model.GrassField;
-import world.model.MoveDirection;
-import world.model.Vector2d;
-import world.model.WorldMap;
-//import world.presenter.SimulationPresenter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-
-import java.util.List;
 
 public class SimulationApp extends Application {
 

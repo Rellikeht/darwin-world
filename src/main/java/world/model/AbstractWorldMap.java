@@ -176,4 +176,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         return animals.get(position);
     }
 
+    @Override
+    public Set<Vector2d> grassPositions() { return grass.keySet(); }
 }

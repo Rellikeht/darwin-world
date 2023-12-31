@@ -1,10 +1,7 @@
 package world.model;
 
-import world.Simulation;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SimulationStats {
     // Można by przynajmniej część liczyć leniwie, ale to już na kiedy indziej chyba

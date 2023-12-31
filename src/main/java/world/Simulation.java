@@ -1,6 +1,5 @@
 package world;
 
-import javafx.geometry.Orientation;
 import world.model.*;
 
 import java.util.ArrayList;
@@ -67,7 +66,6 @@ public class Simulation implements Runnable {
         }
 
         // TODO staty
-
     }
 
     public Simulation() {
