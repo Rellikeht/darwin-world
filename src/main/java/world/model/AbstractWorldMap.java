@@ -20,6 +20,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected final int id;
 
     // Staty
+    private int equatorSize=1;
     private int animalAmount = 0; // To będą w praktyce żywe zwierzęta
     private int freeSquares;
     public int getAnimalAmount() { return animalAmount; }
@@ -38,7 +39,9 @@ public abstract class AbstractWorldMap implements WorldMap {
         animals = new HashMap<>(initialAnimalAmount);
         grass = new HashMap<>(initialGrassAmount);
         listeners = new LinkedHashSet<>();
-
+        int equatorBottom=(height/2)-equatorSize;
+        Vector2d equatorTopVector=new Vector2d(0,(height/2)+equatorSize);
+        Vector2d equatorBottomVector=new Vector2d(0,(height/2)-equatorSize+1);
         // TODO staty
 
         lowerLeft = new Vector2d(0, 0);
@@ -47,10 +50,32 @@ public abstract class AbstractWorldMap implements WorldMap {
         curId += 1;
 //        boundary = new Boundary(lowerLeft, upperRight);
 
-        // TODO I tutaj trudna rzecz: stawianie trawy, to losowanie z tym równikiem
-        // Nie wiem na razie jak to zrobić, może jutro pomyślę
-        // To może wymagać osobnego random position generatora
-
+        // Prowizoryczna Trawa
+        Random random = new Random();
+        for(int i=0;i<initialGrassAmount;i++) {
+            int grassProbability = random.nextInt(10);
+            if (grassProbability <= 1) {
+                int equatorSide=random.nextInt(2);
+                RandomPositionGenerator gen = new RandomPositionGenerator(width, equatorBottom, 1);
+                if(equatorSide==0) {
+                    for (Vector2d grassPosition : gen) {
+                        grass.put(grassPosition, new Grass(grassPosition));
+                    }
+                }
+                else{
+                    for (Vector2d grassPosition : gen) {
+                        grassPosition.add(equatorTopVector);
+                        grass.put(grassPosition, new Grass(grassPosition));
+                    }
+                }
+            } else {
+                RandomPositionGenerator gen = new RandomPositionGenerator(width, equatorSize+1, 1);
+                for (Vector2d grassPosition : gen) {
+                    grassPosition=grassPosition.add(equatorBottomVector);
+                    grass.put(grassPosition, new Grass(grassPosition));
+                }
+            }
+        }
     }
 
     public void place(Animal animal)  {
