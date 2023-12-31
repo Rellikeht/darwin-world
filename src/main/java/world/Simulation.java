@@ -30,23 +30,27 @@ public class Simulation implements Runnable {
     private final boolean growthVariant = false;
     private final List<Animal> animals;
     private final WorldMap map;
-
-    // Staty
-    private int totalAnimalAmount = INITIAL_ANIMAL_AMOUNT;
+    //private final SimulationStats stats;
 
     // To raczej jest zbędne
     private int frameNum = 0;
 
-    public Simulation(WorldMap map, int initialAnimalAmount) {
-        this.animals = new ArrayList<Animal>(initialAnimalAmount);
-        this.map = map;
-        Vector2d maxPos = map.getUpperRight();
+    public Simulation(int initialAnimalAmount) {
+        animals = new ArrayList<Animal>(initialAnimalAmount);
+        map = new EarthMap(MAP_WIDTH, MAP_HEIGHT, INITIAL_GRASS_AMOUNT, INITIAL_JUNGLE_SIZE);
+        //stats = new SimulationStats();
 
+        // To już może potem jak się wyklaruje co i jak
+//        if (mapVariant) {
+//            map = new EarthMap(MAP_WIDTH, MAP_HEIGHT, INITIAL_GRASS_AMOUNT, INITIAL_JUNGLE_SIZE);
+//        } else {
+//            map = new HellMap(MAP_WIDTH, MAP_HEIGHT, INITIAL_GRASS_AMOUNT, INITIAL_JUNGLE_SIZE);
+//        }
+
+        Vector2d maxPos = map.getUpperRight();
         for (int i = 0; i < initialAnimalAmount; i++) {
             Random random = new Random();
             Genome genome = new Genome(GENOME_LENGTH);
-
-            // TODO staty
 
             Animal animal = new Animal(
                     new Vector2d(
@@ -61,10 +65,13 @@ public class Simulation implements Runnable {
             map.place(animal);
             animals.add(animal);
         }
+
+        // TODO staty
+
     }
 
     public Simulation(WorldMap map) {
-        this(map, INITIAL_ANIMAL_AMOUNT);
+        this(INITIAL_ANIMAL_AMOUNT);
     }
 
 //    private void prepare() {

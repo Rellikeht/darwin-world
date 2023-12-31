@@ -15,32 +15,26 @@ public abstract class AbstractWorldMap implements WorldMap {
 //    protected final Boundary boundary;
     protected final Set<MapChangeListener> listeners;
     protected final MapVisualizer visualizer = new MapVisualizer(this);
+    protected final int jungleSize;
 
+    // Numeracja
     protected static int curId = 0;
     protected final int id;
-
-    // Staty
-    private int animalAmount = 0; // To będą w praktyce żywe zwierzęta
-    private int freeSquares;
-    public int getAnimalAmount() { return animalAmount; }
-    public int getFreeSquares() { return freeSquares; }
-    public int getGrassAmount() { return grass.size(); }
 
     public int getId() { return this.id; }
     public Vector2d getUpperRight() { return upperRight; }
 
-    // To jest raczej źle
-    // animal amount nic nie robi
-    // Nie wiem, jak to zrobić w sumie
-    // Chociaż można też zostawić i generować na sztywno
-    // ze stałych w simulation
-    public AbstractWorldMap(int width, int height, int initialAnimalAmount, int initialGrassAmount) {
-        animals = new HashMap<>(initialAnimalAmount);
+    public AbstractWorldMap(int width, int height, int initialGrassAmount, int jungleSize) {
+        // Po co nam więcej argumentów
+        // Początkowa wielkość i tak ma małe znaczenie
+        animals = new HashMap<>(initialGrassAmount);
+
         grass = new HashMap<>(initialGrassAmount);
         listeners = new LinkedHashSet<>();
 
         // TODO staty
 
+        this.jungleSize = jungleSize;
         lowerLeft = new Vector2d(0, 0);
         upperRight = new Vector2d(width-1, height-1);
         this.id = curId;
@@ -145,6 +139,10 @@ public abstract class AbstractWorldMap implements WorldMap {
         Grass grassAt = grass.get(position);
         if (grassAt != null) { return grassAt.toString(); }
         return "";
+    }
+
+    public List<Animal> animalsAt(Vector2d position) {
+        return animals.get(position);
     }
 
 //    @Override

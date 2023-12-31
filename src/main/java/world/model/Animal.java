@@ -10,22 +10,25 @@ public class Animal implements WorldElement {
 
     // Staty
     private int grassEaten = 0;
+    private int dayOfBirth;
+    private int dayOfDeath = -1; // To by było fajnie final mieć, ale chyba się nie da
+    private int childrenAmount = 0;
 
-    public int getEnergy() {
-        return energy;
-    }
+    // TODO ilość potomków, tutaj trzeba będzie albo mieć referencje do dzieci,
+    // Albo referencje do rodziców i dodawać potomków rekurencyjnie (brzmi bardzo źle xd)
 
-    public void setEnergy(int energy) {
-        this.energy = energy;
-    }
-
-    public Animal(Vector2d position, Direction direction, int energy, Genome genes) {
+    public Animal(Vector2d position, Direction direction, int energy, Genome genes, int dayOfBirth) {
         this.position = position;
         this.direction = direction;
         this.genes = genes;
         this.energy = energy;
 
+        this.dayOfBirth = dayOfBirth;
         // TODO staty
+    }
+
+    public Animal(Vector2d position, Direction direction, int energy, Genome genes) {
+        this(position, direction, energy, genes, 0);
     }
 
     @Override
@@ -47,6 +50,24 @@ public class Animal implements WorldElement {
     public Vector2d getPosition() { return this.position; }
     public Direction getOrientation() { return this.direction; }
 
+    public int getEnergy() {
+        return energy;
+    }
+
+    //    public void setEnergy(int energy) { this.energy = energy; }
+    // Tak mi się wydaje, że będzie lepiej, bo przecież im nigdy nie będziemy
+    // bezpośrednio ustawiali energii
+    public void getEnergy(int energy) { this.energy += energy; }
+
+    // A tu od razu można umieranie zrobić
+    public void loseEnergy(int energy) { this.energy -= energy; }
+    public void addChildren() { this.childrenAmount += 1; }
+
+    // Może to wyjdzie w ten sposób
+    public void die(int day) {
+        this.dayOfDeath = day;
+    }
+
 //    private static Vector2d newPos(Vector2d position, Orientation orientation, MoveDirection direction) {
 //        return switch (direction) {
 //            case FORWARD -> position.add(orientation.toUnitVector());
@@ -67,5 +88,5 @@ public class Animal implements WorldElement {
 //            case RIGHT -> this.orientation = this.orientation.next();
 //        }
 //    }
-//
+
 }
