@@ -53,6 +53,9 @@ public class Animal implements WorldElement {
     public int getEnergy() {
         return energy;
     }
+    public int getDayOfBirth(){return dayOfBirth;}
+    public int getChildrenAmount(){return childrenAmount;}
+    public void setDayOfDeath(int day){this.dayOfDeath=day;}
 
     //    public void setEnergy(int energy) { this.energy = energy; }
     // Tak mi się wydaje, że będzie lepiej, bo przecież im nigdy nie będziemy

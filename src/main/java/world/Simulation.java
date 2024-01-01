@@ -1,5 +1,6 @@
 package world;
 
+import javafx.scene.paint.RadialGradient;
 import world.model.*;
 
 import java.util.*;
@@ -88,6 +89,7 @@ public class Simulation implements Runnable {
 
         // TODO JEDZENIE
         // Powinno działać ale nie dokończone. Jest szansa ze sie wyjebie na lokalnej zmianie wartościa tutaj a nie w całym programie
+        // Ale to długie
         Map<Vector2d, Animal> eatingAnimals= new HashMap<>(animals.size());
         for(Animal animal:animals) {
             Vector2d position = animal.getPosition();
@@ -98,7 +100,23 @@ public class Simulation implements Runnable {
                         eatingAnimals.replace(position,animal);
                     }
                     if (animal.getEnergy() == oldAnimal.getEnergy()) {
-                        // TUTAJ TRZEBA ZROBIĆ TE KOLEJNE WARUNKI W KONFLIKCIE
+                        if(animal.getDayOfBirth()>oldAnimal.getDayOfBirth()){
+                            eatingAnimals.replace(position,animal);
+                        }
+                        if(animal.getDayOfBirth()==oldAnimal.getDayOfBirth()){
+                            if(animal.getChildrenAmount()>oldAnimal.getChildrenAmount()){
+                                eatingAnimals.replace(position,animal);
+                            }
+                            if(animal.getChildrenAmount()==oldAnimal.getChildrenAmount()){
+                                Random random = new Random();
+                                int chosenAnimal = random.nextInt(2);
+                                if(chosenAnimal==0){
+                                    eatingAnimals.replace(position,animal);
+                                }
+                            }
+                        }
+
+
                     }
                 }
                 else {
@@ -118,6 +136,7 @@ public class Simulation implements Runnable {
         for(Animal animal:animals){
             if(animal.getEnergy()<=0){
                 animals.remove(animal);
+                animal.setDayOfDeath(frameNum);
             }
         }
 
