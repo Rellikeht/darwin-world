@@ -124,9 +124,9 @@ public class Simulation implements Runnable {
                 }
             }
         }
-        for(Vector2d eaters: eatingAnimals.keySet()){
-            grassPositions.remove(eaters);
-            Animal animal = animals.get(animals.indexOf(eaters));
+        for(Animal eater: eatingAnimals.values()){
+            grassPositions.remove(eater.getPosition());
+            Animal animal = animals.get(animals.indexOf(eater));
             animal.addEnergy(GRASS_ENERGY);
         }
 
