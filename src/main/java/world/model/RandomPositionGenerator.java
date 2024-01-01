@@ -19,7 +19,8 @@ public class RandomPositionGenerator implements Iterable<Vector2d> {
         positions = new ArrayList<Vector2d>(amount);
         int c = 0;
 
-        // To będzie wolne, zwłaszcza dla zbioru pustego, ale najważniejsze, że jest proste i działa
+        // To będzie wolne, zwłaszcza dla zbioru pustego, ale najważniejsze, że jest proste i
+        // To to sie w ogóle wypierdala na "Index 0 out of bounds for length 0"
         for (int i = lowerLeft.getX(); i < upperRight.getX(); i++) {
             for (int j = lowerLeft.getY(); j < upperRight.getY(); j++) {
                 Vector2d vec = new Vector2d(i, j);

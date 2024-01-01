@@ -57,7 +57,7 @@ public class Animal implements WorldElement {
     //    public void setEnergy(int energy) { this.energy = energy; }
     // Tak mi się wydaje, że będzie lepiej, bo przecież im nigdy nie będziemy
     // bezpośrednio ustawiali energii
-    public void getEnergy(int energy) { this.energy += energy; }
+    public void addEnergy(int energy) { this.energy += energy; }
 
     // A tu od razu można umieranie zrobić
     public void loseEnergy(int energy) { this.energy -= energy; }

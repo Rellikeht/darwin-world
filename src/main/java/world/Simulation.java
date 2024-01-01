@@ -2,9 +2,7 @@ package world;
 
 import world.model.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Simulation implements Runnable {
 
@@ -78,8 +76,10 @@ public class Simulation implements Runnable {
 
     private void frame() {
         // To jest właśnie ten dylemat, czy robić to wszystko tu, czy nie
+        // Imo nie ma co brać tej listy co frame bo ona sie będzie zmieniać tutaj i będziemy odpalać kolejny ruch na tej już zmienionej a tak to
+        // pobierając co frame będziemy działać cały czas na tej samej a to bez sensu chyba
         List<Animal> animals = map.getAnimals();
-
+        Set<Vector2d> grassPositions = map.grassPositions() ;
         // TODO RUCH
         for (Animal a : animals) {
 //            map.move(a, Direction.D0);
@@ -87,10 +87,39 @@ public class Simulation implements Runnable {
         }
 
         // TODO JEDZENIE
+        // Powinno działać ale nie dokończone. Jest szansa ze sie wyjebie na lokalnej zmianie wartościa tutaj a nie w całym programie
+        Map<Vector2d, Animal> eatingAnimals= new HashMap<>(animals.size());
+        for(Animal animal:animals) {
+            Vector2d position = animal.getPosition();
+            if (grassPositions.contains(position)) {
+                if (eatingAnimals.containsKey(position)) {
+                    Animal oldAnimal = eatingAnimals.get(position);
+                    if (animal.getEnergy() > oldAnimal.getEnergy()) {
+                        eatingAnimals.replace(position,animal);
+                    }
+                    if (animal.getEnergy() == oldAnimal.getEnergy()) {
+                        // TUTAJ TRZEBA ZROBIĆ TE KOLEJNE WARUNKI W KONFLIKCIE
+                    }
+                }
+                else {
+                        eatingAnimals.put(animal.getPosition(), animal);
+                }
+            }
+        }
+        for(Vector2d eaters: eatingAnimals.keySet()){
+            grassPositions.remove(eaters);
+            Animal animal = animals.get(animals.indexOf(eaters));
+            animal.addEnergy(GRASS_ENERGY);
+        }
 
         // TODO ROZMNAŻANIE
 
         // TODO UMIERANIE
+        for(Animal animal:animals){
+            if(animal.getEnergy()<=0){
+                animals.remove(animal);
+            }
+        }
 
         frameNum++;
     }

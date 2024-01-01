@@ -29,60 +29,49 @@ public abstract class AbstractWorldMap implements WorldMap {
         // Po co nam więcej argumentów
         // Początkowa wielkość i tak ma małe znaczenie
         animals = new HashMap<>(initialGrassAmount);
-
         grass = new HashMap<>(initialGrassAmount);
         listeners = new LinkedHashSet<>();
-
-//        int equatorBottom=(height/2)-equatorSize;
-//        Vector2d equatorTopVector=new Vector2d(0,(height/2)+equatorSize);
-//        Vector2d equatorBottomVector=new Vector2d(0,(height/2)-equatorSize+1);
+        lowerLeft = new Vector2d(0, 0);
+        upperRight = new Vector2d(width-1, height-1);
         int jungleStart = (upperRight.getY() - lowerLeft.getY() - jungleSize) / 2;
         int jungleEnd = jungleStart + jungleSize;
 
         this.jungleSize = jungleSize;
-        lowerLeft = new Vector2d(0, 0);
-        upperRight = new Vector2d(width-1, height-1);
         this.id = curId;
         curId += 1;
 
         // Początkowa Trawa
         Random random = new Random();
-        RandomPositionGenerator overEquator = new RandomPositionGenerator(
-                new Vector2d(upperRight.getX(), upperRight.getY() - jungleEnd),
-                upperRight
-        );
-        RandomPositionGenerator jungle = new RandomPositionGenerator(
-                new Vector2d(lowerLeft.getX(), jungleStart),
-                new Vector2d(jungleEnd, upperRight.getX())
-        );
-        RandomPositionGenerator underEquator = new RandomPositionGenerator(
-                lowerLeft,
-                new Vector2d(lowerLeft.getX(), lowerLeft.getY() + jungleStart)
-        );
 
         // I to wszystko trzeba przerobić używając tych 3 generatorów
         for(int i=0;i<initialGrassAmount;i++) {
             int grassProbability = random.nextInt(10);
             if (grassProbability <= 1) {
-                int equatorSide=random.nextInt(2);
-                RandomPositionGenerator gen = new RandomPositionGenerator(width, equatorBottom, 1);
-
-                if(equatorSide==0) {
-                    for (Vector2d grassPosition : gen) {
+                if(grassProbability==0) {
+                    RandomPositionGenerator overEquator = new RandomPositionGenerator(
+                            new Vector2d(upperRight.getX(), upperRight.getY() - jungleEnd),
+                            upperRight
+                    );
+                    for (Vector2d grassPosition : overEquator) {
                         grass.put(grassPosition, new Grass(grassPosition));
                     }
                 }
                 else{
-                    for (Vector2d grassPosition : gen) {
-                        grassPosition.add(equatorTopVector);
+                    RandomPositionGenerator underEquator = new RandomPositionGenerator(
+                            lowerLeft,
+                            new Vector2d(lowerLeft.getX(), lowerLeft.getY() + jungleStart)
+                    );
+                    for (Vector2d grassPosition : underEquator) {
                         grass.put(grassPosition, new Grass(grassPosition));
                     }
                 }
 
             } else {
-                RandomPositionGenerator gen = new RandomPositionGenerator(width, equatorSize+1, 1);
-                for (Vector2d grassPosition : gen) {
-                    grassPosition=grassPosition.add(equatorBottomVector);
+                RandomPositionGenerator equator = new RandomPositionGenerator(
+                        new Vector2d(lowerLeft.getX(), jungleStart),
+                        new Vector2d(jungleEnd, upperRight.getX())
+                );
+                for (Vector2d grassPosition : equator) {
                     grass.put(grassPosition, new Grass(grassPosition));
                 }
             }
@@ -116,6 +105,8 @@ public abstract class AbstractWorldMap implements WorldMap {
         // a potem zapdejtować mu energię i podobnie z rozmnażaniem
         // I też można by to wywalić do osobnej funkcji
         // Albo jedzenie do osobnej funkcji i każda faza ruchu osobno w symulacji
+
+        // IMHO to może w symulacji na koniec sprawdzać jakie zwięrzęta stoją na trawie i tam rozwiązywać problem kto zjada
 //        if(!beforePosition.equals(afterPosition) && grass.containsKey(afterPosition)){
 //            animal.setEnergy(animal.getEnergy()+grassEnergy);
 //        }
