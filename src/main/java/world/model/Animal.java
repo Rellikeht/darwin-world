@@ -55,6 +55,7 @@ public class Animal implements WorldElement {
     }
     public int getDayOfBirth(){return dayOfBirth;}
     public int getChildrenAmount(){return childrenAmount;}
+    public Genome getGenes(){return genes;}
     public void setDayOfDeath(int day){this.dayOfDeath=day;}
 
     //    public void setEnergy(int energy) { this.energy = energy; }

@@ -16,6 +16,7 @@ public class Genome {
     public int getGene(int i){
         return genes[i];
     }
+    public void setGene(int i,int g){this.genes[i]=g;}
 
     private void randomMutate(){
         Random random = new Random();

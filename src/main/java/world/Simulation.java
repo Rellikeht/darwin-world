@@ -74,7 +74,35 @@ public class Simulation implements Runnable {
 //    private void prepare() {
 //        this.frameNum = 0;
 //    }
-
+    // animal1 musi być silnieszy niż animal2
+    private void reproducing(Animal animal1, Animal animal2){
+        Random random = new Random();
+        int side = random.nextInt(2);
+        int energy1 = animal1.getEnergy();
+        int energy2 = animal2.getEnergy();
+        Genome genome1=animal1.getGenes();
+        Genome genome2=animal2.getGenes();
+        Genome newGenome = new Genome(0);
+        int proportions = GENOME_LENGTH*(energy2/energy1);
+        if(side==0) {
+            for (int i = 0; i < GENOME_LENGTH-proportions; i++) {
+                newGenome.setGene(i, genome2.getGene(i));
+            }
+            for (int i = GENOME_LENGTH-proportions; i < GENOME_LENGTH; i++) {
+                newGenome.setGene(i, genome1.getGene(i));
+            }
+        }
+        else{
+            for (int i = 0; i < proportions; i++) {
+                newGenome.setGene(i, genome1.getGene(i));
+            }
+            for (int i = proportions; i < GENOME_LENGTH; i++) {
+                newGenome.setGene(i, genome2.getGene(i));
+            }
+        }
+        Vector2d position = animal1.getPosition();
+        map.place(new Animal(position,Direction.D0,10,newGenome,frameNum));
+    }
     private void frame() {
         // To jest właśnie ten dylemat, czy robić to wszystko tu, czy nie
         // Imo nie ma co brać tej listy co frame bo ona sie będzie zmieniać tutaj i będziemy odpalać kolejny ruch na tej już zmienionej a tak to
@@ -129,8 +157,28 @@ public class Simulation implements Runnable {
             Animal animal = animals.get(animals.indexOf(eater));
             animal.addEnergy(GRASS_ENERGY);
         }
-
+        //Ale to jest chore gówno
         // TODO ROZMNAŻANIE
+        Map<Vector2d, PriorityQueue<Animal>> reproducingAnimals= new HashMap<>(animals.size());
+        for (Animal animal:animals){
+            Vector2d position = animal.getPosition();
+            if(reproducingAnimals.containsKey(position)){
+                PriorityQueue<Animal> oldQueue = reproducingAnimals.get(position);
+                oldQueue.add(animal);
+                reproducingAnimals.replace(position,oldQueue);
+            }
+            else{
+                PriorityQueue<Animal> newQueue = new PriorityQueue<>(animals.size(),Comparator.comparingInt(Animal::getEnergy));
+                newQueue.add(animal);
+                reproducingAnimals.put(animal.getPosition(),newQueue);
+            }
+        }
+        for(PriorityQueue<Animal> queue:reproducingAnimals.values()) {
+            if (queue.size() >= 2) {
+                Animal animal1 = queue.peek();
+                reproducing(animal1, queue.peek());
+            }
+        }
 
         // TODO UMIERANIE
         for(Animal animal:animals){
