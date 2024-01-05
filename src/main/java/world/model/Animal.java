@@ -33,14 +33,14 @@ public class Animal {
 
     public String toString() {
         return switch (this.direction) {
-            case D0 -> "↑";
-            case D45 -> "↗";
-            case D90 -> "→";
-            case D135 -> "↘";
-            case D180 -> "↓";
-            case D225 -> "↙";
-            case D270 -> "←";
-            case D315 -> "↖";
+            case D0 -> "u";
+            case D45 -> "ur";
+            case D90 -> "r";
+            case D135 -> "dr";
+            case D180 -> "d";
+            case D225 -> "dl";
+            case D270 -> "l";
+            case D315 -> "ul";
         };
     }
 
