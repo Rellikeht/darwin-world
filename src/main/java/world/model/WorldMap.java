@@ -13,6 +13,6 @@ public interface WorldMap {
     void doEating(int grassEnergy);
     void doReproduction(int energyNeeded, int energyTaken);
     void nextDay();
-
+    void grassPlace(int N);
     String getAt(Vector2d currentPosition);
 }

@@ -19,8 +19,8 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected final int id;
     protected int day = 0;
 
-    protected final RandomPositionGenerator overEquator, underEquator, equator;
-    protected final Iterator<Vector2d>[] generators;
+    protected  RandomPositionGenerator overEquator, underEquator, equator;
+    protected  Iterator<Vector2d>[] generators;
 
     @Override
     public int getId() { return this.id; }
@@ -33,14 +33,18 @@ public abstract class AbstractWorldMap implements WorldMap {
         listeners = new LinkedHashSet<>();
         lowerLeft = new Vector2d(0, 0);
         upperRight = new Vector2d(width-1, height-1);
-        int jungleStart = (upperRight.getY() - lowerLeft.getY() - jungleSize) / 2;
-        int jungleEnd = jungleStart + jungleSize;
 
         this.jungleSize = jungleSize;
         this.id = curId;
         curId += 1;
 
         // Początkowa Trawa
+        grassPlace(initialGrassAmount);
+    }
+    @Override
+    public void grassPlace(int N){
+        int jungleStart = (upperRight.getY() - lowerLeft.getY() - jungleSize) / 2;
+        int jungleEnd = jungleStart + jungleSize;
         Random random = new Random();
         overEquator = new RandomPositionGenerator(
                 new Vector2d(lowerLeft.getX(), jungleEnd),
@@ -60,13 +64,12 @@ public abstract class AbstractWorldMap implements WorldMap {
                 overEquator, underEquator, equator, equator, equator,
                 equator, equator, equator, equator, equator
         };
-        for(int i=0;i<initialGrassAmount;i++) {
+        for(int i=0;i<N;i++) {
             int grassProbability = random.nextInt(generators.length);
             Vector2d grassPosition = generators[grassProbability].next();
             grass.add(grassPosition);
         }
     }
-
     @Override
     public void place(Animal animal)  {
         List<Animal> animalsAt = animals.getOrDefault(animal.getPosition(), new ArrayList<>());

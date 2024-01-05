@@ -21,6 +21,7 @@ public class Simulation implements Runnable {
     private static final int MAX_AMOUNT_OF_MUTATIONS = 100;
     private static final int GENOME_LENGTH = 10;
     private static final int INITIAL_JUNGLE_SIZE = 5;
+    private static final int NEW_DAY_GRASS = 10;
 
     // Dane i elementy
     private final boolean behaviorVariant = false;
@@ -75,11 +76,12 @@ public class Simulation implements Runnable {
         // jedzenie chyba tu, bo energia, chociaż w mapie by uszło
         // rozmnażanie raczej tu, ale w sumie w mapie też by dało radę
         // usuwanie umarłych w mapie, bo to łatwe (ten dzień taki sobie, ale trudno)
-
+        map.nextDay();
         map.moveAnimals();
         map.doEating(GRASS_ENERGY);
         map.doReproduction(ENERGY_NEEDED_FOR_PROCREATION, ENERGY_TAKEN_BY_PROCREATION);
-        map.nextDay();
+        map.grassPlace(NEW_DAY_GRASS);
+
     }
 
     public void run() {
