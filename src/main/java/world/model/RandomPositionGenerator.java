@@ -2,12 +2,13 @@ package world.model;
 
 import java.util.*;
 
-public class RandomPositionGenerator implements Iterable<Vector2d> {
-    private final int amount;
-//    private final int[] xs, ys;
+public class RandomPositionGenerator implements Iterator<Vector2d> {
+    private int amount = 0;
     private final List<Vector2d> positions;
+    private final Set<Vector2d> without;
+    private final Random random = new Random();
 
-    private int randN(int upperLimit) { return (int) (Math.random() * upperLimit); }
+    //private int randN(int upperLimit) { return (int) (Math.random() * upperLimit); }
 
     private int maxAmount(Vector2d lowerLeft, Vector2d upperRight) {
         return (upperRight.getX() - lowerLeft.getX() + 1) *
@@ -15,84 +16,53 @@ public class RandomPositionGenerator implements Iterable<Vector2d> {
     }
 
     public RandomPositionGenerator(Vector2d lowerLeft, Vector2d upperRight, Set<Vector2d> without) {
-        amount = maxAmount(lowerLeft, upperRight);
-        positions = new ArrayList<Vector2d>(amount);
-        int c = 0;
+        int maxSize = maxAmount(lowerLeft, upperRight);
+        positions = new ArrayList<>(maxSize);
+        this.without = without;
+        this.amount = maxSize - without.size();
 
-        // To będzie wolne, zwłaszcza dla zbioru pustego, ale najważniejsze, że jest proste i
-        // To to sie w ogóle wypierdala na "Index 0 out of bounds for length 0"
+        // To wszystko będzie wolne, nie mam pojęcia jak to wszystko dobrze zrobić
+        // Co pomysł to gorsze błędy :(
         for (int i = lowerLeft.getX(); i < upperRight.getX(); i++) {
             for (int j = lowerLeft.getY(); j < upperRight.getY(); j++) {
                 Vector2d vec = new Vector2d(i, j);
-                if (!without.contains(vec)) {
-                    positions.set(c, vec);
-                    c++;
-                }
+                positions.add(vec);
             }
         }
 
-        Collections.shuffle(positions);
+        // Nie wiem, może i to by coś pomogło
+        //Collections.shuffle(positions);
     }
 
     public RandomPositionGenerator(Vector2d lowerLeft, Vector2d upperRight) {
         this(lowerLeft, upperRight, new HashSet<>(0));
     }
 
-//    public RandomPositionGenerator(int maxWidth, int maxHeight, int amount) {
-//        this.amount = amount;
-//        xs = new int[amount];
-//        ys = new int[amount];
-//
-//        for (int i = 0; i < amount; i++) xs[i] = randN(maxWidth);
-//        Arrays.sort(xs);
-//
-//        int i = 0;
-//        while (i < amount) {
-//            int count = 1;
-//            int el = xs[i];
-//            i++;
-//
-//            while (i < amount && xs[i] == el) {
-//                i++;
-//                count++;
-//            }
-//
-//            if (count == 1) ys[i-1] = randN(maxHeight);
-//            else {
-//                int[] tmp = new int[count];
-//                for (int j = 0; j < count; j++) tmp[j] = randN(maxHeight - count + 1);
-//                Arrays.sort(tmp);
-//
-//                for (int j = 1; j < count; j++) {
-//                    if (tmp[j-1] <= tmp[j]) tmp[j] += tmp[j-1]+1;
-//                }
-//
-//                for (int j = 0; j < count; j++) {
-//                    tmp[j] -= Math.max(0, tmp[count-1]-maxHeight);
-//                }
-//
-//                for (int j = 0; j < count; j++) ys[i-count+j] = tmp[j];
-//            }
-//        }
-//    }
+    // To without nie jest idealne, bo jak będzie miało elementy
+    // niewystępujące w pozycjach to tu  będzie źle
+    @Override
+    public boolean hasNext() {
+        return positions.size() > without.size();
+    }
 
     @Override
-    public Iterator<Vector2d> iterator() {
-        return new Iterator<Vector2d>() {
-            private int i = 0;
+    public Vector2d next() {
+        System.out.println(positions.size());
+        int i = random.nextInt(positions.size());
+        Vector2d val = positions.get(i);
 
-            @Override
-            public boolean hasNext() {
-                return i < amount;
-            }
+        while (true) {
+            if (without.contains(val)) {
+                i = (i+1)%positions.size();
+                val = positions.get(i);
+            } else { break; }
+        }
 
-            @Override
-            public Vector2d next() {
-                //Vector2d val = new Vector2d(xs[i], ys[i]);
-                Vector2d val = positions.get(i);
-                i++;
-                return val;
-            }
-        };
+        without.add(val);
+        return val;
     }
+
+    public void free(Vector2d position) { without.remove(position); }
+    public void free(Collection<Vector2d> positions) { without.removeAll(positions); }
+
 }

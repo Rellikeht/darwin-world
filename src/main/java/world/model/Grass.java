@@ -4,6 +4,10 @@ public class Grass implements WorldElement {
 
     private final Vector2d position;
 
+    public Grass() {
+        this.position = null;
+    }
+
     public Grass(Vector2d position) {
         this.position = position;
     }

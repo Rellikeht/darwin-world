@@ -8,8 +8,9 @@ import java.util.stream.Collectors;
 public abstract class AbstractWorldMap implements WorldMap {
 
     // Elementy
+    //protected final Map<Vector2d, Grass> grass;
+    protected final Set<Vector2d> grass;
     protected final Map<Vector2d, List<Animal>> animals;
-    protected final Map<Vector2d, Grass> grass;
     protected final Vector2d upperRight, lowerLeft;
     protected final Set<MapChangeListener> listeners;
     protected final MapVisualizer visualizer = new MapVisualizer(this);
@@ -20,6 +21,9 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected static int curId = 0;
     protected final int id;
 
+    protected final RandomPositionGenerator overEquator, underEquator, equator;
+    protected final Iterator<Vector2d>[] generators;
+
     @Override
     public int getId() { return this.id; }
     @Override
@@ -28,8 +32,9 @@ public abstract class AbstractWorldMap implements WorldMap {
     public AbstractWorldMap(int width, int height, int initialGrassAmount, int jungleSize) {
         // Po co nam więcej argumentów
         // Początkowa wielkość i tak ma małe znaczenie
+        //grass = new HashMap<>(initialGrassAmount);
+        grass = new HashSet<>(initialGrassAmount);
         animals = new HashMap<>(initialGrassAmount);
-        grass = new HashMap<>(initialGrassAmount);
         listeners = new LinkedHashSet<>();
         lowerLeft = new Vector2d(0, 0);
         upperRight = new Vector2d(width-1, height-1);
@@ -43,38 +48,30 @@ public abstract class AbstractWorldMap implements WorldMap {
         // Początkowa Trawa
         Random random = new Random();
 
-        // I to wszystko trzeba przerobić używając tych 3 generatorów
-        for(int i=0;i<initialGrassAmount;i++) {
-            int grassProbability = random.nextInt(10);
-            if (grassProbability <= 1) {
-                if(grassProbability==0) {
-                    RandomPositionGenerator overEquator = new RandomPositionGenerator(
-                            new Vector2d(upperRight.getX(), upperRight.getY() - jungleEnd),
-                            upperRight
-                    );
-                    for (Vector2d grassPosition : overEquator) {
-                        grass.put(grassPosition, new Grass(grassPosition));
-                    }
-                }
-                else{
-                    RandomPositionGenerator underEquator = new RandomPositionGenerator(
-                            lowerLeft,
-                            new Vector2d(lowerLeft.getX(), lowerLeft.getY() + jungleStart)
-                    );
-                    for (Vector2d grassPosition : underEquator) {
-                        grass.put(grassPosition, new Grass(grassPosition));
-                    }
-                }
+        overEquator = new RandomPositionGenerator(
+                new Vector2d(lowerLeft.getX(), jungleEnd),
+                upperRight
+        );
+        underEquator = new RandomPositionGenerator(
+                lowerLeft,
+                new Vector2d(upperRight.getX(), jungleStart)
+        );
+        equator = new RandomPositionGenerator(
+                new Vector2d(lowerLeft.getX(), jungleStart),
+                new Vector2d(upperRight.getX(), jungleEnd)
+        );
 
-            } else {
-                RandomPositionGenerator equator = new RandomPositionGenerator(
-                        new Vector2d(lowerLeft.getX(), jungleStart),
-                        new Vector2d(jungleEnd, upperRight.getX())
-                );
-                for (Vector2d grassPosition : equator) {
-                    grass.put(grassPosition, new Grass(grassPosition));
-                }
-            }
+        // It's a kind of magic
+        generators = new RandomPositionGenerator[]{
+                overEquator, underEquator, equator, equator, equator,
+                equator, equator, equator, equator, equator
+        };
+        for(int i=0;i<initialGrassAmount;i++) {
+            int grassProbability = random.nextInt(generators.length);
+            Vector2d grassPosition = generators[grassProbability].next();
+
+            //grass.put(grassPosition, new Grass(grassPosition));
+            grass.add(grassPosition);
         }
     }
 
@@ -157,8 +154,9 @@ public abstract class AbstractWorldMap implements WorldMap {
             }
         }
 
-        Grass grassAt = grass.get(position);
-        if (grassAt != null) { return grassAt.toString(); }
+        //Grass grassAt = grass.get(position);
+        //if (grassAt != null) { return grassAt.toString(); }
+        if (grass.contains(position)) { return "*"; }
         return "";
     }
 
@@ -168,5 +166,6 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     @Override
-    public Set<Vector2d> grassPositions() { return grass.keySet(); }
+    //public Set<Vector2d> grassPositions() { return grass.keySet(); }
+    public Set<Vector2d> grassPositions() { return grass; }
 }

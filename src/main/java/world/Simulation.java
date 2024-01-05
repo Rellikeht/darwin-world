@@ -104,10 +104,10 @@ public class Simulation implements Runnable {
         map.place(new Animal(position,Direction.D0,10,newGenome,frameNum));
     }
     private void frame() {
-        // To jest właśnie ten dylemat, czy robić to wszystko tu, czy nie
-        // Imo nie ma co brać tej listy co frame bo ona sie będzie zmieniać tutaj i będziemy odpalać kolejny ruch na tej już zmienionej a tak to
+        // Imo nie ma co brać tej listy co frame bo ona sie będzie zmieniać tutaj i
+        // będziemy odpalać kolejny ruch na tej już zmienionej a tak to
         // pobierając co frame będziemy działać cały czas na tej samej a to bez sensu chyba
-        List<Animal> animals = map.getAnimals();
+        Collection<Animal> animals = map.getAnimals();
         Set<Vector2d> grassPositions = map.grassPositions() ;
         // TODO RUCH
         for (Animal a : animals) {
@@ -117,7 +117,8 @@ public class Simulation implements Runnable {
 
         // TODO JEDZENIE
         // Powinno działać ale nie dokończone. Jest szansa ze sie wyjebie na lokalnej zmianie wartościa tutaj a nie w całym programie
-        // Ale to długie
+        // Dobra, koniec tego dobrego, to trzeba do mapy
+        // choćby dlatego, że tam już taka mapa jest xd
         Map<Vector2d, Animal> eatingAnimals= new HashMap<>(animals.size());
         for(Animal animal:animals) {
             Vector2d position = animal.getPosition();
@@ -152,13 +153,16 @@ public class Simulation implements Runnable {
                 }
             }
         }
+
         for(Animal eater: eatingAnimals.values()){
             grassPositions.remove(eater.getPosition());
-            Animal animal = animals.get(animals.indexOf(eater));
-            animal.addEnergy(GRASS_ENERGY);
+            // ?????
+            //Animal animal = animals.get(animals.indexOf(eater));
+            //animal.addEnergy(GRASS_ENERGY);
         }
-        //Ale to jest chore gówno
+
         // TODO ROZMNAŻANIE
+        // Ale to jest chore gówno
         Map<Vector2d, PriorityQueue<Animal>> reproducingAnimals= new HashMap<>(animals.size());
         for (Animal animal:animals){
             Vector2d position = animal.getPosition();
