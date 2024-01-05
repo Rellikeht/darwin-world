@@ -1,6 +1,6 @@
 package world.model;
 
-public class Animal implements WorldElement {
+public class Animal {
 
     // Atrybuty
     private Direction direction;
@@ -11,7 +11,7 @@ public class Animal implements WorldElement {
     // Staty
     private int grassEaten = 0;
     private int dayOfBirth;
-    private int dayOfDeath = -1; // To by było fajnie final mieć, ale chyba się nie da
+    private int dayOfDeath;
     private int childrenAmount = 0;
 
     // TODO ilość potomków, tutaj trzeba będzie albo mieć referencje do dzieci,
@@ -31,7 +31,6 @@ public class Animal implements WorldElement {
         this(position, direction, energy, genes, 0);
     }
 
-    @Override
     public String toString() {
         return switch (this.direction) {
             case D0 -> "↑";
@@ -45,52 +44,31 @@ public class Animal implements WorldElement {
         };
     }
 
-    //public boolean isAt(Vector2d position) { return this.position.equals(position); }
-
     public Vector2d getPosition() { return this.position; }
     public Direction getOrientation() { return this.direction; }
 
     public int getEnergy() {
         return energy;
     }
-    public int getDayOfBirth(){return dayOfBirth;}
-    public int getChildrenAmount(){return childrenAmount;}
     public Genome getGenes(){return genes;}
-    public void setDayOfDeath(int day){this.dayOfDeath=day;}
 
-    //    public void setEnergy(int energy) { this.energy = energy; }
-    // Tak mi się wydaje, że będzie lepiej, bo przecież im nigdy nie będziemy
-    // bezpośrednio ustawiali energii
-    public void addEnergy(int energy) { this.energy += energy; }
-
-    // A tu od razu można umieranie zrobić
     public void loseEnergy(int energy) { this.energy -= energy; }
-    public void addChildren() { this.childrenAmount += 1; }
 
-    // Może to wyjdzie w ten sposób
+    public void eatGrass(int grassEnergy) {
+        this.energy += grassEnergy;
+        this.grassEaten += 1;
+    }
+
     public void die(int day) {
         this.dayOfDeath = day;
     }
 
-//    private static Vector2d newPos(Vector2d position, Orientation orientation, MoveDirection direction) {
-//        return switch (direction) {
-//            case FORWARD -> position.add(orientation.toUnitVector());
-//            case BACKWARD -> position.subtract(orientation.toUnitVector());
-//            default -> position;
-//        };
-//    }
+    // TODO tu pasuje ustalić też jak liczymy ilosć potomków
+    public void addChildren() { this.childrenAmount += 1; }
 
-//    public void move(MoveDirection direction, MoveValidator validator) {
-//        Vector2d newPos = newPos(position, orientation, direction);
-//        switch (direction) {
-//            case FORWARD, BACKWARD -> {
-////                if (validator.canMoveTo(newPos)) {
-//                    this.position = newPos;
-////                };
-//            }
-//            case LEFT -> this.orientation = this.orientation.previous();
-//            case RIGHT -> this.orientation = this.orientation.next();
-//        }
-//    }
+    // TODO staty
+    public int getDayOfBirth(){return dayOfBirth;}
+    public int getDayOfDeath(){return dayOfDeath;}
+    public int getChildrenAmount(){return childrenAmount;}
 
 }

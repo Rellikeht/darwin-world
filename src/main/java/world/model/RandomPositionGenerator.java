@@ -3,12 +3,10 @@ package world.model;
 import java.util.*;
 
 public class RandomPositionGenerator implements Iterator<Vector2d> {
-    private int amount = 0;
+    //private int amount = 0;
     private final List<Vector2d> positions;
     private final Set<Vector2d> without;
     private final Random random = new Random();
-
-    //private int randN(int upperLimit) { return (int) (Math.random() * upperLimit); }
 
     private int maxAmount(Vector2d lowerLeft, Vector2d upperRight) {
         return (upperRight.getX() - lowerLeft.getX() + 1) *
@@ -19,7 +17,7 @@ public class RandomPositionGenerator implements Iterator<Vector2d> {
         int maxSize = maxAmount(lowerLeft, upperRight);
         positions = new ArrayList<>(maxSize);
         this.without = without;
-        this.amount = maxSize - without.size();
+        //this.amount = maxSize - without.size();
 
         // To wszystko będzie wolne, nie mam pojęcia jak to wszystko dobrze zrobić
         // Co pomysł to gorsze błędy :(
@@ -29,17 +27,12 @@ public class RandomPositionGenerator implements Iterator<Vector2d> {
                 positions.add(vec);
             }
         }
-
-        // Nie wiem, może i to by coś pomogło
-        //Collections.shuffle(positions);
     }
 
     public RandomPositionGenerator(Vector2d lowerLeft, Vector2d upperRight) {
         this(lowerLeft, upperRight, new HashSet<>(0));
     }
 
-    // To without nie jest idealne, bo jak będzie miało elementy
-    // niewystępujące w pozycjach to tu  będzie źle
     @Override
     public boolean hasNext() {
         return positions.size() > without.size();

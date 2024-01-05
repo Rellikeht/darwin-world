@@ -78,7 +78,7 @@ public class Simulation implements Runnable {
 
         map.moveAnimals();
         map.doEating(GRASS_ENERGY);
-        map.doReproduction();
+        map.doReproduction(ENERGY_NEEDED_FOR_PROCREATION, ENERGY_TAKEN_BY_PROCREATION);
         map.nextDay();
     }
 
