@@ -47,7 +47,6 @@ public class RandomPositionGenerator implements Iterator<Vector2d> {
 
     @Override
     public Vector2d next() {
-        System.out.println(positions.size());
         int i = random.nextInt(positions.size());
         Vector2d val = positions.get(i);
 

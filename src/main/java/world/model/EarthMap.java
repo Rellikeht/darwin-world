@@ -11,4 +11,5 @@ public class EarthMap extends AbstractWorldMap {
 //                position.precedes(this.upperRight) &&
 //                super.canMoveTo(position);
 //    }
+
 }

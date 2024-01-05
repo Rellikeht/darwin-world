@@ -43,4 +43,8 @@ public class Genome {
     public int getActiveGene() {
         return activeGene;
     }
+
+    public int getLength() {
+        return genes.length;
+    }
 }

@@ -3,7 +3,6 @@ package world.model;
 import world.util.MapVisualizer;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public abstract class AbstractWorldMap implements WorldMap {
 
@@ -15,11 +14,11 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected final Set<MapChangeListener> listeners;
     protected final MapVisualizer visualizer = new MapVisualizer(this);
     protected final int jungleSize;
-//    private final int equatorSize = 1;
 
     // Numeracja
     protected static int curId = 0;
     protected final int id;
+    protected int day = 0;
 
     protected final RandomPositionGenerator overEquator, underEquator, equator;
     protected final Iterator<Vector2d>[] generators;
@@ -30,8 +29,6 @@ public abstract class AbstractWorldMap implements WorldMap {
     public Vector2d getUpperRight() { return upperRight; }
 
     public AbstractWorldMap(int width, int height, int initialGrassAmount, int jungleSize) {
-        // Po co nam więcej argumentów
-        // Początkowa wielkość i tak ma małe znaczenie
         //grass = new HashMap<>(initialGrassAmount);
         grass = new HashSet<>(initialGrassAmount);
         animals = new HashMap<>(initialGrassAmount);
@@ -47,7 +44,6 @@ public abstract class AbstractWorldMap implements WorldMap {
 
         // Początkowa Trawa
         Random random = new Random();
-
         overEquator = new RandomPositionGenerator(
                 new Vector2d(lowerLeft.getX(), jungleEnd),
                 upperRight
@@ -82,48 +78,12 @@ public abstract class AbstractWorldMap implements WorldMap {
         animals.put(animal.getPosition(), animalsAt);
     }
 
-    @Override
-    public void move(Animal animal) {
-        // TODO praktycznie cały ruch do zrobienia
-
-        // wiadomość do zmiany, aczkolwiek to tylko debugowanie (na razie)
-        mapChanged("Animal at %s is moving".formatted(
-                animal.getPosition().toString())
-        );
-
-        Vector2d beforePosition=animal.getPosition();
-        List<Animal> animalsAtBefore=animals.getOrDefault(beforePosition, new ArrayList<>());
-        animals.remove(beforePosition);
-        animalsAtBefore.remove(animal);
-//        animal.move(direction, this);
-        Vector2d afterPosition=animal.getPosition();
-
-        // Tutaj by można rozwiązać konflikt, które zwierze zjada,
-        // a potem zapdejtować mu energię i podobnie z rozmnażaniem
-        // I też można by to wywalić do osobnej funkcji
-        // Albo jedzenie do osobnej funkcji i każda faza ruchu osobno w symulacji
-
-        // IMHO to może w symulacji na koniec sprawdzać jakie zwięrzęta stoją na trawie i tam rozwiązywać problem kto zjada
-//        if(!beforePosition.equals(afterPosition) && grass.containsKey(afterPosition)){
-//            animal.setEnergy(animal.getEnergy()+grassEnergy);
-//        }
-
-        List<Animal> animalsAtAfter=animals.getOrDefault(afterPosition, new ArrayList<>());
-        animalsAtAfter.add(animal);
-        animals.put(beforePosition, animalsAtBefore);
-        animals.put(afterPosition, animalsAtAfter);
-    }
-
-//    public boolean isOccupied(Vector2d position) {
-//        return animals.containsKey(position);
-//    }
-
-    @Override
-    public List<Animal> getAnimals() {
+    //@Override
+    protected Collection<Animal> allAnimals() {
         // Przyjemne, trzeba przyznać
         return animals.values().stream()
                 .flatMap(List::stream)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -135,7 +95,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     public void addListener(MapChangeListener listener) { listeners.add(listener); }
     @Override
     public void removeListener(MapChangeListener listener) { listeners.remove(listener); }
-    private void mapChanged(String message) {
+    protected void mapChanged(String message) {
         for (MapChangeListener listener : listeners) {
             listener.mapChanged(this, message);
         }
@@ -160,12 +120,153 @@ public abstract class AbstractWorldMap implements WorldMap {
         return "";
     }
 
+    //public List<Animal> animalsAt(Vector2d position) {
+    //    return animals.get(position);
+    //}
+
+    //public Set<Vector2d> grassPositions() { return grass.keySet(); }
+    protected Set<Vector2d> grassPositions() { return grass; }
+
     @Override
-    public List<Animal> animalsAt(Vector2d position) {
-        return animals.get(position);
+    public void moveAnimals() {
+        // TODO nie wiem, co z tym listenerem
+        mapChanged("");
+        //mapChanged("Animal at %s is moving".formatted(animal.getPosition().toString()));
+
+        for(Animal animal: allAnimals()) {
+
+            // TODO ruch tutaj
+            //Vector2d beforePosition = animal.getPosition();
+            //List<Animal> animalsAtBefore=animals.getOrDefault(beforePosition, new ArrayList<>());
+            //animals.remove(beforePosition);
+            //animalsAtBefore.remove(animal);
+            ////animal.move(direction, this);
+            //Vector2d afterPosition=animal.getPosition();
+
+            //List<Animal> animalsAtAfter=animals.getOrDefault(afterPosition, new ArrayList<>());
+            //animalsAtAfter.add(animal);
+            //animals.put(beforePosition, animalsAtBefore);
+            //animals.put(afterPosition, animalsAtAfter);
+
+        }
+    }
+
+    protected Queue<Animal> getFittestAt(Vector2d position) {
+        List<Animal> animals = this.animals.get(position);
+        PriorityQueue<Animal> queue = new PriorityQueue<>(
+                animals.size(),
+                Comparator.comparingInt(Animal::getEnergy)
+        );
+        queue.addAll(animals);
+        return queue;
     }
 
     @Override
-    //public Set<Vector2d> grassPositions() { return grass.keySet(); }
-    public Set<Vector2d> grassPositions() { return grass; }
+    public void doEating(int grassEnergy) {
+
+        //Map<Vector2d, Animal> eatingAnimals= new HashMap<>(animals.size());
+        //for(Animal animal:animals) {
+        //    Vector2d position = animal.getPosition();
+        //    if (grassPositions.contains(position)) {
+        //        if (eatingAnimals.containsKey(position)) {
+        //            Animal oldAnimal = eatingAnimals.get(position);
+        //            if (animal.getEnergy() > oldAnimal.getEnergy()) {
+        //                eatingAnimals.replace(position,animal);
+        //            }
+        //            if (animal.getEnergy() == oldAnimal.getEnergy()) {
+        //                if(animal.getDayOfBirth()>oldAnimal.getDayOfBirth()){
+        //                    eatingAnimals.replace(position,animal);
+        //                }
+        //                if(animal.getDayOfBirth()==oldAnimal.getDayOfBirth()){
+        //                    if(animal.getChildrenAmount()>oldAnimal.getChildrenAmount()){
+        //                        eatingAnimals.replace(position,animal);
+        //                    }
+        //                    if(animal.getChildrenAmount()==oldAnimal.getChildrenAmount()){
+        //                        Random random = new Random();
+        //                        int chosenAnimal = random.nextInt(2);
+        //                        if(chosenAnimal==0){
+        //                            eatingAnimals.replace(position,animal);
+        //                        }
+        //                    }
+        //                }
+
+        //            }
+        //        }
+        //        else {
+        //            eatingAnimals.put(animal.getPosition(), animal);
+        //        }
+        //    }
+        //}
+
+        //for(Animal eater: eatingAnimals.values()){
+        //    grassPositions.remove(eater.getPosition());
+        //    // ?????
+        //    //Animal animal = animals.get(animals.indexOf(eater));
+        //    //animal.addEnergy(GRASS_ENERGY);
+        //}
+
+        for (Vector2d position: animals.keySet()) {
+            if (!animals.get(position).isEmpty()) {
+                Queue<Animal> fittest = getFittestAt(position);
+                Animal animal = fittest.peek();
+                animal.addEnergy(grassEnergy);
+            }
+        }
+
+    }
+
+    protected Animal reproducing(Animal animal1, Animal animal2) {
+        Random random = new Random();
+        int side = random.nextInt(2);
+        int energy1 = animal1.getEnergy();
+        int energy2 = animal2.getEnergy();
+        Genome genome1 = animal1.getGenes();
+        Genome genome2 = animal2.getGenes();
+        Genome newGenome = new Genome(0);
+        int GENOME_LENGTH = genome1.getLength();
+        int proportions = GENOME_LENGTH*(energy2/energy1);
+
+        if(side==0) {
+            for (int i = 0; i < GENOME_LENGTH-proportions; i++) {
+                newGenome.setGene(i, genome2.getGene(i));
+            }
+            for (int i = GENOME_LENGTH-proportions; i < GENOME_LENGTH; i++) {
+                newGenome.setGene(i, genome1.getGene(i));
+            }
+        }
+        else{
+            for (int i = 0; i < proportions; i++) {
+                newGenome.setGene(i, genome1.getGene(i));
+            }
+            for (int i = proportions; i < GENOME_LENGTH; i++) {
+                newGenome.setGene(i, genome2.getGene(i));
+            }
+        }
+
+        Vector2d position = animal1.getPosition();
+        return new Animal(position, Direction.randomDirection(), 10, newGenome, day);
+    }
+
+    public void doReproduction() {
+        for (Vector2d position: animals.keySet()) {
+            if (animals.get(position).size() > 1) {
+                Queue<Animal> fittest = getFittestAt(position);
+                // Walony warning, nie ma jak mu powiedzieć, że to jest dobrze
+                // A jest, bo ten if tutaj
+                place(reproducing(fittest.peek(), fittest.peek()));
+            }
+        }
+    }
+
+    @Override
+    public void nextDay() {
+        for(Animal animal: allAnimals()) {
+            if(animal.getEnergy()<=0){
+                animals.get(animal.getPosition()).remove(animal);
+                animal.setDayOfDeath(day);
+            }
+        }
+        day += 1;
+    }
+
 }

@@ -1,5 +1,7 @@
 package world.model;
 
+import java.util.Random;
+
 public enum Direction {
 
     // To z numeracją pozwoli nieco łatwiej je dodawać
@@ -18,6 +20,8 @@ public enum Direction {
 
     // Czysto na wszelki wypadek
     private final int number;
+    private static final int amount = Direction.values().length;
+    private static final Random random = new Random();
 
     Direction(int number) {
         this.number = number;
@@ -29,6 +33,13 @@ public enum Direction {
 
     public Vector2d toUnitVector() { return vector; }
     public int getNumber() { return number; }
+
+    public static Direction getDirection(int i) {
+        return Direction.values()[i];
+    }
+    public static Direction randomDirection() {
+        return getDirection(random.nextInt(amount));
+    }
 
     // Jakby się miało przydać to lepiej to wsadzić tam u góry
 //    public String toString() {
