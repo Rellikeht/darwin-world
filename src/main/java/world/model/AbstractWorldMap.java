@@ -147,7 +147,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         List<Animal> animals = this.animals.get(position);
         PriorityQueue<Animal> queue = new PriorityQueue<>(
                 animals.size(),
-                Comparator.comparingInt(Animal::getEnergy)
+                new FittestComparator()
         );
         queue.addAll(animals);
         return queue;
