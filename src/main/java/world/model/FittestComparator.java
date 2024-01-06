@@ -7,11 +7,11 @@ public class FittestComparator implements Comparator<Animal> {
 @Override
 public int compare(Animal animal1, Animal animal2) {
         // Porównujemy po parametrze 1
-        int result = Integer.compare(animal1.getEnergy(), animal2.getEnergy());
+        int result = Integer.compare(animal2.getEnergy(), animal1.getEnergy());
         if (result == 0) {
-        result = Integer.compare(animal1.getDayOfDeath()- animal1.getDayOfBirth(),animal2.getDayOfDeath()- animal1.getDayOfBirth());
+        result = Integer.compare(animal2.getDaysOfLife(),animal1.getDaysOfLife());
             if (result == 0){
-                result = Integer.compare(animal1.getChildrenAmount(), animal2.getChildrenAmount());
+                result = Integer.compare(animal2.getChildrenAmount(), animal1.getChildrenAmount());
                 if (result==0){
                     Random random = new Random();
                     result = random.nextInt(2);

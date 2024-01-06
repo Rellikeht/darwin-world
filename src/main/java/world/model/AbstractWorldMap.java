@@ -225,6 +225,9 @@ public abstract class AbstractWorldMap implements WorldMap {
                 animals.get(animal.getPosition()).remove(animal);
                 animal.die(day);
             }
+            else{
+                animal.nextDayOfLife();
+            }
         }
         day += 1;
     }

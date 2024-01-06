@@ -12,6 +12,7 @@ public class Animal {
     private int grassEaten = 0;
     private int dayOfBirth;
     private int dayOfDeath;
+    private int daysOfLife=0;
     private int childrenAmount = 0;
 
     // TODO ilość potomków, tutaj trzeba będzie albo mieć referencje do dzieci,
@@ -74,7 +75,8 @@ public class Animal {
     }
     // TODO tu pasuje ustalić też jak liczymy ilosć potomków
     public void addChildren() { this.childrenAmount += 1; }
-
+    public int getDaysOfLife(){return  daysOfLife;}
+    public void nextDayOfLife(){daysOfLife+=1;}
     // TODO staty
     public int getDayOfBirth(){return dayOfBirth;}
     public int getDayOfDeath(){return dayOfDeath;}
