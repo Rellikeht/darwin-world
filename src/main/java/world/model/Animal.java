@@ -7,7 +7,7 @@ public class Animal {
     private Vector2d position;
     private final Genome genes;
     private int energy;
-
+    private int lastGen = 0;
     // Staty
     private int grassEaten = 0;
     private int dayOfBirth;
@@ -22,7 +22,6 @@ public class Animal {
         this.direction = direction;
         this.genes = genes;
         this.energy = energy;
-
         this.dayOfBirth = dayOfBirth;
         // TODO staty
     }
@@ -33,14 +32,14 @@ public class Animal {
 
     public String toString() {
         return switch (this.direction) {
-            case D0 -> "↑";
-            case D45 -> "↗";
-            case D90 -> "→";
-            case D135 -> "↘";
-            case D180 -> "↓";
-            case D225 -> "↙";
-            case D270 -> "←";
-            case D315 -> "↖";
+            case D0 -> "u";
+            case D45 -> "ur";
+            case D90 -> "r";
+            case D135 -> "dr";
+            case D180 -> "d";
+            case D225 -> "dl";
+            case D270 -> "l";
+            case D315 -> "ul";
         };
     }
 
@@ -58,11 +57,21 @@ public class Animal {
         this.energy += grassEnergy;
         this.grassEaten += 1;
     }
-
+    public int getLastGen(){
+        return lastGen;
+    }
+    public void rotateAnimals(int n){
+        int gen = genes.getGene(n);
+        lastGen+=1;
+        direction=direction.nextDirection(gen);
+    }
+    public void move(){
+        Vector2d dirVector = direction.toUnitVector();
+        position.add(dirVector);
+        }
     public void die(int day) {
         this.dayOfDeath = day;
     }
-
     // TODO tu pasuje ustalić też jak liczymy ilosć potomków
     public void addChildren() { this.childrenAmount += 1; }
 

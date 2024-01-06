@@ -37,6 +37,7 @@ public enum Direction {
     public static Direction getDirection(int i) {
         return Direction.values()[i];
     }
+    public Direction nextDirection(int i){return Direction.values()[(number+i)%8];}
     public static Direction randomDirection() {
         return getDirection(random.nextInt(amount));
     }
