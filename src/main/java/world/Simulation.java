@@ -1,6 +1,6 @@
 package world;
 
-import javafx.scene.paint.RadialGradient;
+//import javafx.scene.paint.RadialGradient;
 import world.model.*;
 
 import java.util.*;
@@ -48,8 +48,8 @@ public class Simulation implements Runnable {
 
             Animal animal = new Animal(
                     new Vector2d(
-                            random.nextInt(maxPos.getX()),
-                            random.nextInt(maxPos.getY())
+                            random.nextInt(maxPos.getX()+1),
+                            random.nextInt(maxPos.getY()+1)
                     ),
                     Direction.randomDirection(),
                     INITIAL_ANIMAL_ENERGY,
@@ -76,6 +76,7 @@ public class Simulation implements Runnable {
         // jedzenie chyba tu, bo energia, chociaż w mapie by uszło
         // rozmnażanie raczej tu, ale w sumie w mapie też by dało radę
         // usuwanie umarłych w mapie, bo to łatwe (ten dzień taki sobie, ale trudno)
+
         map.nextDay();
         map.moveAnimals();
         map.doEating(GRASS_ENERGY);

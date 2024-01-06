@@ -12,7 +12,9 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected final Vector2d upperRight, lowerLeft;
     protected final Set<MapChangeListener> listeners;
     protected final MapVisualizer visualizer = new MapVisualizer(this);
-    protected final int jungleSize;
+    //protected final int jungleSize;
+    protected final int jungleStart;
+    protected final int jungleEnd;
 
     // Numeracja
     protected static int curId = 0;
@@ -33,19 +35,23 @@ public abstract class AbstractWorldMap implements WorldMap {
         listeners = new LinkedHashSet<>();
         lowerLeft = new Vector2d(0, 0);
         upperRight = new Vector2d(width-1, height-1);
-        int jungleStart = (upperRight.getY() - lowerLeft.getY() - jungleSize) / 2;
-        int jungleEnd = jungleStart + jungleSize;
-        overEquator = new RandomPositionGenerator(
-                new Vector2d(lowerLeft.getX(), jungleEnd),
-                upperRight
-        );
+
+        // TODO te obliczenia nie są bardzo dokładne,
+        // i tamten test nie przechodzi
+        //this.jungleSize = jungleSize;
+        jungleStart = (upperRight.getY() - lowerLeft.getY() - jungleSize) / 2;
+        jungleEnd = jungleStart + jungleSize;
         underEquator = new RandomPositionGenerator(
                 lowerLeft,
                 new Vector2d(upperRight.getX(), jungleStart)
         );
         equator = new RandomPositionGenerator(
                 new Vector2d(lowerLeft.getX(), jungleStart),
-                new Vector2d(upperRight.getX(), jungleEnd)
+                new Vector2d(upperRight.getX(), jungleEnd+1)
+        );
+        overEquator = new RandomPositionGenerator(
+                new Vector2d(lowerLeft.getX(), jungleEnd+1),
+                upperRight
         );
 
         // It's a kind of magic
@@ -54,15 +60,15 @@ public abstract class AbstractWorldMap implements WorldMap {
                 equator, equator, equator, equator, equator
         };
 
-        this.jungleSize = jungleSize;
         this.id = curId;
         curId += 1;
 
         // Początkowa Trawa
         grassPlace(initialGrassAmount);
     }
+
     @Override
-    public void grassPlace(int N){
+    public void grassPlace(int N) {
         Random random = new Random();
         for(int i=0;i<N;i++) {
             int grassProbability = random.nextInt(generators.length);
@@ -70,6 +76,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             grass.add(grassPosition);
         }
     }
+
     @Override
     public void place(Animal animal)  {
         List<Animal> animalsAt = animals.getOrDefault(animal.getPosition(), new ArrayList<>());
@@ -89,6 +96,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     public String toString() {
         return visualizer.draw(lowerLeft, upperRight);
     }
+    public Set<Vector2d> grassPositions() { return grass; }
 
     @Override
     public void addListener(MapChangeListener listener) { listeners.add(listener); }
@@ -116,8 +124,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         if (grass.contains(position)) { return "*"; }
         return "";
     }
-
-    //protected Set<Vector2d> grassPositions() { return grass; }
 
     @Override
     public void moveAnimals() {
@@ -160,6 +166,12 @@ public abstract class AbstractWorldMap implements WorldMap {
                 Queue<Animal> fittest = getFittestAt(position);
                 Animal animal = fittest.peek();
                 animal.eatGrass(grassEnergy);
+                grass.remove(position);
+
+                // Bo mi się nie chce ifów robić, a to i tak zadziała xd
+                underEquator.free(position);
+                equator.free(position);
+                overEquator.free(position);
             }
         }
 
@@ -193,9 +205,10 @@ public abstract class AbstractWorldMap implements WorldMap {
             }
         }
 
-        // TODO energia
+        animal1.loseEnergy(energyTaken);
+        animal2.loseEnergy(energyTaken);
         Vector2d position = animal1.getPosition();
-        return new Animal(position, Direction.randomDirection(), 10, newGenome, day);
+        return new Animal(position, Direction.randomDirection(), 2*energyTaken, newGenome, day);
     }
 
     @Override
@@ -203,12 +216,11 @@ public abstract class AbstractWorldMap implements WorldMap {
         for (Vector2d position: animals.keySet()) {
             if (animals.get(position).size() > 1) {
                 Queue<Animal> fittest = getFittestAt(position);
-                // Walony warning, nie ma jak mu powiedzieć, że to jest dobrze
-                // A jest, bo ten if tutaj
                 Animal a1 = fittest.peek();
                 Animal a2 = fittest.peek();
-                // TODO sprawdzenie energii
-                place(reproducing(a1, a2, energyTaken));
+                if (a1.getEnergy() >= energyNeeded && a2.getEnergy() >= energyNeeded) {
+                    place(reproducing(a1, a2, energyTaken));
+                }
             }
         }
     }

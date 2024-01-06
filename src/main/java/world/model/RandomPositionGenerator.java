@@ -21,8 +21,8 @@ public class RandomPositionGenerator implements Iterator<Vector2d> {
 
         // To wszystko będzie wolne, nie mam pojęcia jak to wszystko dobrze zrobić
         // Co pomysł to gorsze błędy :(
-        for (int i = lowerLeft.getX(); i < upperRight.getX(); i++) {
-            for (int j = lowerLeft.getY(); j < upperRight.getY(); j++) {
+        for (int i = lowerLeft.getX(); i <= upperRight.getX(); i++) {
+            for (int j = lowerLeft.getY(); j <= upperRight.getY(); j++) {
                 Vector2d vec = new Vector2d(i, j);
                 positions.add(vec);
             }

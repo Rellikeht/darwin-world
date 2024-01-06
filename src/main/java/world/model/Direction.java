@@ -41,6 +41,10 @@ public enum Direction {
         return getDirection(random.nextInt(amount));
     }
 
+    public Direction rotate(Direction change) {
+        return Direction.values()[(this.number + change.number) % Direction.amount];
+    }
+
     // Jakby się miało przydać to lepiej to wsadzić tam u góry
 //    public String toString() {
 //        return switch (this) {
@@ -52,24 +56,6 @@ public enum Direction {
 //            case SW -> "Południowy zachód";
 //            case W -> "Zachód";
 //            case NW -> "Północny zachód";
-//        };
-//    }
-//
-//    public MapDirection next() {
-//        return switch (this) {
-//            case NORTH -> EAST;
-//            case SOUTH -> WEST;
-//            case EAST -> SOUTH;
-//            case WEST -> NORTH;
-//        };
-//    }
-//
-//    public MapDirection previous() {
-//        return switch (this) {
-//            case NORTH -> WEST;
-//            case SOUTH -> EAST;
-//            case EAST -> NORTH;
-//            case WEST -> SOUTH;
 //        };
 //    }
 

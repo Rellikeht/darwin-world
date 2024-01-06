@@ -1,8 +1,8 @@
 package world.model;
 
 public class EarthMap extends AbstractWorldMap {
-    public EarthMap(int width, int height, int animalAmount, int grassAmount) {
-        super(width, height, animalAmount, grassAmount);
+    public EarthMap(int width, int height, int initialGrassAmount, int jungleSize) {
+        super(width, height, initialGrassAmount, jungleSize);
     }
 
 //    @Override
