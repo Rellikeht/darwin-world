@@ -8,12 +8,12 @@ import java.util.*;
 public class Simulation implements Runnable {
 
     // Stałe
-    private static final int MAP_HEIGHT = 30;
-    private static final int MAP_WIDTH = 100;
-    private static final int INITIAL_GRASS_AMOUNT = 300;
+    private static final int MAP_HEIGHT = 10;
+    private static final int MAP_WIDTH = 10;
+    private static final int INITIAL_GRASS_AMOUNT = 3;
     private static final int GRASS_ENERGY = 20;
     private static final int DAILY_GRASS_AMOUNT = 50;
-    private static final int INITIAL_ANIMAL_AMOUNT = 20;
+    private static final int INITIAL_ANIMAL_AMOUNT = 15;
     private static final int INITIAL_ANIMAL_ENERGY = 120;
     private static final int ENERGY_NEEDED_FOR_PROCREATION = 50;
     private static final int ENERGY_TAKEN_BY_PROCREATION = 30;
@@ -82,15 +82,16 @@ public class Simulation implements Runnable {
         map.doEating(GRASS_ENERGY);
         map.doReproduction(ENERGY_NEEDED_FOR_PROCREATION, ENERGY_TAKEN_BY_PROCREATION);
         map.grassPlace(NEW_DAY_GRASS);
-
     }
 
     public void run() {
-        while (true) {
+        int i=0;
+        while (i < 2) {
             frame();
             try { Thread.sleep(250); }
             // Nie wiem, czy by tego jakoś lepiej nie trzeba
             catch (InterruptedException e) { throw new RuntimeException(e); }
+            i++;
         }
     }
 

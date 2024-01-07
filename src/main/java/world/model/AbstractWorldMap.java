@@ -125,27 +125,30 @@ public abstract class AbstractWorldMap implements WorldMap {
         return "";
     }
 
+    //protected Set<Vector2d> grassPositions() { return grass; }
+
+    private boolean canMove(Animal animal, Vector2d dirVector){
+        return(animal.getPosition().add(dirVector).follows(lowerLeft) && animal.getPosition().add(dirVector).precedes(upperRight));
+    }
     @Override
     public void moveAnimals() {
         // TODO Coś z listenerem, trzeba przerzucić do simulation jak dla mnie
         // ale to później
         mapChanged("");
-
         for(Animal animal: allAnimals()) {
-
-            // TODO ruch tutaj
-            //Vector2d beforePosition = animal.getPosition();
-            //List<Animal> animalsAtBefore=animals.getOrDefault(beforePosition, new ArrayList<>());
-            //animals.remove(beforePosition);
-            //animalsAtBefore.remove(animal);
-            ////animal.move(direction, this);
-            //Vector2d afterPosition=animal.getPosition();
-
-            //List<Animal> animalsAtAfter=animals.getOrDefault(afterPosition, new ArrayList<>());
-            //animalsAtAfter.add(animal);
-            //animals.put(beforePosition, animalsAtBefore);
-            //animals.put(afterPosition, animalsAtAfter);
-
+            animal.rotateAnimals( animal.getLastGen()%(animal.getGenes().getLength()+1));
+            Direction direction = animal.getOrientation();
+            Vector2d dirVector =direction.toUnitVector();
+            Vector2d beforePosition = animal.getPosition();
+            List<Animal> animalsAtBefore=animals.getOrDefault(beforePosition, new ArrayList<>());
+            animals.remove(beforePosition);
+            animalsAtBefore.remove(animal);
+            if (canMove(animal, dirVector)){animal.move();}
+            Vector2d afterPosition=animal.getPosition();
+            List<Animal> animalsAtAfter=animals.getOrDefault(afterPosition, new ArrayList<>());
+            animalsAtAfter.add(animal);
+            animals.put(beforePosition, animalsAtBefore);
+            animals.put(afterPosition, animalsAtAfter);
         }
     }
 
@@ -153,10 +156,17 @@ public abstract class AbstractWorldMap implements WorldMap {
         List<Animal> animals = this.animals.get(position);
         PriorityQueue<Animal> queue = new PriorityQueue<>(
                 animals.size(),
-                Comparator.comparingInt(Animal::getEnergy)
+                new FittestComparator()
         );
         queue.addAll(animals);
         return queue;
+    }
+
+    public Vector2d getUpperBound(){
+        return upperRight;
+    }
+    public Vector2d getLowerBound(){
+        return lowerLeft;
     }
 
     @Override
@@ -231,6 +241,10 @@ public abstract class AbstractWorldMap implements WorldMap {
             if(animal.getEnergy()<=0){
                 animals.get(animal.getPosition()).remove(animal);
                 animal.die(day);
+            }
+            else{
+                // ??
+                animal.nextDayOfLife();
             }
         }
         day += 1;

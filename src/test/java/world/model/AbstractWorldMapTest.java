@@ -16,7 +16,16 @@ class AbstractWorldMapTest {
             int jungleSize = random.nextInt(8)+1;
 
             System.out.printf("%d: %d\n", i, jungleSize);
-            EarthMap map = new EarthMap(10, 10, 10, jungleSize);
+            EarthMap map = new EarthMap(50, 50, 10, jungleSize);
+            map.place(new Animal(
+                    new Vector2d(
+                            1,1
+                    ),
+                    Direction.randomDirection(),
+                    10,
+                    new Genome(7)
+            ));
+            map.moveAnimals();
         }
     }
 
