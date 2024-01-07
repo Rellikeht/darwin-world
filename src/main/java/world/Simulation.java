@@ -8,15 +8,16 @@ import java.util.*;
 public class Simulation implements Runnable {
 
     // Stałe
-    private static final int MAP_HEIGHT = 10;
-    private static final int MAP_WIDTH = 10;
+    private static final int MAP_HEIGHT = 20;
+    private static final int MAP_WIDTH = 20;
     private static final int INITIAL_GRASS_AMOUNT = 3;
     private static final int GRASS_ENERGY = 20;
-    private static final int DAILY_GRASS_AMOUNT = 50;
+    private static final int DAILY_GRASS_AMOUNT = 20;
     private static final int INITIAL_ANIMAL_AMOUNT = 15;
     private static final int INITIAL_ANIMAL_ENERGY = 120;
     private static final int ENERGY_NEEDED_FOR_PROCREATION = 50;
     private static final int ENERGY_TAKEN_BY_PROCREATION = 30;
+    private static final int ENERGY_TAKEN_BY_MOVEMENT = 5;
     private static final int MIN_AMOUNT_OF_MUTATIONS = 0;
     private static final int MAX_AMOUNT_OF_MUTATIONS = 100;
     private static final int GENOME_LENGTH = 10;
@@ -78,7 +79,7 @@ public class Simulation implements Runnable {
         // usuwanie umarłych w mapie, bo to łatwe (ten dzień taki sobie, ale trudno)
 
         map.nextDay();
-        map.moveAnimals();
+        map.moveAnimals(ENERGY_TAKEN_BY_MOVEMENT);
         map.doEating(GRASS_ENERGY);
         map.doReproduction(ENERGY_NEEDED_FOR_PROCREATION, ENERGY_TAKEN_BY_PROCREATION);
         map.grassPlace(NEW_DAY_GRASS);
@@ -86,7 +87,7 @@ public class Simulation implements Runnable {
 
     public void run() {
         int i=0;
-        while (i < 2) {
+        while (i < 5) {
             frame();
             try { Thread.sleep(250); }
             // Nie wiem, czy by tego jakoś lepiej nie trzeba

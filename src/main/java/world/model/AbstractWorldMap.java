@@ -21,8 +21,10 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected final int id;
     protected int day = 0;
 
+    // Generacja
+    protected final Random random = new Random();
     protected final RandomPositionGenerator overEquator, underEquator, equator;
-    protected final Iterator<Vector2d>[] generators;
+    //protected final Iterator<Vector2d>[] generators;
 
     @Override
     public int getId() { return this.id; }
@@ -55,10 +57,10 @@ public abstract class AbstractWorldMap implements WorldMap {
         );
 
         // It's a kind of magic
-        generators = new RandomPositionGenerator[]{
-                overEquator, underEquator, equator, equator, equator,
-                equator, equator, equator, equator, equator
-        };
+        //generators = new RandomPositionGenerator[]{
+        //        overEquator, underEquator, equator, equator, equator,
+        //        equator, equator, equator, equator, equator
+        //};
 
         this.id = curId;
         curId += 1;
@@ -69,11 +71,24 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     @Override
     public void grassPlace(int N) {
-        Random random = new Random();
+        List<RandomPositionGenerator> generators = new ArrayList<>(10);
+        if (underEquator.hasNext()) { generators.add(underEquator); }
+        if (overEquator.hasNext()) { generators.add(overEquator); }
+        if (equator.hasNext()) {
+            for (int i = 0; i < 8; i++) { generators.add(equator); }
+        }
+
+        if (generators.isEmpty()) { return; }
         for(int i=0;i<N;i++) {
-            int grassProbability = random.nextInt(generators.length);
-            Vector2d grassPosition = generators[grassProbability].next();
-            grass.add(grassPosition);
+            int grassProbability = random.nextInt(generators.size());
+            RandomPositionGenerator generator = generators.get(grassProbability);
+
+            // W tym miejscu i tak się to wywali
+            // TODO Tu trzeba przysiąść i to lepiej zrobić
+            if (generator.hasNext()) {
+                Vector2d grassPosition = generator.next();
+                grass.add(grassPosition);
+            }
         }
     }
 
@@ -128,24 +143,31 @@ public abstract class AbstractWorldMap implements WorldMap {
     //protected Set<Vector2d> grassPositions() { return grass; }
 
     private boolean canMove(Animal animal, Vector2d dirVector){
-        return(animal.getPosition().add(dirVector).follows(lowerLeft) && animal.getPosition().add(dirVector).precedes(upperRight));
+        return animal.getPosition().add(dirVector).follows(lowerLeft)
+            && animal.getPosition().add(dirVector).precedes(upperRight);
     }
     @Override
-    public void moveAnimals() {
+    public void moveAnimals(int energyTaken) {
         // TODO Coś z listenerem, trzeba przerzucić do simulation jak dla mnie
         // ale to później
         mapChanged("");
+
         for(Animal animal: allAnimals()) {
-            animal.rotateAnimals( animal.getLastGen()%(animal.getGenes().getLength()+1));
+            animal.rotateAnimals(animal.getCurrentGene()%(animal.getGenes().getLength()+1));
             Direction direction = animal.getOrientation();
-            Vector2d dirVector =direction.toUnitVector();
+            Vector2d dirVector = direction.toUnitVector();
             Vector2d beforePosition = animal.getPosition();
-            List<Animal> animalsAtBefore=animals.getOrDefault(beforePosition, new ArrayList<>());
+
+            List<Animal> animalsAtBefore = animals.getOrDefault(beforePosition, new ArrayList<>());
             animals.remove(beforePosition);
             animalsAtBefore.remove(animal);
-            if (canMove(animal, dirVector)){animal.move();}
+            if (canMove(animal, dirVector)){
+                animal.move();
+                animal.loseEnergy(energyTaken);
+            }
+
             Vector2d afterPosition=animal.getPosition();
-            List<Animal> animalsAtAfter=animals.getOrDefault(afterPosition, new ArrayList<>());
+            List<Animal> animalsAtAfter = animals.getOrDefault(afterPosition, new ArrayList<>());
             animalsAtAfter.add(animal);
             animals.put(beforePosition, animalsAtBefore);
             animals.put(afterPosition, animalsAtAfter);
@@ -155,8 +177,8 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected Queue<Animal> getFittestAt(Vector2d position) {
         List<Animal> animals = this.animals.get(position);
         PriorityQueue<Animal> queue = new PriorityQueue<>(
-                animals.size(),
-                new FittestComparator()
+                animals.size()
+                //new FittestComparator()
         );
         queue.addAll(animals);
         return queue;
@@ -188,7 +210,6 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     protected Animal reproducing(Animal animal1, Animal animal2, int energyTaken) {
-        Random random = new Random();
         int side = random.nextInt(2);
         int energy1 = animal1.getEnergy();
         int energy2 = animal2.getEnergy();
@@ -206,6 +227,7 @@ public abstract class AbstractWorldMap implements WorldMap {
                 newGenome.setGene(i, genome1.getGene(i));
             }
         }
+
         else{
             for (int i = 0; i < proportions; i++) {
                 newGenome.setGene(i, genome1.getGene(i));
@@ -242,10 +264,9 @@ public abstract class AbstractWorldMap implements WorldMap {
                 animals.get(animal.getPosition()).remove(animal);
                 animal.die(day);
             }
-            else{
-                // ??
-                animal.nextDayOfLife();
-            }
+            //else{
+            //    animal.nextDayOfLife(); // ??
+            //}
         }
         day += 1;
     }

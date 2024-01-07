@@ -17,8 +17,6 @@ public enum Direction {
     D315(7);
 
     private final Vector2d vector;
-
-    // Czysto na wszelki wypadek
     private final int number;
     private static final int amount = Direction.values().length;
     private static final Random random = new Random();
@@ -34,17 +32,12 @@ public enum Direction {
     public Vector2d toUnitVector() { return vector; }
     public int getNumber() { return number; }
 
-    public static Direction getDirection(int i) {
-        return Direction.values()[i];
-    }
-    public Direction nextDirection(int i){return Direction.values()[(number+i)%8];}
-    public static Direction randomDirection() {
-        return getDirection(random.nextInt(amount));
-    }
-
+    public static Direction getDirection(int i) { return Direction.values()[i]; }
+    public static Direction randomDirection() { return getDirection(random.nextInt(amount)); }
     public Direction rotate(Direction change) {
         return Direction.values()[(this.number + change.number) % Direction.amount];
     }
+    public Direction rotate(int change) { return rotate(getDirection(change)); }
 
     // Jakby się miało przydać to lepiej to wsadzić tam u góry
 //    public String toString() {

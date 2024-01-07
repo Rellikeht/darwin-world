@@ -9,7 +9,7 @@ public interface WorldMap {
     void addListener(MapChangeListener listener);
     void removeListener(MapChangeListener listener);
 
-    void moveAnimals();
+    void moveAnimals(int energyTaken);
     void doEating(int grassEnergy);
     void doReproduction(int energyNeeded, int energyTaken);
     void nextDay();

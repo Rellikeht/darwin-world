@@ -25,7 +25,7 @@ class AbstractWorldMapTest {
                     10,
                     new Genome(7)
             ));
-            map.moveAnimals();
+            map.moveAnimals(5);
         }
     }
 

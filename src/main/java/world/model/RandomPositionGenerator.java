@@ -55,6 +55,5 @@ public class RandomPositionGenerator implements Iterator<Vector2d> {
     }
 
     public void free(Vector2d position) { without.remove(position); }
-    public void free(Collection<Vector2d> positions) { without.removeAll(positions); }
-
+    //public void free(Collection<Vector2d> positions) { without.removeAll(positions); }
 }
