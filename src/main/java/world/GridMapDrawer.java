@@ -24,6 +24,10 @@ public class GridMapDrawer {
         upperRight = map.getUpperRight();
         width = upperRight.getX() - lowerLeft.getX() + 1;
         height = upperRight.getY() - lowerLeft.getY() + 1;
+
+        System.out.println();
+        System.out.printf("%s %s\n", lowerLeft, upperRight);
+        System.out.println();
     }
 
     public void draw() {

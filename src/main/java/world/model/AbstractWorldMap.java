@@ -29,7 +29,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public int getId() { return this.id; }
     @Override
-    public Vector2d getLowerLeft() { return upperRight; }
+    public Vector2d getLowerLeft() { return lowerLeft; }
     @Override
     public Vector2d getUpperRight() { return upperRight; }
 

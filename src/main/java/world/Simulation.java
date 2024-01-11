@@ -1,9 +1,10 @@
 package world;
 
 //import javafx.scene.paint.RadialGradient;
+
 import world.model.*;
 
-import java.util.*;
+import java.util.Random;
 
 public class Simulation implements Runnable {
 

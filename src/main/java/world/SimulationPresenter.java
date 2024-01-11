@@ -7,9 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import world.model.Direction;
 import world.model.MapChangeListener;
-import world.model.Vector2d;
 import world.model.WorldMap;
 
 import java.util.List;
@@ -41,13 +39,6 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void onSimulationStartClicked(ActionEvent actionEvent) {
-        List<Direction> moves = OptionsParser.parse(
-                textField.getText().split(" ")
-        );
-        List<Vector2d> startingPositions = List.of(
-                new Vector2d(2, 2), new Vector2d(3, 4)
-        );
-
         Simulation simulation = new Simulation(10);
         map = simulation.getMap();
         simulation.addListener(this);
