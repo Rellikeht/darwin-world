@@ -29,6 +29,8 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public int getId() { return this.id; }
     @Override
+    public Vector2d getLowerLeft() { return upperRight; }
+    @Override
     public Vector2d getUpperRight() { return upperRight; }
 
     public AbstractWorldMap(int width, int height, int initialGrassAmount, int jungleSize) {
@@ -90,6 +92,8 @@ public abstract class AbstractWorldMap implements WorldMap {
                 grass.add(grassPosition);
             }
         }
+
+        mapChanged("We have some new grass");
     }
 
     @Override
@@ -111,7 +115,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     public String toString() {
         return visualizer.draw(lowerLeft, upperRight);
     }
-    public Set<Vector2d> grassPositions() { return grass; }
+    //public Set<Vector2d> grassPositions() { return grass; }
 
     @Override
     public void addListener(MapChangeListener listener) { listeners.add(listener); }
@@ -140,17 +144,13 @@ public abstract class AbstractWorldMap implements WorldMap {
         return "";
     }
 
-    //protected Set<Vector2d> grassPositions() { return grass; }
-
-    private boolean canMove(Animal animal, Vector2d dirVector){
+    protected boolean canMove(Animal animal, Vector2d dirVector){
         return animal.getPosition().add(dirVector).follows(lowerLeft)
             && animal.getPosition().add(dirVector).precedes(upperRight);
     }
+
     @Override
     public void moveAnimals(int energyTaken) {
-        // TODO Coś z listenerem, trzeba przerzucić do simulation jak dla mnie
-        // ale to później
-        mapChanged("");
 
         for(Animal animal: allAnimals()) {
             animal.rotateAnimals(animal.getCurrentGene()%(animal.getGenes().getLength()+1));
@@ -172,6 +172,10 @@ public abstract class AbstractWorldMap implements WorldMap {
             animals.put(beforePosition, animalsAtBefore);
             animals.put(afterPosition, animalsAtAfter);
         }
+
+        // TODO Coś z listenerem, w simulation mogłoby być lepiej
+        // ale to później
+        mapChanged("Animals moved");
     }
 
     protected Queue<Animal> getFittestAt(Vector2d position) {
@@ -182,13 +186,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         );
         queue.addAll(animals);
         return queue;
-    }
-
-    public Vector2d getUpperBound(){
-        return upperRight;
-    }
-    public Vector2d getLowerBound(){
-        return lowerLeft;
     }
 
     @Override
@@ -207,6 +204,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             }
         }
 
+        mapChanged("Eating done");
     }
 
     protected Animal reproducing(Animal animal1, Animal animal2, int energyTaken) {
@@ -255,6 +253,8 @@ public abstract class AbstractWorldMap implements WorldMap {
                 }
             }
         }
+
+        mapChanged("Reproduction done");
     }
 
     @Override

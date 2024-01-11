@@ -66,6 +66,11 @@ public class Simulation implements Runnable {
     public Simulation() {
         this(INITIAL_ANIMAL_AMOUNT);
     }
+    private void wait(int miliseconds) {
+        try { Thread.sleep(500); }
+        // Nie wiem, czy by tego jakoś lepiej nie trzeba
+        catch (InterruptedException e) { throw new RuntimeException(e); }
+    }
 
     private void frame() {
 
@@ -80,18 +85,19 @@ public class Simulation implements Runnable {
 
         map.nextDay();
         map.moveAnimals(ENERGY_TAKEN_BY_MOVEMENT);
+        wait(300);
         map.doEating(GRASS_ENERGY);
+        wait(300);
         map.doReproduction(ENERGY_NEEDED_FOR_PROCREATION, ENERGY_TAKEN_BY_PROCREATION);
+        wait(300);
         map.grassPlace(NEW_DAY_GRASS);
+        wait(300);
     }
 
     public void run() {
         int i=0;
         while (i < 5) {
             frame();
-            try { Thread.sleep(250); }
-            // Nie wiem, czy by tego jakoś lepiej nie trzeba
-            catch (InterruptedException e) { throw new RuntimeException(e); }
             i++;
         }
     }
@@ -103,5 +109,6 @@ public class Simulation implements Runnable {
     public void removeListener(MapChangeListener listener) {
         map.removeListener(listener);
     }
+    public WorldMap getMap() { return map; }
 
 }

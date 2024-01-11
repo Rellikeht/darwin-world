@@ -3,6 +3,7 @@ package world.model;
 public interface WorldMap {
 
     Vector2d getUpperRight();
+    Vector2d getLowerLeft();
     void place(Animal animal);
     int getId();
 
