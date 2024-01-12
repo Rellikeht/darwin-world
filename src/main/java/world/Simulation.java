@@ -44,8 +44,8 @@ public class Simulation implements Runnable {
 
     // Wszystko domyślne
     public Simulation() { this(new SimulationSettings()); }
-    private void wait(int miliseconds) {
-        try { Thread.sleep(500); }
+    private void wait(int milliseconds) {
+        try { Thread.sleep(milliseconds); }
         // Nie wiem, czy by tego jakoś lepiej nie trzeba
         catch (InterruptedException e) { throw new RuntimeException(e); }
     }
@@ -54,13 +54,13 @@ public class Simulation implements Runnable {
 
         map.nextDay();
         map.moveAnimals();
-        wait(300);
+        wait(settings.getTickTime());
         map.doEating();
-        wait(300);
+        wait(settings.getTickTime());
         map.doReproduction();
-        wait(300);
+        wait(settings.getTickTime());
         map.grassPlace(settings.getDailyGrassAmount());
-        wait(300);
+        wait(settings.getTickTime());
     }
 
     public void run() {

@@ -41,10 +41,11 @@ public class SimulationPresenter extends Application implements MapChangeListene
     }
 
     public void onSimulationStartClicked(ActionEvent actionEvent) {
-        // TODO ustawianie ustawień
         SimulationSettings settings = new SimulationSettings();
+        // TODO ustawianie ustawień
+
         Simulation simulation = new Simulation(settings);
-        map = simulation.getMap();
+        map = simulation.getMap();// TODO nie wiem, czy ta mapa tutaj to dobry pomysł
         simulation.addListener(this);
         startButton.setDisable(true);
         simulation.run();

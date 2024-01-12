@@ -1,4 +1,6 @@
-package world.model;
+package world;
+
+import world.model.Animal;
 
 import java.util.ArrayList;
 import java.util.List;

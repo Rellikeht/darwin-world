@@ -1,9 +1,6 @@
 package world;
 
 public class SimulationSettings {
-    public SimulationSettings() {
-        // Wszystko domyślne
-    }
 
     // Wielkości mapy
     private static final int DEFAULT_MAP_HEIGHT = 15;
@@ -64,17 +61,26 @@ public class SimulationSettings {
     void setEnergyTakenByMovement(int energyTakenByMovement) {this.energyTakenByMovement = energyTakenByMovement;}
 
     // Genom
-    // TODO struktura
     private static final int DEFAULT_MIN_AMOUNT_OF_MUTATIONS = 0;
     private int minAmountOfMutations = DEFAULT_MIN_AMOUNT_OF_MUTATIONS;
+    public int getMinAmountOfMutations() {return minAmountOfMutations;}
+    void setMinAmountOfMutations(int minAmountOfMutations) {this.minAmountOfMutations = minAmountOfMutations;}
+
     private static final int DEFAULT_MAX_AMOUNT_OF_MUTATIONS = 100;
     private int maxAmountOfMutations = DEFAULT_MAX_AMOUNT_OF_MUTATIONS;
+    public int getMaxAmountOfMutations() {return maxAmountOfMutations;}
+    void setMaxAmountOfMutations(int maxAmountOfMutations) {this.maxAmountOfMutations = maxAmountOfMutations;}
+
     private static final int DEFAULT_GENOME_LENGTH = 10;
     private int genomeLength = DEFAULT_GENOME_LENGTH;
+    public int getGenomeLength() {return genomeLength;}
+    void setGenomeLength(int genomeLength) {this.genomeLength = genomeLength;}
 
     // Flagi
     private static final boolean DEFAULT_IS_MUTATION_RANDOM = false;
     private boolean isMutationRandom = DEFAULT_IS_MUTATION_RANDOM;
+    public boolean isMutationRandom() {return isMutationRandom;}
+    void setMutationRandom(boolean mutationRandom) {isMutationRandom = mutationRandom;}
 
     private static final boolean DEFAULT_IS_MAP_BASIC = true;
     private boolean isMapBasic = DEFAULT_IS_MAP_BASIC;
@@ -82,42 +88,24 @@ public class SimulationSettings {
     void setMapBasic(boolean mapBasic) {isMapBasic = mapBasic;}
 
     // Inne
-    private static final int DEFAULT_TICK_TIME = 400;
+    private static final int DEFAULT_TICK_TIME = 300;
     private int tickTime = DEFAULT_TICK_TIME;
     public int getTickTime() { return tickTime; }
     public void setTickTime(int tickTime) { this.tickTime = tickTime; }
 
-    public int getMinAmountOfMutations() {
-        return minAmountOfMutations;
+    public SimulationSettings() {
+        // Wszystko domyślne
     }
 
-    void setMinAmountOfMutations(int minAmountOfMutations) {
-        this.minAmountOfMutations = minAmountOfMutations;
+    // To pod testy, nie wiem, czy potrzebujemy
+    public SimulationSettings(
+            int mapWidth, int mapHeight,
+            int initialGrassAmount, int jungleSize
+    ) {
+        this.mapWidth = mapWidth;
+        this.mapHeight = mapHeight;
+        this.initialGrassAmount = initialGrassAmount;
+        this.jungleSize = jungleSize;
     }
-
-    public int getMaxAmountOfMutations() {
-        return maxAmountOfMutations;
-    }
-
-    void setMaxAmountOfMutations(int maxAmountOfMutations) {
-        this.maxAmountOfMutations = maxAmountOfMutations;
-    }
-
-    public int getGenomeLength() {
-        return genomeLength;
-    }
-
-    void setGenomeLength(int genomeLength) {
-        this.genomeLength = genomeLength;
-    }
-
-    public boolean isMutationRandom() {
-        return isMutationRandom;
-    }
-
-    void setMutationRandom(boolean mutationRandom) {
-        isMutationRandom = mutationRandom;
-    }
-
 
 }

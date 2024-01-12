@@ -6,10 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EarthMap extends AbstractWorldMap {
-    //public EarthMap(int width, int height, int initialGrassAmount, int jungleSize, int typeOfMutation) {
-    //    super(width, height, initialGrassAmount, jungleSize, typeOfMutation);
-    //}
     public EarthMap(SimulationSettings settings) { super(settings); }
+
     public void moveAnimals(int energyTaken) {
         for(Animal animal: allAnimals()) {
             animal.rotateAnimals(animal.getCurrentGene()%(animal.getGenes().getLength()+1));
@@ -48,7 +46,8 @@ public class EarthMap extends AbstractWorldMap {
     protected int typeOfMove(Animal animal, Vector2d vector){
         if (animal.getPosition().add(vector).getX()>upperRight.getX()){return 1;}
         if (animal.getPosition().add(vector).getX()<lowerLeft.getX()){return 2;}
-        if (animal.getPosition().add(vector).getY()>upperRight.getY() ||     animal.getPosition().add(vector).getY()<lowerLeft.getY()){return 4;}
+        if (animal.getPosition().add(vector).getY()>upperRight.getY() ||
+            animal.getPosition().add(vector).getY()<lowerLeft.getY()) {return 4;}
         else{return 3;}
 
     }

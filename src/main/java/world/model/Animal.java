@@ -21,6 +21,8 @@ public class Animal implements Comparable<Animal> {
 
     private final Animal parent1;
     private final Animal parent2;
+
+    // Bo czemu nie
     private final Random random = new Random();
 
     public Animal(
