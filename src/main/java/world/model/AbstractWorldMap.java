@@ -1,5 +1,6 @@
 package world.model;
 
+import world.SimulationSettings;
 import world.util.MapVisualizer;
 
 import java.util.*;
@@ -7,12 +8,9 @@ import java.util.*;
 public abstract class AbstractWorldMap implements WorldMap {
 
     // Elementy
-    private final int typeOfMutation;
     protected final Set<Vector2d> grass;
     protected final Map<Vector2d, List<Animal>> animals;
     protected final Vector2d upperRight, lowerLeft;
-    protected final Set<MapChangeListener> listeners;
-    protected final MapVisualizer visualizer = new MapVisualizer(this);
     protected final int jungleStart;
     protected final int jungleEnd;
 
@@ -21,9 +19,13 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected final int id;
     protected int day = 0;
 
-    // Generacja
+    // Reszta
     protected final Random random = new Random();
     protected final RandomPositionGenerator overEquator, underEquator, equator;
+    protected final SimulationSettings settings;
+    // TODO i tak będzie tylko 1 listener, więc trzeba to jakoś zmienić
+    protected final Set<MapChangeListener> listeners;
+    protected final MapVisualizer visualizer = new MapVisualizer(this);
 
     @Override
     public int getId() { return this.id; }
@@ -32,16 +34,17 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public Vector2d getUpperRight() { return upperRight; }
 
-    public AbstractWorldMap(int width, int height, int initialGrassAmount, int jungleSize,int typeOfMutation) {
-        grass = new HashSet<>(initialGrassAmount);
-        animals = new HashMap<>(initialGrassAmount);
+    public AbstractWorldMap(SimulationSettings settings) {
+        this.settings = settings;
+
+        grass = new HashSet<>(settings.getInitialGrassAmount());
+        animals = new HashMap<>(settings.getInitialAnimalAmount());
         listeners = new LinkedHashSet<>();
         lowerLeft = new Vector2d(0, 0);
-        upperRight = new Vector2d(width-1, height-1);
-        this.typeOfMutation=typeOfMutation;
+        upperRight = new Vector2d(settings.getMapWidth()-1, settings.getMapHeight()-1);
 
-        jungleStart = (upperRight.getY() - lowerLeft.getY() - jungleSize) / 2;
-        jungleEnd = jungleStart + jungleSize;
+        jungleStart = (upperRight.getY() - lowerLeft.getY() - settings.getJungleSize()) / 2;
+        jungleEnd = jungleStart + settings.getJungleSize();
         underEquator = new RandomPositionGenerator(
                 lowerLeft,
                 new Vector2d(upperRight.getX(), jungleStart)
@@ -57,7 +60,7 @@ public abstract class AbstractWorldMap implements WorldMap {
 
         this.id = curId;
         curId += 1;
-        grassPlace(initialGrassAmount);
+        grassPlace(settings.getInitialGrassAmount());
     }
 
     @Override
@@ -137,11 +140,11 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     @Override
-    public void moveAnimals(int energyTaken) {
+    public void moveAnimals() {
 
         for(Animal animal: allAnimals()) {
             animal.rotateAnimals(animal.getCurrentGene()%(animal.getGenes().getLength()+1));
-            Direction direction = animal.getOrientation();
+            Direction direction = animal.getDirection();
             Vector2d dirVector = direction.toUnitVector();
             Vector2d beforePosition = animal.getPosition();
 
@@ -150,7 +153,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             animalsAtBefore.remove(animal);
             if (canMove(animal, dirVector)){
                 animal.move();
-                animal.loseEnergy(energyTaken);
+                animal.loseEnergy(settings.getEnergyTakenByMovement());
             }
 
             Vector2d afterPosition=animal.getPosition();
@@ -174,12 +177,12 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     @Override
-    public void doEating(int grassEnergy) {
+    public void doEating() {
         for (Vector2d position: animals.keySet()) {
             if (!animals.get(position).isEmpty()) {
                 Queue<Animal> fittest = getFittestAt(position);
                 Animal animal = fittest.peek();
-                animal.eatGrass(grassEnergy);
+                animal.eatGrass(settings.getGrassEnergy());
                 grass.remove(position);
 
                 // Bo mi się nie chce ifów robić, a to i tak zadziała xd
@@ -192,7 +195,24 @@ public abstract class AbstractWorldMap implements WorldMap {
         mapChanged("Eating done");
     }
 
-    protected Animal reproducing(Animal animal1, Animal animal2, int energyTaken) {
+    @Override
+    public void doReproduction() {
+        for (Vector2d position: animals.keySet()) {
+            if (animals.get(position).size() > 1) {
+                Queue<Animal> fittest = getFittestAt(position);
+                Animal a1 = fittest.peek();
+                Animal a2 = fittest.peek();
+                if (a1.getEnergy() >= settings.getEnergyNeededForProcreation() &&
+                    a2.getEnergy() >= settings.getEnergyNeededForProcreation()) {
+                    place(reproducing(a1, a2));
+                }
+            }
+        }
+
+        mapChanged("Reproduction done");
+    }
+
+    protected Animal reproducing(Animal animal1, Animal animal2) {
         int side = random.nextInt(2);
         int energy1 = animal1.getEnergy();
         int energy2 = animal2.getEnergy();
@@ -220,30 +240,14 @@ public abstract class AbstractWorldMap implements WorldMap {
             }
         }
 
-        animal1.loseEnergy(energyTaken);
-        animal2.loseEnergy(energyTaken);
+        animal1.loseEnergy(settings.getEnergyTakenByProcreation());
+        animal2.loseEnergy(settings.getEnergyTakenByProcreation());
         Vector2d position = animal1.getPosition();
         return new Animal(
                 position, Direction.randomDirection(),
-                2*energyTaken, newGenome, day,
+                2*settings.getEnergyTakenByProcreation(), newGenome, day,
                 animal1, animal2
         );
-    }
-
-    @Override
-    public void doReproduction(int energyNeeded, int energyTaken) {
-        for (Vector2d position: animals.keySet()) {
-            if (animals.get(position).size() > 1) {
-                Queue<Animal> fittest = getFittestAt(position);
-                Animal a1 = fittest.peek();
-                Animal a2 = fittest.peek();
-                if (a1.getEnergy() >= energyNeeded && a2.getEnergy() >= energyNeeded) {
-                    place(reproducing(a1, a2, energyTaken));
-                }
-            }
-        }
-
-        mapChanged("Reproduction done");
     }
 
     @Override

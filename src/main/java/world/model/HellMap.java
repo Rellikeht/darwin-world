@@ -1,14 +1,21 @@
 package world.model;
 
+import world.SimulationSettings;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class HellMap extends AbstractWorldMap {
-    private final int energyPortal;
-    public HellMap(int width, int height, int animal_amount, int grass_amount,int energyPortal) {
-        super(width, height, animal_amount, grass_amount);
-        this.energyPortal=energyPortal;
+    // TODO jakoś wcielić to sensownie do ustawień
+    private final int energyPortal = 10;
+    //public HellMap(
+    //        int width, int height, int animal_amount, int grass_amount, int typeOfMutation, int energyPortal
+    //) {
+    //    super(width, height, animal_amount, grass_amount, typeOfMutation);
+    public HellMap(SimulationSettings settings) {
+        super(settings);
+        //this.energyPortal = energyPortal;
     }
 
     public boolean canMoveTo(Vector2d position) {

@@ -10,9 +10,9 @@ public interface WorldMap {
     void addListener(MapChangeListener listener);
     void removeListener(MapChangeListener listener);
 
-    void moveAnimals(int energyTaken);
-    void doEating(int grassEnergy);
-    void doReproduction(int energyNeeded, int energyTaken);
+    void moveAnimals();
+    void doEating();
+    void doReproduction();
     void nextDay();
     void grassPlace(int N);
     String getAt(Vector2d currentPosition);
