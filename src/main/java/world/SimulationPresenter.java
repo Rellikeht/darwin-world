@@ -24,7 +24,6 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     private WorldMap map;
 
-    //public void setWorldMap(WorldMap map) { this.map = map; }
     public void drawMap(String message) {
         Platform.runLater(() -> {
             GridMapDrawer drawer = new GridMapDrawer(mapGrid, map);
@@ -42,9 +41,8 @@ public class SimulationPresenter implements MapChangeListener {
         Simulation simulation = new Simulation(10);
         map = simulation.getMap();
         simulation.addListener(this);
-        //map.addListener(this);
         SimulationEngine engine = new SimulationEngine(List.of(simulation));
-        engine.runAsync();
         startButton.setDisable(true);
+        simulation.run();
     }
 }

@@ -12,7 +12,6 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected final Vector2d upperRight, lowerLeft;
     protected final Set<MapChangeListener> listeners;
     protected final MapVisualizer visualizer = new MapVisualizer(this);
-    //protected final int jungleSize;
     protected final int jungleStart;
     protected final int jungleEnd;
     private final int typeOfMutation;
@@ -29,7 +28,6 @@ public abstract class AbstractWorldMap implements WorldMap {
     // Generacja
     protected final Random random = new Random();
     protected final RandomPositionGenerator overEquator, underEquator, equator;
-    //protected final Iterator<Vector2d>[] generators;
 
     @Override
     public int getId() { return this.id; }
@@ -48,9 +46,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         this.minNumberOfMutation=minNumberOfMutation;
         this.maxNumberOfMutation=maxNumberOfMutation;
 
-        // TODO te obliczenia nie są bardzo dokładne,
-        // i tamten test nie przechodzi
-        //this.jungleSize = jungleSize;
         jungleStart = (upperRight.getY() - lowerLeft.getY() - jungleSize) / 2;
         jungleEnd = jungleStart + jungleSize;
         underEquator = new RandomPositionGenerator(
@@ -65,21 +60,15 @@ public abstract class AbstractWorldMap implements WorldMap {
                 new Vector2d(lowerLeft.getX(), jungleEnd+1),
                 upperRight
         );
-        // It's a kind of magic
-        //generators = new RandomPositionGenerator[]{
-        //        overEquator, underEquator, equator, equator, equator,
-        //        equator, equator, equator, equator, equator
-        //};
 
         this.id = curId;
         curId += 1;
-
-        // Początkowa Trawa
         grassPlace(initialGrassAmount);
     }
 
     @Override
     public void grassPlace(int N) {
+        // It's definitely a kind of magic
         List<RandomPositionGenerator> generators = new ArrayList<>(10);
         if (underEquator.hasNext()) { generators.add(underEquator); }
         if (overEquator.hasNext()) { generators.add(overEquator); }
@@ -119,10 +108,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     @Override
-    public String toString() {
-        return visualizer.draw(lowerLeft, upperRight);
-    }
-    //public Set<Vector2d> gr   assPositions() { return grass; }
+    public String toString() { return visualizer.draw(lowerLeft, upperRight); }
 
     @Override
     public void addListener(MapChangeListener listener) { listeners.add(listener); }
@@ -133,6 +119,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             listener.mapChanged(this, message);
         }
     }
+
     @Override
     public String getAt(Vector2d position) {
         List<Animal> animalsAt = animals.get(position);
@@ -149,6 +136,39 @@ public abstract class AbstractWorldMap implements WorldMap {
         if (grass.contains(position)) { return "*"; }
         return "";
     }
+
+    protected boolean canMove(Animal animal, Vector2d dirVector){
+        return animal.getPosition().add(dirVector).follows(lowerLeft)
+            && animal.getPosition().add(dirVector).precedes(upperRight);
+    }
+
+    @Override
+    public void moveAnimals(int energyTaken) {
+
+        for(Animal animal: allAnimals()) {
+            animal.rotateAnimals(animal.getCurrentGene()%(animal.getGenes().getLength()+1));
+            Direction direction = animal.getOrientation();
+            Vector2d dirVector = direction.toUnitVector();
+            Vector2d beforePosition = animal.getPosition();
+
+            List<Animal> animalsAtBefore = animals.getOrDefault(beforePosition, new ArrayList<>());
+            animals.remove(beforePosition);
+            animalsAtBefore.remove(animal);
+            if (canMove(animal, dirVector)){
+                animal.move();
+                animal.loseEnergy(energyTaken);
+            }
+
+            Vector2d afterPosition=animal.getPosition();
+            List<Animal> animalsAtAfter = animals.getOrDefault(afterPosition, new ArrayList<>());
+            animalsAtAfter.add(animal);
+            animals.put(beforePosition, animalsAtBefore);
+            animals.put(afterPosition, animalsAtAfter);
+        }
+
+        mapChanged("Animals moved");
+    }
+
     protected Queue<Animal> getFittestAt(Vector2d position) {
         List<Animal> animals = this.animals.get(position);
         PriorityQueue<Animal> queue = new PriorityQueue<>(
@@ -158,6 +178,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         queue.addAll(animals);
         return queue;
     }
+
     @Override
     public void doEating(int grassEnergy) {
         for (Vector2d position: animals.keySet()) {
@@ -177,7 +198,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         mapChanged("Eating done");
     }
 
-        protected Animal reproducing(Animal animal1, Animal animal2, int energyTaken) {
+    protected Animal reproducing(Animal animal1, Animal animal2, int energyTaken) {
         int side = random.nextInt(2);
         int energy1 = animal1.getEnergy();
         int energy2 = animal2.getEnergy();
@@ -204,6 +225,7 @@ public abstract class AbstractWorldMap implements WorldMap {
                 newGenome.setGene(i, genome2.getGene(i));
             }
         }
+
         animal1.loseEnergy(energyTaken);
         animal2.loseEnergy(energyTaken);
         Vector2d position = animal1.getPosition();
@@ -233,9 +255,6 @@ public abstract class AbstractWorldMap implements WorldMap {
                 animals.get(animal.getPosition()).remove(animal);
                 animal.die(day);
             }
-            //else{
-            //    animal.nextDayOfLife(); // ??
-            //}
         }
         day += 1;
     }
