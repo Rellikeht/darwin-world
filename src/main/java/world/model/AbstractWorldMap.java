@@ -147,7 +147,7 @@ public abstract class AbstractWorldMap implements WorldMap {
 
         for(Animal animal: allAnimals()) {
             animal.rotateAnimals(animal.getCurrentGene()%(animal.getGenes().getLength()+1));
-            Direction direction = animal.getOrientation();
+            Direction direction = animal.getDirection();
             Vector2d dirVector = direction.toUnitVector();
             Vector2d beforePosition = animal.getPosition();
 
@@ -230,7 +230,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         animal2.loseEnergy(energyTaken);
         Vector2d position = animal1.getPosition();
         newGenome.mutate(minNumberOfMutation,maxNumberOfMutation,typeOfMutation);
-        return new Animal(position, Direction.randomDirection(), 2*energyTaken, newGenome, day);
+        return new Animal(position, Direction.randomDirection(), 2*energyTaken, newGenome, day,animal1,animal2);
     }
 
     @Override
