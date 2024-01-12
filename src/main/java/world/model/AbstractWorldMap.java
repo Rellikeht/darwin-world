@@ -7,6 +7,7 @@ import java.util.*;
 public abstract class AbstractWorldMap implements WorldMap {
 
     // Elementy
+    private final int typeOfMutation;
     protected final Set<Vector2d> grass;
     protected final Map<Vector2d, List<Animal>> animals;
     protected final Vector2d upperRight, lowerLeft;
@@ -33,12 +34,13 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public Vector2d getUpperRight() { return upperRight; }
 
-    public AbstractWorldMap(int width, int height, int initialGrassAmount, int jungleSize) {
+    public AbstractWorldMap(int width, int height, int initialGrassAmount, int jungleSize,int typeOfMutation) {
         grass = new HashSet<>(initialGrassAmount);
         animals = new HashMap<>(initialGrassAmount);
         listeners = new LinkedHashSet<>();
         lowerLeft = new Vector2d(0, 0);
         upperRight = new Vector2d(width-1, height-1);
+        this.typeOfMutation=typeOfMutation;
 
         // TODO te obliczenia nie są bardzo dokładne,
         // i tamten test nie przechodzi
@@ -57,7 +59,6 @@ public abstract class AbstractWorldMap implements WorldMap {
                 new Vector2d(lowerLeft.getX(), jungleEnd+1),
                 upperRight
         );
-
         // It's a kind of magic
         //generators = new RandomPositionGenerator[]{
         //        overEquator, underEquator, equator, equator, equator,
@@ -126,7 +127,6 @@ public abstract class AbstractWorldMap implements WorldMap {
             listener.mapChanged(this, message);
         }
     }
-
     @Override
     public String getAt(Vector2d position) {
         List<Animal> animalsAt = animals.get(position);
@@ -143,41 +143,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         if (grass.contains(position)) { return "*"; }
         return "";
     }
-
-    protected boolean canMove(Animal animal, Vector2d dirVector){
-        return animal.getPosition().add(dirVector).follows(lowerLeft)
-            && animal.getPosition().add(dirVector).precedes(upperRight);
-    }
-
-    @Override
-    public void moveAnimals(int energyTaken) {
-
-        for(Animal animal: allAnimals()) {
-            animal.rotateAnimals(animal.getCurrentGene()%(animal.getGenes().getLength()+1));
-            Direction direction = animal.getOrientation();
-            Vector2d dirVector = direction.toUnitVector();
-            Vector2d beforePosition = animal.getPosition();
-
-            List<Animal> animalsAtBefore = animals.getOrDefault(beforePosition, new ArrayList<>());
-            animals.remove(beforePosition);
-            animalsAtBefore.remove(animal);
-            if (canMove(animal, dirVector)){
-                animal.move();
-                animal.loseEnergy(energyTaken);
-            }
-
-            Vector2d afterPosition=animal.getPosition();
-            List<Animal> animalsAtAfter = animals.getOrDefault(afterPosition, new ArrayList<>());
-            animalsAtAfter.add(animal);
-            animals.put(beforePosition, animalsAtBefore);
-            animals.put(afterPosition, animalsAtAfter);
-        }
-
-        // TODO Coś z listenerem, w simulation mogłoby być lepiej
-        // ale to później
-        mapChanged("Animals moved");
-    }
-
     protected Queue<Animal> getFittestAt(Vector2d position) {
         List<Animal> animals = this.animals.get(position);
         PriorityQueue<Animal> queue = new PriorityQueue<>(
@@ -187,7 +152,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         queue.addAll(animals);
         return queue;
     }
-
     @Override
     public void doEating(int grassEnergy) {
         for (Vector2d position: animals.keySet()) {
@@ -207,7 +171,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         mapChanged("Eating done");
     }
 
-    protected Animal reproducing(Animal animal1, Animal animal2, int energyTaken) {
+        protected Animal reproducing(Animal animal1, Animal animal2, int energyTaken) {
         int side = random.nextInt(2);
         int energy1 = animal1.getEnergy();
         int energy2 = animal2.getEnergy();
@@ -234,7 +198,6 @@ public abstract class AbstractWorldMap implements WorldMap {
                 newGenome.setGene(i, genome2.getGene(i));
             }
         }
-
         animal1.loseEnergy(energyTaken);
         animal2.loseEnergy(energyTaken);
         Vector2d position = animal1.getPosition();

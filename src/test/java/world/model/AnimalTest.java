@@ -4,8 +4,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.PriorityQueue;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class AnimalTest {
 
     @Test
@@ -29,8 +27,8 @@ class AnimalTest {
         queue.add(animal2);
         queue.add(animal1);
 
-        System.out.println(animal1.getOrientation());
-        System.out.println(animal2.getOrientation());
+        System.out.println(animal1.getDirection());
+        System.out.println(animal2.getDirection());
         System.out.println(queue);
         System.out.println(queue.peek());
 
