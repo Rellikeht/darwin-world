@@ -40,7 +40,7 @@ public class Simulation implements Runnable {
 //        if (mapVariant) {
 //            map = new EarthMap(MAP_WIDTH, MAP_HEIGHT, INITIAL_GRASS_AMOUNT, INITIAL_JUNGLE_SIZE);
 //        } else {
-//            map = new HellMap(MAP_WIDTH, MAP_HEIGHT, INITIAL_GRASS_AMOUNT, INITIAL_JUNGLE_SIZE);
+//            map = new HellMap(MAP_WIDTH, MAP_HEIGHT, INITIAL_GRASS_AMOUNT, INITIAL_JUNGLE_SIZE,ENERGY_NEEDED_FOR_PROCREATION);
 //        }
 
         Vector2d maxPos = map.getUpperRight();

@@ -71,7 +71,8 @@ public class Animal implements Comparable<Animal> {
     }
 
     public Vector2d getPosition() { return this.position; }
-    public Direction getOrientation() { return this.direction; }
+    public void setPosition(Vector2d position){this.position=position;}
+    public Direction getDirection() { return this.direction; }
     public int getEnergy() { return energy; }
     public Genome getGenes(){ return genes; }
     public int getCurrentGene(){ return currentGene; }
@@ -118,7 +119,6 @@ public class Animal implements Comparable<Animal> {
                 }
             }
         }
-
         return result;
     }
 

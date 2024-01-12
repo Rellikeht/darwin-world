@@ -7,6 +7,7 @@ import java.util.*;
 public abstract class AbstractWorldMap implements WorldMap {
 
     // Elementy
+    private final int typeOfMutation;
     protected final Set<Vector2d> grass;
     protected final Map<Vector2d, List<Animal>> animals;
     protected final Vector2d upperRight, lowerLeft;
@@ -31,12 +32,13 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public Vector2d getUpperRight() { return upperRight; }
 
-    public AbstractWorldMap(int width, int height, int initialGrassAmount, int jungleSize) {
+    public AbstractWorldMap(int width, int height, int initialGrassAmount, int jungleSize,int typeOfMutation) {
         grass = new HashSet<>(initialGrassAmount);
         animals = new HashMap<>(initialGrassAmount);
         listeners = new LinkedHashSet<>();
         lowerLeft = new Vector2d(0, 0);
         upperRight = new Vector2d(width-1, height-1);
+        this.typeOfMutation=typeOfMutation;
 
         jungleStart = (upperRight.getY() - lowerLeft.getY() - jungleSize) / 2;
         jungleEnd = jungleStart + jungleSize;
