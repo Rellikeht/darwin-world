@@ -7,7 +7,6 @@ import java.util.*;
 public abstract class AbstractWorldMap implements WorldMap {
 
     // Elementy
-    private final int typeOfMutation;
     protected final Set<Vector2d> grass;
     protected final Map<Vector2d, List<Animal>> animals;
     protected final Vector2d upperRight, lowerLeft;
@@ -16,6 +15,11 @@ public abstract class AbstractWorldMap implements WorldMap {
     //protected final int jungleSize;
     protected final int jungleStart;
     protected final int jungleEnd;
+    private final int typeOfMutation;
+
+    private final int minNumberOfMutation;
+
+    private final int maxNumberOfMutation;
 
     // Numeracja
     protected static int curId = 0;
@@ -34,13 +38,15 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public Vector2d getUpperRight() { return upperRight; }
 
-    public AbstractWorldMap(int width, int height, int initialGrassAmount, int jungleSize,int typeOfMutation) {
+    public AbstractWorldMap(int width, int height, int initialGrassAmount, int jungleSize,int typeOfMutation,int minNumberOfMutation,int maxNumberOfMutation) {
         grass = new HashSet<>(initialGrassAmount);
         animals = new HashMap<>(initialGrassAmount);
         listeners = new LinkedHashSet<>();
         lowerLeft = new Vector2d(0, 0);
         upperRight = new Vector2d(width-1, height-1);
         this.typeOfMutation=typeOfMutation;
+        this.minNumberOfMutation=minNumberOfMutation;
+        this.maxNumberOfMutation=maxNumberOfMutation;
 
         // TODO te obliczenia nie są bardzo dokładne,
         // i tamten test nie przechodzi
@@ -116,7 +122,7 @@ public abstract class AbstractWorldMap implements WorldMap {
     public String toString() {
         return visualizer.draw(lowerLeft, upperRight);
     }
-    //public Set<Vector2d> grassPositions() { return grass; }
+    //public Set<Vector2d> gr   assPositions() { return grass; }
 
     @Override
     public void addListener(MapChangeListener listener) { listeners.add(listener); }
@@ -201,6 +207,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         animal1.loseEnergy(energyTaken);
         animal2.loseEnergy(energyTaken);
         Vector2d position = animal1.getPosition();
+        newGenome.mutate(minNumberOfMutation,maxNumberOfMutation,typeOfMutation);
         return new Animal(position, Direction.randomDirection(), 2*energyTaken, newGenome, day);
     }
 
@@ -216,7 +223,6 @@ public abstract class AbstractWorldMap implements WorldMap {
                 }
             }
         }
-
         mapChanged("Reproduction done");
     }
 

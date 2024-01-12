@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EarthMap extends AbstractWorldMap {
-    public EarthMap(int width, int height, int initialGrassAmount, int jungleSize) {
-        super(width, height, initialGrassAmount, jungleSize);
+    public EarthMap(int width, int height, int initialGrassAmount, int jungleSize,int typeOfMutation,int minNumberOfMutation,int maxNumberOfMutation) {
+        super(width, height, initialGrassAmount, jungleSize,typeOfMutation,minNumberOfMutation,maxNumberOfMutation);
     }
     public void moveAnimals(int energyTaken) {
         for(Animal animal: allAnimals()) {

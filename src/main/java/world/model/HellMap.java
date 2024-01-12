@@ -6,8 +6,8 @@ import java.util.Random;
 
 public class HellMap extends AbstractWorldMap {
     private final int energyPortal;
-    public HellMap(int width, int height, int animal_amount, int grass_amount,int energyPortal) {
-        super(width, height, animal_amount, grass_amount);
+    public HellMap(int width, int height, int animal_amount, int grass_amount,int energyPortal,int typeOfMutation,int minNumberOfMutation,int maxNumberOfMutation) {
+        super(width, height, animal_amount, grass_amount, typeOfMutation, minNumberOfMutation,maxNumberOfMutation);
         this.energyPortal=energyPortal;
     }
 

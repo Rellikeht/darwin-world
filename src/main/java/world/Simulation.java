@@ -24,6 +24,8 @@ public class Simulation implements Runnable {
     private static final int GENOME_LENGTH = 10;
     private static final int INITIAL_JUNGLE_SIZE = 5;
     private static final int NEW_DAY_GRASS = 10;
+    private static final int TYPE_OF_MUTATION = 0;
+
 
     // Dane i elementy
     private final boolean behaviorVariant = false;
@@ -33,7 +35,7 @@ public class Simulation implements Runnable {
     //private final SimulationStats stats;
 
     public Simulation(int initialAnimalAmount) {
-        map = new EarthMap(MAP_WIDTH, MAP_HEIGHT, INITIAL_GRASS_AMOUNT, INITIAL_JUNGLE_SIZE);
+        map = new EarthMap(MAP_WIDTH, MAP_HEIGHT, INITIAL_GRASS_AMOUNT, INITIAL_JUNGLE_SIZE,TYPE_OF_MUTATION,MIN_AMOUNT_OF_MUTATIONS,MAX_AMOUNT_OF_MUTATIONS);
         //stats = new SimulationStats();
 
         // To już może potem jak się wyklaruje co i jak
