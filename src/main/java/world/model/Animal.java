@@ -9,13 +9,15 @@ public class Animal implements Comparable<Animal> {
     private Vector2d position;
     private final Genome genes;
     private int energy;
-    private int currentGene = 0;
+    private int currentGeneNumber;
 
     // Staty
     private int grassEaten = 0;
     private final int dayOfBirth;
-    private int dayOfDeath;
-    //private int daysOfLife = 0;
+    // Nie jestem pewien, czy to dobry pomysł, ale ogólnie
+    // jak tu jest null to jest żywy i to nam pozwala na
+    // 1-linijkowy getter
+    private Integer dayOfDeath;
     private int childrenAmount = 0;
     private int offspringsAmount = 0;
 
@@ -47,6 +49,8 @@ public class Animal implements Comparable<Animal> {
             parent2.addOffspring();
         }
 
+        currentGeneNumber = random.nextInt(genes.getLength());
+
         // TODO staty
     }
 
@@ -56,56 +60,33 @@ public class Animal implements Comparable<Animal> {
         this(position, direction, energy, genes, 0, null, null);
     }
 
-    //private void addChild() {
-    //    this.childrenAmount += 1;
-    //    if (parent1 != null) parent1.addOffspring();
-    //    if (parent2 != null) parent2.addOffspring();
-    //}
-
     private void addOffspring() {
         this.offspringsAmount += 1;
         if (parent1 != null) parent1.addOffspring();
         if (parent2 != null) parent2.addOffspring();
     }
 
-    public String toString() {
-        return this.direction.toString();
-    }
+    void setPosition(Vector2d position){this.position=position;}
+    void loseEnergy(int energy) { this.energy -= energy; }
 
-    public Vector2d getPosition() { return this.position; }
-    public void setPosition(Vector2d position){this.position=position;}
-    public Direction getDirection() { return this.direction; }
-    public int getEnergy() { return energy; }
-    public Genome getGenes(){ return genes; }
-    public int getCurrentGene(){ return currentGene; }
-
-    public void loseEnergy(int energy) { this.energy -= energy; }
-
-    public void eatGrass(int grassEnergy) {
+    void eatGrass(int grassEnergy) {
         this.energy += grassEnergy;
         this.grassEaten += 1;
     }
 
-    public void rotateAnimals(int n){
-        int gene = genes.getGene(n);
-        currentGene += 1;
-        direction = Direction.getDirection(gene);
+    void activateGene(){
+        direction = Direction.getDirection(genes.getGene(currentGeneNumber));
+        currentGeneNumber = (currentGeneNumber +1)%genes.getLength();
     }
 
-    public void move(){
+    void move(){
         Vector2d dirVector = direction.toUnitVector();
         position.add(dirVector);
     }
 
-    public void die(int day) {
+    void die(int day) {
         this.dayOfDeath = day;
     }
-
-    // TODO staty
-    public int getDayOfBirth() { return dayOfBirth; }
-    public int getDayOfDeath() { return dayOfDeath; }
-    public int getChildrenAmount() { return childrenAmount; }
-    public int getOffspringsAmount() { return offspringsAmount; }
 
     @Override
     public int compareTo(Animal other) {
@@ -123,5 +104,18 @@ public class Animal implements Comparable<Animal> {
         }
         return result;
     }
+
+    public Vector2d getPosition() { return this.position; }
+    public Direction getDirection() { return this.direction; }
+    public int getEnergy() { return energy; }
+    public int getCurrentGeneNumber() { return currentGeneNumber; }
+    Genome getGenes() { return genes; }
+
+
+    public String toString() { return this.direction.toString(); }
+    public int getDayOfBirth() { return dayOfBirth; }
+    public Integer getDayOfDeath() { return dayOfDeath; }
+    public int getChildrenAmount() { return childrenAmount; }
+    public int getOffspringsAmount() { return offspringsAmount; }
 
 }

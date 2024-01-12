@@ -8,9 +8,9 @@ import java.util.List;
 public class EarthMap extends AbstractWorldMap {
     public EarthMap(SimulationSettings settings) { super(settings); }
 
-    public void moveAnimals(int energyTaken) {
+    public void moveAnimals() {
         for(Animal animal: allAnimals()) {
-            animal.rotateAnimals(animal.getCurrentGene()%(animal.getGenes().getLength()+1));
+            animal.activateGene();
             Direction direction = animal.getDirection();
             Vector2d dirVector = direction.toUnitVector();
             Vector2d beforePosition = animal.getPosition();
@@ -20,17 +20,17 @@ public class EarthMap extends AbstractWorldMap {
             int typeOfMove=typeOfMove(animal,dirVector);
             if (typeOfMove==1){
                 animal.move();
-                animal.loseEnergy(energyTaken);
+                animal.loseEnergy(settings.getEnergyTakenByMovement());
                 animal.setPosition(new Vector2d(1,animal.getPosition().getY()));
             }
             else if(typeOfMove==2){
                 animal.move();
-                animal.loseEnergy(energyTaken);
+                animal.loseEnergy(settings.getEnergyTakenByMovement());
                 animal.setPosition(new Vector2d(upperRight.getX(),animal.getPosition().getY()));
             }
             else if(typeOfMove==3){
                 animal.move();
-                animal.loseEnergy(energyTaken);
+                animal.loseEnergy(settings.getEnergyTakenByMovement());
             }
             Vector2d afterPosition=animal.getPosition();
             List<Animal> animalsAtAfter = animals.getOrDefault(afterPosition, new ArrayList<>());
@@ -39,11 +39,10 @@ public class EarthMap extends AbstractWorldMap {
             animals.put(afterPosition, animalsAtAfter);
         }
 
-        // TODO Coś z listenerem, w simulation mogłoby być lepiej
-        // ale to później
-        mapChanged("Animals moved");
+        super.moveAnimals();
     }
-    protected int typeOfMove(Animal animal, Vector2d vector){
+
+    private int typeOfMove(Animal animal, Vector2d vector){
         if (animal.getPosition().add(vector).getX()>upperRight.getX()){return 1;}
         if (animal.getPosition().add(vector).getX()<lowerLeft.getX()){return 2;}
         if (animal.getPosition().add(vector).getY()>upperRight.getY() ||

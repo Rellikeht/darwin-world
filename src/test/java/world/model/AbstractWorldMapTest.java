@@ -31,7 +31,7 @@ class AbstractWorldMapTest {
                     10,
                     new Genome(7)
             ));
-            map.moveAnimals(5);
+            map.moveAnimals();
         }
     }
 

@@ -78,8 +78,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             int grassProbability = random.nextInt(generators.size());
             RandomPositionGenerator generator = generators.get(grassProbability);
 
-            // W tym miejscu i tak się to wywali
-            // TODO Tu trzeba przysiąść i to lepiej zrobić
+            // TODO Tu trzeba przysiąść i to lepiej zrobić, ale to jak będzie za dużo czasu
             if (generator.hasNext()) {
                 Vector2d grassPosition = generator.next();
                 grass.add(grassPosition);
@@ -134,34 +133,35 @@ public abstract class AbstractWorldMap implements WorldMap {
         return "";
     }
 
-    protected boolean canMove(Animal animal, Vector2d dirVector){
-        return animal.getPosition().add(dirVector).follows(lowerLeft)
-            && animal.getPosition().add(dirVector).precedes(upperRight);
-    }
+    //protected boolean canMove(Animal animal, Vector2d dirVector){
+    //    return animal.getPosition().add(dirVector).follows(lowerLeft)
+    //        && animal.getPosition().add(dirVector).precedes(upperRight);
+    //}
 
     @Override
     public void moveAnimals() {
+        // TODO wyciągnąć tu kod z klas dziedziczących
 
-        for(Animal animal: allAnimals()) {
-            animal.rotateAnimals(animal.getCurrentGene()%(animal.getGenes().getLength()+1));
-            Direction direction = animal.getDirection();
-            Vector2d dirVector = direction.toUnitVector();
-            Vector2d beforePosition = animal.getPosition();
+        //for(Animal animal: allAnimals()) {
+        //    animal.rotateAnimals(animal.getCurrentGene()%(animal.getGenes().getLength()+1));
+        //    Direction direction = animal.getDirection();
+        //    Vector2d dirVector = direction.toUnitVector();
+        //    Vector2d beforePosition = animal.getPosition();
 
-            List<Animal> animalsAtBefore = animals.getOrDefault(beforePosition, new ArrayList<>());
-            animals.remove(beforePosition);
-            animalsAtBefore.remove(animal);
-            if (canMove(animal, dirVector)){
-                animal.move();
-                animal.loseEnergy(settings.getEnergyTakenByMovement());
-            }
+        //    List<Animal> animalsAtBefore = animals.getOrDefault(beforePosition, new ArrayList<>());
+        //    animals.remove(beforePosition);
+        //    animalsAtBefore.remove(animal);
+        //    if (canMove(animal, dirVector)){
+        //        animal.move();
+        //        animal.loseEnergy(settings.getEnergyTakenByMovement());
+        //    }
 
-            Vector2d afterPosition=animal.getPosition();
-            List<Animal> animalsAtAfter = animals.getOrDefault(afterPosition, new ArrayList<>());
-            animalsAtAfter.add(animal);
-            animals.put(beforePosition, animalsAtBefore);
-            animals.put(afterPosition, animalsAtAfter);
-        }
+        //    Vector2d afterPosition=animal.getPosition();
+        //    List<Animal> animalsAtAfter = animals.getOrDefault(afterPosition, new ArrayList<>());
+        //    animalsAtAfter.add(animal);
+        //    animals.put(beforePosition, animalsAtBefore);
+        //    animals.put(afterPosition, animalsAtAfter);
+        //}
 
         mapChanged("Animals moved");
     }
@@ -213,58 +213,23 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     protected Animal reproducing(Animal animal1, Animal animal2) {
-        int side = random.nextInt(2);
-        int energy1 = animal1.getEnergy();
-        int energy2 = animal2.getEnergy();
-        Genome genome1 = animal1.getGenes();
-        Genome genome2 = animal2.getGenes();
-        Genome newGenome = new Genome(0);
-        int GENOME_LENGTH = genome1.getLength();
-        int proportions = GENOME_LENGTH*(energy2/energy1);
-
-        if(side==0) {
-            for (int i = 0; i < GENOME_LENGTH-proportions; i++) {
-                newGenome.setGene(i, genome2.getGene(i));
-            }
-            for (int i = GENOME_LENGTH-proportions; i < GENOME_LENGTH; i++) {
-                newGenome.setGene(i, genome1.getGene(i));
-            }
-        }
-
-        else{
-            for (int i = 0; i < proportions; i++) {
-                newGenome.setGene(i, genome1.getGene(i));
-            }
-            for (int i = proportions; i < GENOME_LENGTH; i++) {
-                newGenome.setGene(i, genome2.getGene(i));
-            }
-        }
-
         animal1.loseEnergy(settings.getEnergyTakenByProcreation());
         animal2.loseEnergy(settings.getEnergyTakenByProcreation());
+
         Vector2d position = animal1.getPosition();
-        newGenome.mutate(minNumberOfMutation,maxNumberOfMutation,typeOfMutation);
-        return new Animal(position, Direction.randomDirection(), 2*energyTaken, newGenome, day,animal1,animal2);
+        Genome genome = new Genome(
+                animal1.getGenes(), animal2.getGenes(),
+                animal1.getEnergy(), animal2.getEnergy(),
+                settings.getMinAmountOfMutations(),
+                settings.getMaxAmountOfMutations(),
+                settings.isMutationRandom()
+        );
+
         return new Animal(
                 position, Direction.randomDirection(),
-                2*settings.getEnergyTakenByProcreation(), newGenome, day,
-                animal1, animal2
+                2*settings.getEnergyTakenByProcreation(),
+                genome, day, animal1, animal2
         );
-    }
-
-    @Override
-    public void doReproduction(int energyNeeded, int energyTaken) {
-        for (Vector2d position: animals.keySet()) {
-            if (animals.get(position).size() > 1) {
-                Queue<Animal> fittest = getFittestAt(position);
-                Animal a1 = fittest.peek();
-                Animal a2 = fittest.peek();
-                if (a1.getEnergy() >= energyNeeded && a2.getEnergy() >= energyNeeded) {
-                    place(reproducing(a1, a2, energyTaken));
-                }
-            }
-        }
-        mapChanged("Reproduction done");
     }
 
     @Override

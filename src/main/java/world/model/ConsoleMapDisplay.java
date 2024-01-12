@@ -9,7 +9,7 @@ public class ConsoleMapDisplay implements MapChangeListener {
             messages++;
             System.out.println(message);
             System.out.printf("Map ID: %d%n", worldMap.getId());
-            System.out.println(worldMap.toString());
+            System.out.println(worldMap);
             System.out.printf("Amount of messages: %d%n", messages);
         }
     }

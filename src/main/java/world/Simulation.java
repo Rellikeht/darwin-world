@@ -1,7 +1,5 @@
 package world;
 
-//import javafx.scene.paint.RadialGradient;
-
 import world.model.*;
 
 import java.util.Random;
