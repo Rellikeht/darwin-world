@@ -17,45 +17,57 @@ public class Animal implements Comparable<Animal> {
     private int dayOfDeath;
     //private int daysOfLife = 0;
     private int childrenAmount = 0;
+    private int offspringsAmount = 0;
 
+    private final Animal parent1;
+    private final Animal parent2;
     private final Random random = new Random();
 
-    // TODO ilość potomków, tutaj trzeba będzie albo mieć referencje do dzieci,
-    // Albo referencje do rodziców i dodawać potomków rekurencyjnie (brzmi bardzo źle xd)
-
-    public Animal(Vector2d position, Direction direction, int energy, Genome genes, int dayOfBirth) {
+    public Animal(
+            Vector2d position, Direction direction, int energy,
+            Genome genes, int dayOfBirth, Animal parent1, Animal parent2
+    ) {
         this.position = position;
         this.direction = direction;
         this.genes = genes;
         this.energy = energy;
+
         this.dayOfBirth = dayOfBirth;
+        this.parent1 = parent1;
+        this.parent2 = parent2;
+
+        if (parent1 != null) {
+            parent1.childrenAmount += 1;
+            parent1.addOffspring();
+        }
+        if (parent2 != null) {
+            parent2.childrenAmount += 1;
+            parent2.addOffspring();
+        }
+
         // TODO staty
     }
 
-    public Animal(Vector2d position, Direction direction, int energy, Genome genes) {
-        this(position, direction, energy, genes, 0);
+    public Animal(
+            Vector2d position, Direction direction, int energy, Genome genes
+    ) {
+        this(position, direction, energy, genes, 0, null, null);
+    }
+
+    //private void addChild() {
+    //    this.childrenAmount += 1;
+    //    if (parent1 != null) parent1.addOffspring();
+    //    if (parent2 != null) parent2.addOffspring();
+    //}
+
+    private void addOffspring() {
+        this.offspringsAmount += 1;
+        if (parent1 != null) parent1.addOffspring();
+        if (parent2 != null) parent2.addOffspring();
     }
 
     public String toString() {
-        return switch (this.direction) {
-            //case D0 -> "u";
-            //case D45 -> "ur";
-            //case D90 -> "r";
-            //case D135 -> "dr";
-            //case D180 -> "d";
-            //case D225 -> "dl";
-            //case D270 -> "l";
-            //case D315 -> "ul";
-
-            case D0 -> "↑";
-            case D45 -> "↗";
-            case D90 -> "→";
-            case D135 -> "↘";
-            case D180 -> "↓";
-            case D225 -> "↙";
-            case D270 -> "←";
-            case D315 -> "↖";
-        };
+        return this.direction.toString();
     }
 
     public Vector2d getPosition() { return this.position; }
@@ -86,15 +98,11 @@ public class Animal implements Comparable<Animal> {
         this.dayOfDeath = day;
     }
 
-    // TODO tu pasuje ustalić też jak liczymy ilosć potomków
-    public void addChildren() { this.childrenAmount += 1; }
-    //public void nextDayOfLife(){daysOfLife+=1;}
-
     // TODO staty
-    //public int getDaysOfLife(){return  daysOfLife;}
-    public int getDayOfBirth(){return dayOfBirth;}
-    public int getDayOfDeath(){return dayOfDeath;}
-    public int getChildrenAmount(){return childrenAmount;}
+    public int getDayOfBirth() { return dayOfBirth; }
+    public int getDayOfDeath() { return dayOfDeath; }
+    public int getChildrenAmount() { return childrenAmount; }
+    public int getOffspringsAmount() { return offspringsAmount; }
 
     @Override
     public int compareTo(Animal other) {

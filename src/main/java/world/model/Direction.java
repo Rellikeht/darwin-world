@@ -4,9 +4,6 @@ import java.util.Random;
 
 public enum Direction {
 
-    // To z numeracją pozwoli nieco łatwiej je dodawać
-    // Nazwy nie sugerujące kierunków świata będą mniej kuły w oczy,
-    // jak użyjemy ich też do zmiany kierunku
     D0(0),
     D45(1),
     D90(2),
@@ -20,6 +17,16 @@ public enum Direction {
     private final int number;
     private static final int amount = Direction.values().length;
     private static final Random random = new Random();
+
+    private static final String[] arrows = {
+            "↑", "↗", "→", "↘", "↓", "↙", "←", "↖",
+    };
+    private static final String[] letters = {
+            "u", "ur", "r", "dr", "d", "dl", "l", "ul",
+    };
+
+    public String toString() { return arrows[this.number]; }
+    public String toLetter() { return letters[this.number]; }
 
     Direction(int number) {
         this.number = number;
@@ -38,19 +45,5 @@ public enum Direction {
         return Direction.values()[(this.number + change.number) % Direction.amount];
     }
     public Direction rotate(int change) { return rotate(getDirection(change)); }
-
-    // Jakby się miało przydać to lepiej to wsadzić tam u góry
-//    public String toString() {
-//        return switch (this) {
-//            case N -> "Północ";
-//            case NE -> "Północny wschód";
-//            case E -> "Wschód";
-//            case SE -> "Południowy wschód";
-//            case S -> "Południe";
-//            case SW -> "Południowy zachód";
-//            case W -> "Zachód";
-//            case NW -> "Północny zachód";
-//        };
-//    }
 
 }
