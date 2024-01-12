@@ -15,6 +15,7 @@ public class HellMap extends AbstractWorldMap {
     //    super(width, height, animal_amount, grass_amount, typeOfMutation);
     public HellMap(SimulationSettings settings) {
         super(settings);
+        // TODO portal
         //this.energyPortal = energyPortal;
     }
 

@@ -18,7 +18,20 @@ public class Genome {
     }
     public void setGene(int i,int g){this.genes[i]=g;}
 
-
+    public void mutate(int minMutateNumber,int maxMutateNumber,int type){
+        Random random = new Random();
+        int mutateNumber=random.nextInt(maxMutateNumber-minMutateNumber)+minMutateNumber;
+        if(type==0){
+            for(int i=0;i<mutateNumber;i++) {
+                randomMutate();
+            }
+        }
+        else{
+            for(int i=0;i<mutateNumber;i++) {
+                swapMutate();
+            }
+        }
+    }
     private void randomMutate(){
         Random random = new Random();
         int genIndex = random.nextInt(genes.length);

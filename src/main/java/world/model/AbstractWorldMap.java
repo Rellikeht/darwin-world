@@ -243,11 +243,28 @@ public abstract class AbstractWorldMap implements WorldMap {
         animal1.loseEnergy(settings.getEnergyTakenByProcreation());
         animal2.loseEnergy(settings.getEnergyTakenByProcreation());
         Vector2d position = animal1.getPosition();
+        newGenome.mutate(minNumberOfMutation,maxNumberOfMutation,typeOfMutation);
+        return new Animal(position, Direction.randomDirection(), 2*energyTaken, newGenome, day,animal1,animal2);
         return new Animal(
                 position, Direction.randomDirection(),
                 2*settings.getEnergyTakenByProcreation(), newGenome, day,
                 animal1, animal2
         );
+    }
+
+    @Override
+    public void doReproduction(int energyNeeded, int energyTaken) {
+        for (Vector2d position: animals.keySet()) {
+            if (animals.get(position).size() > 1) {
+                Queue<Animal> fittest = getFittestAt(position);
+                Animal a1 = fittest.peek();
+                Animal a2 = fittest.peek();
+                if (a1.getEnergy() >= energyNeeded && a2.getEnergy() >= energyNeeded) {
+                    place(reproducing(a1, a2, energyTaken));
+                }
+            }
+        }
+        mapChanged("Reproduction done");
     }
 
     @Override
