@@ -93,7 +93,6 @@ public class Animal implements Comparable<Animal> {
         // Porównujemy po parametrze 1
         int result = Integer.compare(other.getEnergy(), getEnergy());
         if (result == 0) {
-            // result = Integer.compare(other.getDaysOfLife(), getDaysOfLife());
             result = Integer.compare(getDayOfBirth(), other.getDayOfBirth());
             if (result == 0){
                 result = Integer.compare(other.getChildrenAmount(), getChildrenAmount());

@@ -7,14 +7,11 @@ public class Genome {
     private final int length;
     private final Random random = new Random();
 
-    public Genome(int N){
-        genes = new int[N];
-        length = N;
-        for(int i=0;i<N;i++){ genes[i] = random.nextInt(8); }
+    public Genome(int length){
+        genes = new int[length];
+        this.length = length;
+        for(int i=0;i<length;i++){ genes[i] = random.nextInt(8); }
     }
-
-    // TODO do odstrzału
-    private void setGene(int i,int g){this.genes[i]=g;}
 
     Genome(
             Genome genome1, Genome genome2,
@@ -28,19 +25,19 @@ public class Genome {
 
         if(random.nextInt(2) == 0) {
             for (int i = 0; i < length-proportions; i++) {
-                this.setGene(i, genome2.getGene(i));
+                genes[i] = genome2.getGene(i);
             }
             for (int i = length-proportions; i < length; i++) {
-                this.setGene(i, genome1.getGene(i));
+                genes[i] = genome1.getGene(i);
             }
         }
 
         else{
             for (int i = 0; i < proportions; i++) {
-                this.setGene(i, genome1.getGene(i));
+                genes[i] = genome1.getGene(i);
             }
             for (int i = proportions; i < length; i++) {
-                this.setGene(i, genome2.getGene(i));
+                genes[i] = genome2.getGene(i);
             }
         }
 

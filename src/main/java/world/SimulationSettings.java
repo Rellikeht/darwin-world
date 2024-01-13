@@ -1,5 +1,7 @@
 package world;
 
+import java.util.Set;
+
 public class SimulationSettings {
 
     // Wielkości mapy
@@ -92,6 +94,11 @@ public class SimulationSettings {
     private int tickTime = DEFAULT_TICK_TIME;
     public int getTickTime() { return tickTime; }
     public void setTickTime(int tickTime) { this.tickTime = tickTime; }
+
+    private static final int DEFAULT_PORTAL_ENERGY = 10;
+    private int portalEnergy = DEFAULT_PORTAL_ENERGY;
+    public int getPortalEnergy() { return portalEnergy; }
+    public void setPortalEnergy(int portalEnergy) { this.portalEnergy = portalEnergy; }
 
     public SimulationSettings() {
         // Wszystko domyślne

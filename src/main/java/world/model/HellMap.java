@@ -7,16 +7,8 @@ import java.util.List;
 import java.util.Random;
 
 public class HellMap extends AbstractWorldMap {
-    // TODO jakoś wcielić to sensownie do ustawień
-    private final int energyPortal = 10;
-    //public HellMap(
-    //        int width, int height, int animal_amount, int grass_amount, int typeOfMutation, int energyPortal
-    //) {
-    //    super(width, height, animal_amount, grass_amount, typeOfMutation);
     public HellMap(SimulationSettings settings) {
         super(settings);
-        // TODO portal
-        //this.energyPortal = energyPortal;
     }
 
     public void moveAnimals() {
@@ -33,7 +25,7 @@ public class HellMap extends AbstractWorldMap {
                 Random random = new Random();
                 int y = random.nextInt(upperRight.getY());
                 int x = random.nextInt(upperRight.getX());
-                animal.loseEnergy(energyPortal);
+                animal.loseEnergy(settings.getPortalEnergy());
                 animal.setPosition(new Vector2d(x,y));
             }
             else if(typeOfMove==2){
@@ -49,6 +41,7 @@ public class HellMap extends AbstractWorldMap {
 
         super.moveAnimals();
     }
+
     private int typeOfMove(Animal animal, Vector2d vector){
         if (animal.getPosition().add(vector).getX()>upperRight.getX()||animal.getPosition().add(vector).getX()<lowerLeft.getX()){return 1;}
         if (animal.getPosition().add(vector).getY()>upperRight.getY() ||     animal.getPosition().add(vector).getY()<lowerLeft.getY()){return 3;}
