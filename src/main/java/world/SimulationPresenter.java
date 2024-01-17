@@ -76,7 +76,8 @@ public class SimulationPresenter extends Application implements MapChangeListene
             moveInfoLabel.setText(message);
         });
     };
-    private void uploadSettings(){
+
+    private void uploadSettings() {
         int widthNum=Integer.parseInt(mapWidth.getText());
         if(widthNum>0){settings.setMapWidth(widthNum);}
         int heightNum=Integer.parseInt(mapHeight.getText());
@@ -93,6 +94,7 @@ public class SimulationPresenter extends Application implements MapChangeListene
         settings.setMaxAmountOfMutations(Integer.parseInt(maxMutation.getText()));
 
     }
+
     @Override
     public void mapChanged(WorldMap worldMap, String message) {
         drawMap(message);

@@ -19,6 +19,13 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected final int id;
     protected int day = 0;
 
+    // Staty
+    protected final int size;
+    // TODO
+    protected int avgAnimalEnergy = 0;
+    private int deadAnimalsAmount = 0;
+    private int deadAnimalsLifespanSum = 0;
+
     // Reszta
     protected final Random random = new Random();
     protected final RandomPositionGenerator overEquator, underEquator, equator;
@@ -42,6 +49,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         listeners = new LinkedHashSet<>();
         lowerLeft = new Vector2d(0, 0);
         upperRight = new Vector2d(settings.getMapWidth()-1, settings.getMapHeight()-1);
+        size = settings.getMapWidth()*settings.getMapHeight();
 
         jungleStart = (upperRight.getY() - lowerLeft.getY() - settings.getJungleSize()) / 2;
         jungleEnd = jungleStart + settings.getJungleSize();
@@ -64,7 +72,19 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     @Override
-    public void grassPlace(int N) {
+    public void nextDay() {
+        for(Animal animal: allAnimals()) {
+            if(animal.getEnergy()<=0){
+                animals.get(animal.getPosition()).remove(animal);
+                animal.die(day);
+                deadAnimalsAmount += 1;
+                deadAnimalsLifespanSum += animal.getDayOfDeath() - animal.getDayOfBirth();
+            }
+        }
+        day += 1;
+    }
+
+    protected void grassPlace(int N) {
         // It's definitely a kind of magic
         List<RandomPositionGenerator> generators = new ArrayList<>(10);
         if (underEquator.hasNext()) { generators.add(underEquator); }
@@ -89,13 +109,17 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     @Override
+    public void grassPlace() {
+        grassPlace(settings.getDailyGrassAmount());
+    }
+
+    @Override
     public void place(Animal animal)  {
         List<Animal> animalsAt = animals.getOrDefault(animal.getPosition(), new ArrayList<>());
         animalsAt.add(animal);
         animals.put(animal.getPosition(), animalsAt);
     }
 
-    //@Override
     protected Collection<Animal> allAnimals() {
         // Przyjemne, trzeba przyznać
         return animals.values().stream()
@@ -168,10 +192,7 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     protected Queue<Animal> getFittestAt(Vector2d position) {
         List<Animal> animals = this.animals.get(position);
-        PriorityQueue<Animal> queue = new PriorityQueue<>(
-                animals.size()
-                //new FittestComparator()
-        );
+        PriorityQueue<Animal> queue = new PriorityQueue<>(animals.size());
         queue.addAll(animals);
         return queue;
     }
@@ -233,14 +254,24 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     @Override
-    public void nextDay() {
-        for(Animal animal: allAnimals()) {
-            if(animal.getEnergy()<=0){
-                animals.get(animal.getPosition()).remove(animal);
-                animal.die(day);
-            }
-        }
-        day += 1;
+    public int getGrassAmount() {
+        return grass.size();
+    }
+
+    @Override
+    public int getFreeSquares() {
+        // TODO usunąć w razie czego, nie wiem, jak interpretować wolne pola
+        return size - getGrassAmount();
+    }
+
+    @Override
+    public int getAvgAnimalEnergy() {
+        return avgAnimalEnergy;
+    }
+
+    @Override
+    public int getAvgLifespan() {
+        return deadAnimalsLifespanSum/deadAnimalsAmount;
     }
 
 }

@@ -2,13 +2,20 @@ package world;
 
 import world.model.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class Simulation implements Runnable {
 
     private final WorldMap map;
     private final SimulationSettings settings;
-    private final SimulationStats stats;
+
+    // TODO staty
+    //private final SimulationStats stats;
+    private int animalsAmount;
+    private final Map<Genome, Integer> genomes;
 
     public Simulation(SimulationSettings settings) {
         this.settings = settings;
@@ -17,6 +24,10 @@ public class Simulation implements Runnable {
         } else {
             map = new HellMap(settings);
         }
+
+        // TODO staty
+        //stats = new SimulationStats();
+        this.genomes = new HashMap<>(settings.getInitialAnimalAmount());
 
         Vector2d maxPos = map.getUpperRight();
         for (int i = 0; i < settings.getInitialAnimalAmount(); i++) {
@@ -34,10 +45,11 @@ public class Simulation implements Runnable {
             );
 
             map.place(animal);
+            Integer count = genomes.getOrDefault(genome, 0);
+            genomes.put(genome, count+1);
+            animalsAmount = settings.getInitialAnimalAmount();
         }
 
-        // TODO staty
-        stats = new SimulationStats();
     }
 
     // Wszystko domyślne
@@ -57,7 +69,7 @@ public class Simulation implements Runnable {
         wait(settings.getTickTime());
         map.doReproduction();
         wait(settings.getTickTime());
-        map.grassPlace(settings.getDailyGrassAmount());
+        map.grassPlace();
         wait(settings.getTickTime());
     }
 
@@ -77,5 +89,27 @@ public class Simulation implements Runnable {
         map.removeListener(listener);
     }
     public WorldMap getMap() { return map; }
+
+    // 6. Program ma pozwalać na śledzenie następujących statystyk dla aktualnej sytuacji w symulacji:
+    //    * liczby wszystkich zwierzaków,
+    public int getAnimalAmount() { return animalsAmount; }
+
+    //    * liczby wszystkich roślin,
+    public int getGrassAmount() { return map.getGrassAmount(); }
+
+    //    * liczby wolnych pól,
+    public int getFreeSquares() { return map.getFreeSquares(); }
+
+    //    * najpopularniejszych genotypów,
+    // TODO
+
+    //    * średniego poziomu energii dla żyjących zwierzaków,
+    public int getAvgAnimalEnergy() { return map.getAvgAnimalEnergy(); }
+
+    //    * średniej długości życia zwierzaków dla martwych zwierzaków (wartość uwzględnia wszystkie nieżyjące zwierzaki - od początku symulacji),
+    private int getAvgLifespan() { return map.getAvgLifespan(); }
+
+    //    * średniej liczby dzieci dla żyjących zwierzaków (wartość uwzględnia wszystkie powstałe zwierzaki, a nie tylko zwierzaki powstałe w danej epoce).
+    // TODO
 
 }

@@ -21,6 +21,16 @@ public class Animal implements Comparable<Animal> {
     private int childrenAmount = 0;
     private int offspringsAmount = 0;
 
+    //7. Po zatrzymaniu programu można oznaczyć jednego zwierzaka jako wybranego do śledzenia. Od tego momentu (do zatrzymania śledzenia) UI powinien przekazywać nam informacje o jego statusie i historii:
+    //   * jaki ma genom,
+    //   * która jego część jest aktywowana,
+    //   * ile ma energii,
+    //   * ile zjadł roślin,
+    //   * ile posiada dzieci,
+    //   * ile posiada potomków (niekoniecznie będących bezpośrednio dziećmi),
+    //   * ile dni już żyje (jeżeli żyje),
+    //   * którego dnia zmarło (jeżeli żywot już skończyło).
+
     private final Animal parent1;
     private final Animal parent2;
 
@@ -108,7 +118,7 @@ public class Animal implements Comparable<Animal> {
     public Direction getDirection() { return this.direction; }
     public int getEnergy() { return energy; }
     public int getCurrentGeneNumber() { return currentGeneNumber; }
-    Genome getGenes() { return genes; }
+    public Genome getGenes() { return genes; }
 
 
     public String toString() { return this.direction.toString(); }

@@ -14,6 +14,12 @@ public interface WorldMap {
     void doEating();
     void doReproduction();
     void nextDay();
-    void grassPlace(int N);
+    void grassPlace();
     String getAt(Vector2d currentPosition);
+
+    int getGrassAmount();
+    int getFreeSquares();
+    int getAvgAnimalEnergy();
+    int getAvgLifespan();
+
 }

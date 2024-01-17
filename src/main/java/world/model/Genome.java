@@ -7,10 +7,12 @@ public class Genome {
     private final int length;
     private final Random random = new Random();
 
-    public Genome(int length){
+    public Genome(int length) {
         genes = new int[length];
         this.length = length;
-        for(int i=0;i<length;i++){ genes[i] = random.nextInt(8); }
+        for(int i=0;i<length;i++){
+            genes[i] = random.nextInt(8);
+        }
     }
 
     Genome(
@@ -19,7 +21,7 @@ public class Genome {
             int minAmountOfMutations, int maxAmountOfMutations,
             boolean isMutationRandom
     ) {
-        this(genome1.getLength());
+        this(genome1.getLength()); // ??
         int proportions = length*(energy2/energy1);
         int mutateNumber = random.nextInt(maxAmountOfMutations-minAmountOfMutations)+minAmountOfMutations;
 
@@ -67,4 +69,11 @@ public class Genome {
     public int getGene(int i){ return genes[i]; }
     public int getLength() { return genes.length; }
 
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        return other instanceof Genome otherGenome &&
+                otherGenome.length == this.length &&
+                otherGenome.genes == this.genes;
+    }
 }

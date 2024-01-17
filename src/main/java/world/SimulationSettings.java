@@ -93,13 +93,14 @@ public class SimulationSettings {
     private static final int DEFAULT_TICK_TIME = 300;
     private int tickTime = DEFAULT_TICK_TIME;
     public int getTickTime() { return tickTime; }
-    public void setTickTime(int tickTime) { this.tickTime = tickTime; }
+    void setTickTime(int tickTime) { this.tickTime = tickTime; }
 
     private static final int DEFAULT_PORTAL_ENERGY = 10;
     private int portalEnergy = DEFAULT_PORTAL_ENERGY;
     public int getPortalEnergy() { return portalEnergy; }
-    public void setPortalEnergy(int portalEnergy) { this.portalEnergy = portalEnergy; }
+    void setPortalEnergy(int portalEnergy) { this.portalEnergy = portalEnergy; }
 
+    public int getMapSize() { return mapWidth*mapHeight; }
     public SimulationSettings() {
         // Wszystko domyślne
     }
