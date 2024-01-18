@@ -21,12 +21,13 @@ public abstract class AbstractWorldMap {
 
     // Staty
     protected final int size;
-    private int deadAnimalsAmount = 0;
-    private int deadAnimalsLifespanSum = 0;
-    private int animalsAmount = 0;
-    private final Map<Genome, Integer> mostPopularGenomes = new HashMap<>();
+    protected int deadAnimalsAmount = 0;
+    protected int deadAnimalsLifespanSum = 0;
+    protected int animalsAmount = 0;
+    protected final Map<Genome, Integer> mostPopularGenomes = new HashMap<>();
     // TODO
     //protected int animalEnergySum = 0;
+    //protected int childrenAmountSum = 0;
 
     // Reszta
     protected final Random random = new Random();
@@ -164,31 +165,29 @@ public abstract class AbstractWorldMap {
     //}
 
     public void moveAnimals() {
-        // TODO wyciągnąć tu kod z klas dziedziczących
+        for(Animal animal: allAnimals()) {
+            animal.activateGene();
+            Direction direction = animal.getDirection();
+            Vector2d dirVector = direction.toUnitVector();
+            Vector2d beforePosition = animal.getPosition();
 
-        //for(Animal animal: allAnimals()) {
-        //    animal.rotateAnimals(animal.getCurrentGene()%(animal.getGenes().getLength()+1));
-        //    Direction direction = animal.getDirection();
-        //    Vector2d dirVector = direction.toUnitVector();
-        //    Vector2d beforePosition = animal.getPosition();
+            List<Animal> animalsAtBefore = animals.getOrDefault(beforePosition, new ArrayList<>());
+            animals.remove(beforePosition);
+            animalsAtBefore.remove(animal);
+            specialAnimalMovement(animal, dirVector);
 
-        //    List<Animal> animalsAtBefore = animals.getOrDefault(beforePosition, new ArrayList<>());
-        //    animals.remove(beforePosition);
-        //    animalsAtBefore.remove(animal);
-        //    if (canMove(animal, dirVector)){
-        //        animal.move();
-        //        animal.loseEnergy(settings.getEnergyTakenByMovement());
-        //    }
+            Vector2d afterPosition = animal.getPosition();
+            List<Animal> animalsAtAfter = animals.getOrDefault(afterPosition, new ArrayList<>());
+            animalsAtAfter.add(animal);
+            animals.put(beforePosition, animalsAtBefore);
+            animals.put(afterPosition, animalsAtAfter);
+        }
 
-        //    Vector2d afterPosition=animal.getPosition();
-        //    List<Animal> animalsAtAfter = animals.getOrDefault(afterPosition, new ArrayList<>());
-        //    animalsAtAfter.add(animal);
-        //    animals.put(beforePosition, animalsAtBefore);
-        //    animals.put(afterPosition, animalsAtAfter);
-        //}
-
-        // TODO energia po ruchu, pasuje wrzucić tu większość ruchu
         mapChanged("Animals moved");
+    }
+
+    protected void specialAnimalMovement(Animal animal, Vector2d vector) {
+        // TODO powyciągać dalej, implementacje nie są za ładne
     }
 
     protected Queue<Animal> getFittestAt(Vector2d position) {
@@ -271,7 +270,6 @@ public abstract class AbstractWorldMap {
     }
 
     public int getAvgChildrenAmount() {
-        // TODO można by to liczyć w trakcie, ale to sporo zabawy
         int childrenAmount = 0;
         for (Animal animal: allAnimals()) {
             childrenAmount += animal.getChildrenAmount();

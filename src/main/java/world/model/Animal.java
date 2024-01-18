@@ -6,33 +6,69 @@ public class Animal implements Comparable<Animal> {
 
     // Atrybuty
     private Direction direction;
+    public Direction getDirection() { return this.direction; }
+
     private Vector2d position;
-    private final Genome genes;
-    private int energy;
-    private int currentGeneNumber;
+    public Vector2d getPosition() { return this.position; }
+    void setPosition(Vector2d position) { this.position=position; }
+
+    private final Animal parent1;
+    private final Animal parent2;
 
     // Staty
+
+    //7. Po zatrzymaniu programu można oznaczyć jednego zwierzaka jako wybranego do śledzenia. Od tego momentu (do zatrzymania śledzenia) UI powinien przekazywać nam informacje o jego statusie i historii:
+    //   * jaki ma genom,
+    private final Genome genes;
+    public Genome getGenes() { return genes; }
+
+    //   * która jego część jest aktywowana,
+    private int currentGeneNumber;
+    public int getCurrentGeneNumber() { return currentGeneNumber; }
+    void activateGene(){
+        direction = Direction.getDirection(genes.getGene(currentGeneNumber));
+        currentGeneNumber = (currentGeneNumber +1)%genes.getLength();
+    }
+
+    //   * ile ma energii,
+    private int energy;
+    public int getEnergy() { return energy; }
+    void loseEnergy(int energy) { this.energy -= energy; }
+
+    //   * ile zjadł roślin,
     private int grassEaten = 0;
+    public int getGrassEaten() { return grassEaten; }
+    void eatGrass(int grassEnergy) {
+        this.energy += grassEnergy;
+        this.grassEaten += 1;
+    }
+
+    //   * ile posiada dzieci,
+    private int childrenAmount = 0;
+    public int getChildrenAmount() { return childrenAmount; }
+
+    //   * ile posiada potomków (niekoniecznie będących bezpośrednio dziećmi),
+    private int offspringsAmount = 0;
+    public int getOffspringsAmount() { return offspringsAmount; }
+    private void addOffspring() {
+        this.offspringsAmount += 1;
+        if (parent1 != null) parent1.addOffspring();
+        if (parent2 != null) parent2.addOffspring();
+    }
+
+    //   * ile dni już żyje (jeżeli żyje),
     private final int dayOfBirth;
+    public int getDayOfBirth() { return dayOfBirth; }
+
+    //   * którego dnia zmarło (jeżeli żywot już skończyło).
     // Nie jestem pewien, czy to dobry pomysł, ale ogólnie
     // jak tu jest null to jest żywy i to nam pozwala na
     // 1-linijkowy getter
     private Integer dayOfDeath;
-    private int childrenAmount = 0;
-    private int offspringsAmount = 0;
-
-    //7. Po zatrzymaniu programu można oznaczyć jednego zwierzaka jako wybranego do śledzenia. Od tego momentu (do zatrzymania śledzenia) UI powinien przekazywać nam informacje o jego statusie i historii:
-    //   * jaki ma genom,
-    //   * która jego część jest aktywowana,
-    //   * ile ma energii,
-    //   * ile zjadł roślin,
-    //   * ile posiada dzieci,
-    //   * ile posiada potomków (niekoniecznie będących bezpośrednio dziećmi),
-    //   * ile dni już żyje (jeżeli żyje),
-    //   * którego dnia zmarło (jeżeli żywot już skończyło).
-
-    private final Animal parent1;
-    private final Animal parent2;
+    public Integer getDayOfDeath() { return dayOfDeath; }
+    void die(int day) {
+        this.dayOfDeath = day;
+    }
 
     // Bo czemu nie
     private final Random random = new Random();
@@ -60,8 +96,6 @@ public class Animal implements Comparable<Animal> {
         }
 
         currentGeneNumber = random.nextInt(genes.getLength());
-
-        // TODO staty
     }
 
     public Animal(
@@ -70,32 +104,9 @@ public class Animal implements Comparable<Animal> {
         this(position, direction, energy, genes, 0, null, null);
     }
 
-    private void addOffspring() {
-        this.offspringsAmount += 1;
-        if (parent1 != null) parent1.addOffspring();
-        if (parent2 != null) parent2.addOffspring();
-    }
-
-    void setPosition(Vector2d position){this.position=position;}
-    void loseEnergy(int energy) { this.energy -= energy; }
-
-    void eatGrass(int grassEnergy) {
-        this.energy += grassEnergy;
-        this.grassEaten += 1;
-    }
-
-    void activateGene(){
-        direction = Direction.getDirection(genes.getGene(currentGeneNumber));
-        currentGeneNumber = (currentGeneNumber +1)%genes.getLength();
-    }
-
-    void move(){
+    void move() {
         Vector2d dirVector = direction.toUnitVector();
         position.add(dirVector);
-    }
-
-    void die(int day) {
-        this.dayOfDeath = day;
     }
 
     @Override
@@ -114,17 +125,6 @@ public class Animal implements Comparable<Animal> {
         return result;
     }
 
-    public Vector2d getPosition() { return this.position; }
-    public Direction getDirection() { return this.direction; }
-    public int getEnergy() { return energy; }
-    public int getCurrentGeneNumber() { return currentGeneNumber; }
-    public Genome getGenes() { return genes; }
-
-
     public String toString() { return this.direction.toString(); }
-    public int getDayOfBirth() { return dayOfBirth; }
-    public Integer getDayOfDeath() { return dayOfDeath; }
-    public int getChildrenAmount() { return childrenAmount; }
-    public int getOffspringsAmount() { return offspringsAmount; }
 
 }
