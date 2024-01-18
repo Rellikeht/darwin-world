@@ -1,6 +1,6 @@
 package world.model;
 
-import java.util.*;
+import java.util.Random;
 
 public class Genome {
     private final int[] genes;

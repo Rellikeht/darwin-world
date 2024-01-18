@@ -11,11 +11,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.converter.NumberStringConverter;
+import world.model.AbstractWorldMap;
 import world.model.MapChangeListener;
-import world.model.WorldMap;
-
-import java.util.function.UnaryOperator;
 
 public class SimulationPresenter extends Application implements MapChangeListener {
 
@@ -32,8 +29,9 @@ public class SimulationPresenter extends Application implements MapChangeListene
     private Label moveInfoLabel;
     @FXML
     private GridPane mapGrid;
+
     @FXML
-    private WorldMap map;
+    private AbstractWorldMap map;
     @FXML
     private ToggleButton HellMap;
     @FXML
@@ -96,7 +94,7 @@ public class SimulationPresenter extends Application implements MapChangeListene
     }
 
     @Override
-    public void mapChanged(WorldMap worldMap, String message) {
+    public void mapChanged(AbstractWorldMap worldMap, String message) {
         drawMap(message);
     }
     public void setHellMap(){settings.setMapBasic(false);}

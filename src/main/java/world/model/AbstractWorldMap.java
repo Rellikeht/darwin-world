@@ -5,7 +5,7 @@ import world.util.MapVisualizer;
 
 import java.util.*;
 
-public abstract class AbstractWorldMap implements WorldMap {
+public abstract class AbstractWorldMap {
 
     // Elementy
     protected final Set<Vector2d> grass;
@@ -21,10 +21,12 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     // Staty
     protected final int size;
-    // TODO
-    protected int avgAnimalEnergy = 0;
     private int deadAnimalsAmount = 0;
     private int deadAnimalsLifespanSum = 0;
+    private int animalsAmount = 0;
+    private final Map<Genome, Integer> mostPopularGenomes = new HashMap<>();
+    // TODO
+    //protected int animalEnergySum = 0;
 
     // Reszta
     protected final Random random = new Random();
@@ -34,13 +36,6 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected final Set<MapChangeListener> listeners;
     protected final MapVisualizer visualizer = new MapVisualizer(this);
 
-    @Override
-    public int getId() { return this.id; }
-    @Override
-    public Vector2d getLowerLeft() { return lowerLeft; }
-    @Override
-    public Vector2d getUpperRight() { return upperRight; }
-
     public AbstractWorldMap(SimulationSettings settings) {
         this.settings = settings;
 
@@ -49,7 +44,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         listeners = new LinkedHashSet<>();
         lowerLeft = new Vector2d(0, 0);
         upperRight = new Vector2d(settings.getMapWidth()-1, settings.getMapHeight()-1);
-        size = settings.getMapWidth()*settings.getMapHeight();
 
         jungleStart = (upperRight.getY() - lowerLeft.getY() - settings.getJungleSize()) / 2;
         jungleEnd = jungleStart + settings.getJungleSize();
@@ -68,17 +62,24 @@ public abstract class AbstractWorldMap implements WorldMap {
 
         this.id = curId;
         curId += 1;
+        size = settings.getMapWidth()*settings.getMapHeight();
         grassPlace(settings.getInitialGrassAmount());
     }
 
-    @Override
     public void nextDay() {
         for(Animal animal: allAnimals()) {
             if(animal.getEnergy()<=0){
                 animals.get(animal.getPosition()).remove(animal);
                 animal.die(day);
+
                 deadAnimalsAmount += 1;
                 deadAnimalsLifespanSum += animal.getDayOfDeath() - animal.getDayOfBirth();
+                animalsAmount -= 1;
+
+                Genome genome = animal.getGenes();
+                int count = mostPopularGenomes.get(genome);
+                mostPopularGenomes.put(genome, count-1);
+                //animalEnergySum -= animal.getEnergy();
             }
         }
         day += 1;
@@ -108,16 +109,20 @@ public abstract class AbstractWorldMap implements WorldMap {
         mapChanged("We have some new grass");
     }
 
-    @Override
     public void grassPlace() {
         grassPlace(settings.getDailyGrassAmount());
     }
 
-    @Override
     public void place(Animal animal)  {
         List<Animal> animalsAt = animals.getOrDefault(animal.getPosition(), new ArrayList<>());
         animalsAt.add(animal);
         animals.put(animal.getPosition(), animalsAt);
+        animalsAmount += 1;
+
+        Genome genome = animal.getGenes();
+        Integer count = mostPopularGenomes.getOrDefault(genome, 0);
+        mostPopularGenomes.put(genome, count+1);
+        //animalEnergySum += animal.getEnergy();
     }
 
     protected Collection<Animal> allAnimals() {
@@ -127,12 +132,9 @@ public abstract class AbstractWorldMap implements WorldMap {
                 .toList();
     }
 
-    @Override
     public String toString() { return visualizer.draw(lowerLeft, upperRight); }
 
-    @Override
     public void addListener(MapChangeListener listener) { listeners.add(listener); }
-    @Override
     public void removeListener(MapChangeListener listener) { listeners.remove(listener); }
     protected void mapChanged(String message) {
         for (MapChangeListener listener : listeners) {
@@ -140,7 +142,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
     }
 
-    @Override
     public String getAt(Vector2d position) {
         List<Animal> animalsAt = animals.get(position);
         if (animalsAt != null) {
@@ -162,7 +163,6 @@ public abstract class AbstractWorldMap implements WorldMap {
     //        && animal.getPosition().add(dirVector).precedes(upperRight);
     //}
 
-    @Override
     public void moveAnimals() {
         // TODO wyciągnąć tu kod z klas dziedziczących
 
@@ -187,6 +187,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         //    animals.put(afterPosition, animalsAtAfter);
         //}
 
+        // TODO energia po ruchu, pasuje wrzucić tu większość ruchu
         mapChanged("Animals moved");
     }
 
@@ -197,7 +198,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         return queue;
     }
 
-    @Override
     public void doEating() {
         for (Vector2d position: animals.keySet()) {
             if (!animals.get(position).isEmpty()) {
@@ -216,7 +216,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         mapChanged("Eating done");
     }
 
-    @Override
     public void doReproduction() {
         for (Vector2d position: animals.keySet()) {
             if (animals.get(position).size() > 1) {
@@ -253,25 +252,38 @@ public abstract class AbstractWorldMap implements WorldMap {
         );
     }
 
-    @Override
-    public int getGrassAmount() {
-        return grass.size();
-    }
-
-    @Override
+    public int getGrassAmount() { return grass.size(); }
     public int getFreeSquares() {
         // TODO usunąć w razie czego, nie wiem, jak interpretować wolne pola
         return size - getGrassAmount();
     }
 
-    @Override
-    public int getAvgAnimalEnergy() {
-        return avgAnimalEnergy;
-    }
+    public int getId() { return this.id; }
+    public Vector2d getLowerLeft() { return lowerLeft; }
+    public Vector2d getUpperRight() { return upperRight; }
 
-    @Override
     public int getAvgLifespan() {
         return deadAnimalsLifespanSum/deadAnimalsAmount;
+    }
+    public int getAnimalsAmount() { return animalsAmount; }
+    public Map<Genome, Integer> getMostPopularGenomes() {
+        return mostPopularGenomes;
+    }
+
+    public int getAvgChildrenAmount() {
+        // TODO można by to liczyć w trakcie, ale to sporo zabawy
+        int childrenAmount = 0;
+        for (Animal animal: allAnimals()) {
+            childrenAmount += animal.getChildrenAmount();
+        }
+        return childrenAmount/animalsAmount;
+    }
+    public int getAvgAnimalEnergy() {
+        int animalEnergySum = 0;
+        for (Animal animal: allAnimals()) {
+            animalEnergySum += animal.getEnergy();
+        }
+        return animalEnergySum/animalsAmount;
     }
 
 }

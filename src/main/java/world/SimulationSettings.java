@@ -1,7 +1,5 @@
 package world;
 
-import java.util.Set;
-
 public class SimulationSettings {
 
     // Wielkości mapy

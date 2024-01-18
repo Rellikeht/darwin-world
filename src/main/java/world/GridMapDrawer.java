@@ -5,19 +5,19 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import world.model.AbstractWorldMap;
 import world.model.Vector2d;
-import world.model.WorldMap;
 
 public class GridMapDrawer {
     private static final int CELL_WIDTH = 40;
     private static final int CELL_HEIGHT = 40;
 
     private final GridPane mapGrid;
-    private final WorldMap map;
+    private final AbstractWorldMap map;
     private final Vector2d lowerLeft, upperRight;
     private final int width, height;
 
-    public GridMapDrawer(GridPane mapGrid, WorldMap map) {
+    public GridMapDrawer(GridPane mapGrid, AbstractWorldMap map) {
         this.mapGrid = mapGrid;
         this.map = map;
         lowerLeft = map.getLowerLeft();
