@@ -247,8 +247,9 @@ public abstract class AbstractWorldMap {
 
     int getGrassAmount() { return grass.size(); }
     int getFreeSquares() {
-        // TODO nie wiem, jak dokładnie interpretować wolne pola
-        return size - getGrassAmount();
+        //int freeSquares = 0;
+        //return size - (gra)
+        return 0; // TODO
     }
 
     public int getId() { return this.id; }

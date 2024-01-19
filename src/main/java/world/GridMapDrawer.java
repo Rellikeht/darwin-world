@@ -67,7 +67,6 @@ public class GridMapDrawer {
     private void drawWorldElements() {
         for (int x = lowerLeft.getX(); x <= upperRight.getX(); x++) {
             for (int y = lowerLeft.getY(); y <= upperRight.getY(); y++) {
-                //WorldElement element = map.objectAt(new Vector2d(x, y));
                 //String labelText = element != null ? element.toString() : "";
 
                 String labelText = map.getAt(new Vector2d(x, y));
