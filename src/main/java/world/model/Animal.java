@@ -16,8 +16,9 @@ public class Animal implements Comparable<Animal> {
     private final Animal parent2;
 
     // Staty
-
-    //7. Po zatrzymaniu programu można oznaczyć jednego zwierzaka jako wybranego do śledzenia. Od tego momentu (do zatrzymania śledzenia) UI powinien przekazywać nam informacje o jego statusie i historii:
+    // 7. Po zatrzymaniu programu można oznaczyć jednego zwierzaka jako wybranego do śledzenia.
+    // Od tego momentu (do zatrzymania śledzenia) UI powinien przekazywać
+    // nam informacje o jego statusie i historii:
     //   * jaki ma genom,
     private final Genome genes;
     public Genome getGenes() { return genes; }

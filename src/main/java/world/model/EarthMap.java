@@ -2,9 +2,6 @@ package world.model;
 
 import world.SimulationSettings;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class EarthMap extends AbstractWorldMap {
     public EarthMap(SimulationSettings settings) { super(settings); }
 
