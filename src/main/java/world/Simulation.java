@@ -74,7 +74,13 @@ public class Simulation implements Runnable {
     public void removeListener(MapChangeListener listener) {
         map.removeListener(listener);
     }
-    public AbstractWorldMap getMap() { return map; }
+
     public SimulationStats getStats() { return stats; }
+    //public AbstractWorldMap getMap() { return map; }
+    public String getAt(Vector2d position) {
+        return map.getAt(position);
+    }
+    public Vector2d getLowerLeft() { return map.getLowerLeft(); }
+    public Vector2d getUpperRight() { return map.getUpperRight(); }
 
 }

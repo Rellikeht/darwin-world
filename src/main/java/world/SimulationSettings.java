@@ -14,6 +14,7 @@ public class SimulationSettings {
     }
 
     private static final Map<String, Integer> defaultSettings = new HashMap<>();
+    private final Map<String, Integer> settings;
     private static void addSetting(String name, int defaultValue) {
         defaultSettings.put(inputName(name), defaultValue);
     }
@@ -38,12 +39,7 @@ public class SimulationSettings {
         addSetting("isMapBasic", 1);
         addSetting("tickTime", 300);
         addSetting("portalEnergy", 10);
-
-        // TODO readolny calculated
-        //public int getMapSize() { return mapWidth*mapHeight; }
     }
-
-    private final Map<String, Integer> settings;
 
     // TODO błedy ???
     public int get(String name) {

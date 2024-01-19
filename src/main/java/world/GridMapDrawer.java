@@ -13,15 +13,15 @@ public class GridMapDrawer {
     private static final int CELL_HEIGHT = 40;
 
     private final GridPane mapGrid;
-    private final AbstractWorldMap map;
+    private final Simulation simulation;
     private final Vector2d lowerLeft, upperRight;
     private final int width, height;
 
-    public GridMapDrawer(GridPane mapGrid, AbstractWorldMap map) {
+    public GridMapDrawer(GridPane mapGrid, Simulation simulation) {
         this.mapGrid = mapGrid;
-        this.map = map;
-        lowerLeft = map.getLowerLeft();
-        upperRight = map.getUpperRight();
+        this.simulation = simulation;
+        lowerLeft = simulation.getLowerLeft();
+        upperRight = simulation.getUpperRight();
         width = upperRight.getX() - lowerLeft.getX() + 1;
         height = upperRight.getY() - lowerLeft.getY() + 1;
 
@@ -69,7 +69,7 @@ public class GridMapDrawer {
             for (int y = lowerLeft.getY(); y <= upperRight.getY(); y++) {
                 //String labelText = element != null ? element.toString() : "";
 
-                String labelText = map.getAt(new Vector2d(x, y));
+                String labelText = simulation.getAt(new Vector2d(x, y));
                 addToMapGrid(labelText,
                         1 - lowerLeft.getX() + x,
                         1 + upperRight.getY() -  y

@@ -14,12 +14,7 @@ import javafx.stage.Stage;
 import world.model.AbstractWorldMap;
 import world.model.MapChangeListener;
 
-import java.util.function.Function;
-
 public class SimulationPresenter extends Application implements MapChangeListener {
-
-    @FXML
-    private AbstractWorldMap map;
 
     public VBox textBox;
     public ToolBar mapBar;
@@ -67,12 +62,13 @@ public class SimulationPresenter extends Application implements MapChangeListene
     @FXML
     private TextField maxMutation;
 
+    private Simulation simulation;
     private SimulationSettings settings = new SimulationSettings();
     private boolean isBasic = false;
 
     public void drawMap(String message) {
         Platform.runLater(() -> {
-            GridMapDrawer drawer = new GridMapDrawer(mapGrid, map);
+            GridMapDrawer drawer = new GridMapDrawer(mapGrid, simulation);
             drawer.draw();
             moveInfoLabel.setText(message);
         });
@@ -108,10 +104,12 @@ public class SimulationPresenter extends Application implements MapChangeListene
 
     }
 
+    // TODO Dość bekowa konstrukcja, bo tu wszystko się o symulację rozgrywa xd
     @Override
     public void mapChanged(AbstractWorldMap worldMap, String message) {
         drawMap(message);
     }
+
     public void setHellMap(){settings.set("MapBasic", 0);}
     public void setEarthMap(){settings.set("MapBasic", 1);}
     public void setNormalMutation(){settings.set("MutationRandom", 0);}
@@ -120,8 +118,7 @@ public class SimulationPresenter extends Application implements MapChangeListene
         if(!isBasic) {
             uploadSettings();
         }
-        Simulation simulation = new Simulation(settings);
-        map = simulation.getMap();// TODO nie wiem, czy ta mapa tutaj to dobry pomysł
+        simulation = new Simulation(settings);
         simulation.addListener(this);
         mutationBar.setVisible(false);
         mapBar.setVisible(false);
@@ -137,20 +134,23 @@ public class SimulationPresenter extends Application implements MapChangeListene
         primaryStage.minWidthProperty().bind(viewRoot.minWidthProperty());
         primaryStage.minHeightProperty().bind(viewRoot.minHeightProperty());
     }
+
     public void custom(){
         mutationBar.setVisible(true);
         mapBar.setVisible(true);
         startButton.setDisable(false);
         textBox.setVisible(true);
-        isBasic =false;
+        isBasic = false;
     }
+
     public void basic(){
         mutationBar.setVisible(false);
         mapBar.setVisible(false);
         startButton.setDisable(false);
         textBox.setVisible(false);
-        isBasic =true;
+        isBasic = true;
     }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader();

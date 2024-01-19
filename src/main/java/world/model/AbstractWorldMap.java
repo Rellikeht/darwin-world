@@ -247,12 +247,12 @@ public abstract class AbstractWorldMap {
 
     int getGrassAmount() { return grass.size(); }
     int getFreeSquares() {
-        //int freeSquares = 0;
-        //return size - (gra)
-        return 0; // TODO
+        Set<Vector2d> occupied = new HashSet<>(grass);
+        animals.forEach((pos, list) -> {if (!list.isEmpty()) occupied.add(pos);});
+        return size - (occupied.size());
     }
 
-    public int getId() { return this.id; }
+    int getId() { return this.id; }
     public Vector2d getLowerLeft() { return lowerLeft; }
     public Vector2d getUpperRight() { return upperRight; }
 
