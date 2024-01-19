@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import world.model.AbstractWorldMap;
@@ -64,7 +65,8 @@ public class SimulationPresenter extends Application implements MapChangeListene
     private TextField minMutation;
     @FXML
     private TextField maxMutation;
-
+    @FXML
+    private VBox customBox;
     private Simulation simulation;
     private SimulationSettings settings = new SimulationSettings();
     private boolean isBasic = false;

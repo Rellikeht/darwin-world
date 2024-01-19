@@ -2,6 +2,7 @@ package world;
 
 import world.model.*;
 
+import java.util.Map;
 import java.util.Random;
 
 public class Simulation implements Runnable {
@@ -78,8 +79,9 @@ public class Simulation implements Runnable {
 
     public SimulationStats getStats() { return stats; }
     //public AbstractWorldMap getMap() { return map; }
-    public String getAt(Vector2d position) {
-        return map.getAt(position);
+    public int getAt(Vector2d position) {
+        int energy = settings.get("energyNeededForProcreation")/5;
+        return map.getAt(position,energy);
     }
     public Vector2d getLowerLeft() { return map.getLowerLeft(); }
     public Vector2d getUpperRight() { return map.getUpperRight(); }

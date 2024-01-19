@@ -1,7 +1,10 @@
 package world;
 
 import javafx.geometry.HPos;
+import javafx.scene.ImageCursor;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -68,20 +71,101 @@ public class GridMapDrawer {
     private void drawWorldElements() {
         for (int x = lowerLeft.getX(); x <= upperRight.getX(); x++) {
             for (int y = lowerLeft.getY(); y <= upperRight.getY(); y++) {
-                //String labelText = element != null ? element.toString() : "";
+                Vector2d position = new Vector2d(1 - lowerLeft.getX() + x, 1 + upperRight.getY() -  y);
+                int element = simulation.getAt(position);
+                switch(element) {
+                    case -2 -> {
+                    }
+                    case -1 -> addGrass(position);
+                    default -> addCapibara(position,element);
 
-                String labelText = simulation.getAt(new Vector2d(x, y));
-                addToMapGrid(labelText,
-                        1 - lowerLeft.getX() + x,
-                        1 + upperRight.getY() -  y
-                );
+                }
             }
         }
     }
-
+    private void addGrass(Vector2d position){
+        Image image = new Image("grass.png");
+        ImageView view = new ImageView(image);
+        GridPane.setHalignment(view, HPos.CENTER);
+        mapGrid.add(view, position.getX(), position.getY() );
+    }
+        private void addCapibara(Vector2d position,int element){
+        Image image = new Image("Capi2.png");
+        int direction = element%8;
+        int type=element/8;
+        System.out.println(direction);
+        System.out.println(type);
+        switch(type) {
+            //Tutaj zamiast kolejnych kapibar w drugim switchu bedą ich obroty ale nie mam dostępu do photoshopa na laptopie xd
+            case 0 -> {
+                switch (direction) {
+                    case 0 -> image = new Image("Capi0.png");
+                    case 1 -> image = new Image("Capi0.png");
+                    case 2 -> image = new Image("Capi0.png");
+                    case 3 -> image = new Image("Capi0.png");
+                    case 4 -> image = new Image("Capi0.png");
+                    case 5 -> image = new Image("Capi0.png");
+                    case 6 -> image = new Image("Capi0.png");
+                    case 7 -> image = new Image("Capi0.png");
+                }
+            }
+            case 1 ->{
+                switch (direction) {
+                    case 0 -> image = new Image("Capi1.png");
+                    case 1 -> image = new Image("Capi1.png");
+                    case 2 -> image = new Image("Capi1.png");
+                    case 3 -> image = new Image("Capi1.png");
+                    case 4 -> image = new Image("Capi1.png");
+                    case 5 -> image = new Image("Capi1.png");
+                    case 6 -> image = new Image("Capi1.png");
+                    case 7 -> image = new Image("Capi1.png");
+                }
+            }
+            case 2 ->{
+                switch (direction) {
+                    case 0 -> image = new Image("Capi2.png");
+                    case 1 -> image = new Image("Capi2.png");
+                    case 2 -> image = new Image("Capi2.png");
+                    case 3 -> image = new Image("Capi2.png");
+                    case 4 -> image = new Image("Capi2.png");
+                    case 5 -> image = new Image("Capi2.png");
+                    case 6 -> image = new Image("Capi2.png");
+                    case 7 -> image = new Image("Capi2.png");
+                }
+            }
+            case 3 ->{
+                switch (direction) {
+                    case 0 -> image = new Image("Capi3.png");
+                    case 1 -> image = new Image("Capi3.png");
+                    case 2 -> image = new Image("Capi3.png");
+                    case 3 -> image = new Image("Capi3.png");
+                    case 4 -> image = new Image("Capi3.png");
+                    case 5 -> image = new Image("Capi3.png");
+                    case 6 -> image = new Image("Capi3.png");
+                    case 7 -> image = new Image("Capi3.png");
+                }
+            }
+            default ->  {
+                switch (direction) {
+                    case 0 -> image = new Image("Capi4.png");
+                    case 1 -> image = new Image("Capi4.png");
+                    case 2 -> image = new Image("Capi4.png");
+                    case 3 -> image = new Image("Capi4.png");
+                    case 4 -> image = new Image("Capi4.png");
+                    case 5 -> image = new Image("Capi4.png");
+                    case 6 -> image = new Image("Capi4.png");
+                    case 7 -> image = new Image("Capi4.png");
+                }
+            }
+        }
+        ImageView view = new ImageView(image);
+        GridPane.setHalignment(view, HPos.CENTER);
+        mapGrid.add(view, position.getX(), position.getY() );
+    }
     private void addToMapGrid(String text, int columnIndex, int rowIndex) {
-        Label label = new Label(text);
-        GridPane.setHalignment(label, HPos.CENTER);
-        mapGrid.add(label, columnIndex, rowIndex );
+        Image image = new Image("Capi4.png");
+        ImageView view = new ImageView(image);
+        GridPane.setHalignment(view, HPos.CENTER);
+        mapGrid.add(view, columnIndex, rowIndex );
     }
 }

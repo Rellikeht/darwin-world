@@ -27,10 +27,10 @@ public class SimulationSettings {
         addSetting("dailyGrassAmount", 20);
         addSetting("jungleSize", 5);
         addSetting("initialAnimalAmount", 15);
-        addSetting("initialAnimalEnergy", 120);
+        addSetting("initialAnimalEnergy", 5);
         addSetting("grassEnergy", 20);
         addSetting("energyTakenByProcreation", 30);
-        addSetting("energyNeededForProcreation", 50);
+        addSetting("energyNeededForProcreation", 500);
         addSetting("energyTakenByMovement", 5);
         addSetting("minAmountOfMutations", 0);
         addSetting("maxAmountOfMutations", 100);

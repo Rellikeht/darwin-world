@@ -22,7 +22,7 @@
             <children>
                <VBox prefHeight="250.0" prefWidth="564.0">
                   <children>
-                     <ToolBar fx:id="mutationBar" prefHeight="40.0" prefWidth="646.0">
+                     <ToolBar fx:id="mutationBar" prefHeight="40.0" prefWidth="646.0" visible="false">
                         <items>
                            <ToggleButton fx:id="NormalMutation" mnemonicParsing="false" onAction="#setNormalMutation" text="Normal Mutation">
                               <toggleGroup>
@@ -36,7 +36,7 @@
                            </ToggleButton>
                         </items>
                      </ToolBar>
-                     <ToolBar fx:id="mapBar" prefHeight="40.0" prefWidth="200.0">
+                     <ToolBar fx:id="mapBar" prefHeight="40.0" prefWidth="200.0" visible="false">
                        <items>
                            <ToggleButton fx:id="HellMap" contentDisplay="CENTER" mnemonicParsing="false" onAction="#setHellMap" text="HellMap">
                               <toggleGroup>
@@ -46,7 +46,7 @@
                            <ToggleButton fx:id="EarthMap" mnemonicParsing="false" onAction="#setEarthMap" text="EarthMap" toggleGroup="$MapGroup" />
                        </items>
                      </ToolBar>
-                     <VBox fx:id="textBox" prefHeight="179.0" prefWidth="522.0">
+                     <VBox fx:id="textBox" prefHeight="179.0" prefWidth="522.0" visible="false">
                         <children>
                            <HBox prefHeight="23.0" prefWidth="850.0">
                               <children>

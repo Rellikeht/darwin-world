@@ -70,7 +70,9 @@ public class Animal implements Comparable<Animal> {
     void die(int day) {
         this.dayOfDeath = day;
     }
-
+    public int getColor(){
+        return (this.energy);
+    }
     // Bo czemu nie
     private final Random random = new Random();
 

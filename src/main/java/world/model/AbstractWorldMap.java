@@ -3,6 +3,7 @@ package world.model;
 import world.SimulationSettings;
 import world.util.MapVisualizer;
 
+import java.security.DigestInputStream;
 import java.util.*;
 
 public abstract class AbstractWorldMap {
@@ -142,20 +143,31 @@ public abstract class AbstractWorldMap {
         }
     }
 
-    public String getAt(Vector2d position) {
+    public int getAt(Vector2d position,int energy) {
         List<Animal> animalsAt = animals.get(position);
-        if (animalsAt != null) {
-            if (animalsAt.size() == 1) {
-                return animalsAt.get(0).toString();
-            } else if (animalsAt.size() > 1 && animalsAt.size() < 10) {
-                return Integer.toString(animalsAt.size());
-            } else if (animalsAt.size() >= 10) {
-                return "#";
+        if (animalsAt != null && !animalsAt.isEmpty()) {
+            Animal animal = animalsAt.get(0);
+            int animalEnergy=animal.getEnergy();
+            int direction = animal.getDirection().getNumber();
+            if ( animalEnergy< energy) {
+                return 0+direction;
+            }
+            if (animalEnergy < 2 * energy) {
+                return 8+direction;
+            }
+            if (animalEnergy < 3 * energy) {
+                return 16+direction;
+            }
+            if (animalEnergy < 4 * energy) {
+                return 24+direction;
+            } else {
+                return 32+direction;
             }
         }
-
-        if (grass.contains(position)) { return "*"; }
-        return "";
+        if (grass.contains(position)) {
+            return -1;
+        }
+        return -2;
     }
 
     public void moveAnimals() {
