@@ -2,10 +2,6 @@ package world.model;
 
 import world.SimulationSettings;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 public class HellMap extends AbstractWorldMap {
     public HellMap(SimulationSettings settings) { super(settings); }
 

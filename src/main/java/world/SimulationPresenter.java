@@ -14,7 +14,12 @@ import javafx.stage.Stage;
 import world.model.AbstractWorldMap;
 import world.model.MapChangeListener;
 
+import java.util.function.Function;
+
 public class SimulationPresenter extends Application implements MapChangeListener {
+
+    @FXML
+    private AbstractWorldMap map;
 
     public VBox textBox;
     public ToolBar mapBar;
@@ -29,9 +34,6 @@ public class SimulationPresenter extends Application implements MapChangeListene
     private Label moveInfoLabel;
     @FXML
     private GridPane mapGrid;
-
-    @FXML
-    private AbstractWorldMap map;
     @FXML
     private ToggleButton HellMap;
     @FXML
@@ -64,9 +66,10 @@ public class SimulationPresenter extends Application implements MapChangeListene
     private TextField minMutation;
     @FXML
     private TextField maxMutation;
-    @FXML
-    SimulationSettings settings = new SimulationSettings();
-    boolean basic = false;
+
+    private SimulationSettings settings = new SimulationSettings();
+    private boolean isBasic = false;
+
     public void drawMap(String message) {
         Platform.runLater(() -> {
             GridMapDrawer drawer = new GridMapDrawer(mapGrid, map);
@@ -75,21 +78,33 @@ public class SimulationPresenter extends Application implements MapChangeListene
         });
     };
 
+    private void uploadSetting(TextField field, Function<Integer, Void> setting) {
+        try {
+            setting.apply(Integer.parseInt(staringGrass.getText()));
+        } catch (Exception ignored) {}
+    }
+
     private void uploadSettings() {
-        int widthNum=Integer.parseInt(mapWidth.getText());
-        if(widthNum>0){settings.setMapWidth(widthNum);}
-        int heightNum=Integer.parseInt(mapHeight.getText());
-        if(heightNum>0){settings.setMapHeight(heightNum);}
-        settings.setInitialGrassAmount(Integer.parseInt(staringGrass.getText()));
-        settings.setDailyGrassAmount(Integer.parseInt(dailyGrass.getText()));
-        settings.setJungleSize(Integer.parseInt(jungleSize.getText()));
-        settings.setInitialAnimalAmount(Integer.parseInt(animalNumber.getText()));
-        settings.setInitialAnimalEnergy(Integer.parseInt(animalEnergy.getText()));
-        settings.setGrassEnergy(Integer.parseInt(grassEnergy.getText()));
-        settings.setEnergyNeededForProcreation(Integer.parseInt(readyEnergy.getText()));
-        settings.setEnergyTakenByProcreation(Integer.parseInt(procreationEnergy.getText()));
-        settings.setMinAmountOfMutations(Integer.parseInt(minMutation.getText()));
-        settings.setMaxAmountOfMutations(Integer.parseInt(maxMutation.getText()));
+        try {
+            int widthNum = Integer.parseInt(mapWidth.getText());
+            if (widthNum > 0) settings.setMapWidth(widthNum);
+        } catch (Exception ignored) {}
+
+        try {
+            int heightNum = Integer.parseInt(mapHeight.getText());
+            if (heightNum > 0) settings.setMapHeight(heightNum);
+        } catch (Exception ignored) {}
+
+        uploadSetting(staringGrass, settings::setInitialGrassAmount);
+        uploadSetting(dailyGrass, settings::setDailyGrassAmount);
+        uploadSetting(jungleSize, settings::setJungleSize);
+        uploadSetting(animalNumber, settings::setInitialAnimalAmount);
+        uploadSetting(animalEnergy, settings::setInitialAnimalEnergy);
+        uploadSetting(grassEnergy, settings::setGrassEnergy);
+        uploadSetting(readyEnergy, settings::setEnergyNeededForProcreation);
+        uploadSetting(procreationEnergy, settings::setEnergyTakenByProcreation);
+        uploadSetting(minMutation, settings::setMinAmountOfMutations);
+        uploadSetting(maxMutation, settings::setMaxAmountOfMutations);
 
     }
 
@@ -102,7 +117,7 @@ public class SimulationPresenter extends Application implements MapChangeListene
     public void setNormalMutation(){settings.setMutationRandom(false);}
     public void setSpecialMutation(){settings.setMutationRandom(true);}
     public void onSimulationStartClicked(ActionEvent actionEvent) {
-        if(!basic) {
+        if(!isBasic) {
             uploadSettings();
         }
         Simulation simulation = new Simulation(settings);
@@ -127,14 +142,14 @@ public class SimulationPresenter extends Application implements MapChangeListene
         mapBar.setVisible(true);
         startButton.setDisable(false);
         textBox.setVisible(true);
-        basic=false;
+        isBasic =false;
     }
     public void basic(){
         mutationBar.setVisible(false);
         mapBar.setVisible(false);
         startButton.setDisable(false);
         textBox.setVisible(false);
-        basic=true;
+        isBasic =true;
     }
     @Override
     public void start(Stage primaryStage) throws Exception {
