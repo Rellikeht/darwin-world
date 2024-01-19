@@ -6,8 +6,8 @@
 <?import world.model.*?>
 
 <BorderPane minHeight="550.0" minWidth="850.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="world.SimulationPresenter">
-   <center>
-        <VBox alignment="TOP_CENTER" BorderPane.alignment="CENTER">
+   <top>
+        <VBox alignment="TOP_CENTER" prefHeight="348.0" prefWidth="850.0" BorderPane.alignment="CENTER">
             <Label fx:id="moveInfoLabel" />
          <ToolBar prefHeight="40.0" prefWidth="200.0">
             <items>
@@ -18,70 +18,94 @@
                <ToggleButton fx:id="custom" mnemonicParsing="false" onAction="#custom" text="Custom" toggleGroup="$MainGroup" />
             </items>
          </ToolBar>
-         <ToolBar fx:id="mutationBar" prefHeight="40.0" prefWidth="200.0" visible="false">
-            <items>
-               <ToggleButton fx:id="NormalMutation" mnemonicParsing="false" onAction="#setNormalMutation" text="Normal Mutation">
-                  <toggleGroup>
-                     <ToggleGroup fx:id="MutationGroup" />
-                  </toggleGroup>
-               </ToggleButton>
-               <ToggleButton fx:id="SpecialMutation" mnemonicParsing="false" onAction="#setSpecialMutation" text="Special Mutation" toggleGroup="$MutationGroup">
-                  <cursor>
-                     <Cursor fx:constant="HAND" />
-                  </cursor></ToggleButton>
-            </items>
-         </ToolBar>
-         <ToolBar fx:id="mapBar" prefHeight="40.0" prefWidth="200.0" visible="false">
-           <items>
-               <ToggleButton fx:id="HellMap" contentDisplay="CENTER" mnemonicParsing="false" onAction="#setHellMap" text="HellMap">
-                  <toggleGroup>
-                     <ToggleGroup fx:id="MapGroup" />
-                  </toggleGroup>
-               </ToggleButton>
-               <ToggleButton fx:id="EarthMap" mnemonicParsing="false" onAction="#setEarthMap" text="EarthMap" toggleGroup="$MapGroup" />
-           </items>
-         </ToolBar>
-            <GridPane fx:id="mapGrid" alignment="CENTER" gridLinesVisible="true" />
-         <VBox fx:id="textBox" prefHeight="180.0" prefWidth="850.0" visible="false">
+         <HBox prefHeight="100.0" prefWidth="200.0">
             <children>
-               <HBox prefHeight="23.0" prefWidth="850.0">
+               <VBox prefHeight="250.0" prefWidth="564.0">
                   <children>
-                     <NumberTextField fx:id="mapWidth" prefWidth="425.0" promptText="Map Width" />
-                     <NumberTextField fx:id="mapHeight" prefWidth="425.0" promptText="Map Height" />
-                  </children></HBox>
-               <HBox prefHeight="15.0" prefWidth="850.0">
-                  <children>
-                     <NumberTextField fx:id="staringGrass" prefWidth="425.0" promptText="Starting Grass" />
-                     <NumberTextField fx:id="dailyGrass" prefWidth="425.0" promptText="Daily Grass" />
-                  </children></HBox>
-               <HBox prefHeight="12.0" prefWidth="850.0">
-                  <children>
-                     <NumberTextField fx:id="jungleSize" prefWidth="425.0" promptText="Jungle SIze" />
-                     <NumberTextField fx:id="animalNumber" prefWidth="425.0" promptText="Number of Animals" />
+                     <ToolBar fx:id="mutationBar" prefHeight="40.0" prefWidth="646.0">
+                        <items>
+                           <ToggleButton fx:id="NormalMutation" mnemonicParsing="false" onAction="#setNormalMutation" text="Normal Mutation">
+                              <toggleGroup>
+                                 <ToggleGroup fx:id="MutationGroup" />
+                              </toggleGroup>
+                           </ToggleButton>
+                           <ToggleButton fx:id="SpecialMutation" mnemonicParsing="false" onAction="#setSpecialMutation" text="Special Mutation" toggleGroup="$MutationGroup">
+                              <cursor>
+                                 <Cursor fx:constant="HAND" />
+                              </cursor>
+                           </ToggleButton>
+                        </items>
+                     </ToolBar>
+                     <ToolBar fx:id="mapBar" prefHeight="40.0" prefWidth="200.0">
+                       <items>
+                           <ToggleButton fx:id="HellMap" contentDisplay="CENTER" mnemonicParsing="false" onAction="#setHellMap" text="HellMap">
+                              <toggleGroup>
+                                 <ToggleGroup fx:id="MapGroup" />
+                              </toggleGroup>
+                           </ToggleButton>
+                           <ToggleButton fx:id="EarthMap" mnemonicParsing="false" onAction="#setEarthMap" text="EarthMap" toggleGroup="$MapGroup" />
+                       </items>
+                     </ToolBar>
+                     <VBox fx:id="textBox" prefHeight="179.0" prefWidth="522.0">
+                        <children>
+                           <HBox prefHeight="23.0" prefWidth="850.0">
+                              <children>
+                                 <NumberTextField fx:id="mapWidth" prefWidth="425.0" promptText="Map Width" />
+                                 <NumberTextField fx:id="mapHeight" prefWidth="425.0" promptText="Map Height" />
+                              </children>
+                           </HBox>
+                           <HBox prefHeight="15.0" prefWidth="850.0">
+                              <children>
+                                 <NumberTextField fx:id="staringGrass" prefWidth="425.0" promptText="Starting Grass" />
+                                 <NumberTextField fx:id="dailyGrass" prefWidth="425.0" promptText="Daily Grass" />
+                              </children>
+                           </HBox>
+                           <HBox prefHeight="26.0" prefWidth="715.0">
+                              <children>
+                                 <NumberTextField fx:id="jungleSize" prefHeight="26.0" prefWidth="425.0" promptText="Jungle SIze" />
+                                 <NumberTextField fx:id="animalNumber" prefHeight="26.0" prefWidth="425.0" promptText="Number of Animals" />
+                              </children>
+                           </HBox>
+                           <HBox prefHeight="15.0" prefWidth="850.0">
+                              <children>
+                                 <NumberTextField fx:id="animalEnergy" prefWidth="425.0" promptText="Starting Animal Energy" />
+                                 <NumberTextField fx:id="grassEnergy" prefWidth="425.0" promptText="Grass Energy" />
+                              </children>
+                           </HBox>
+                           <HBox prefHeight="22.0" prefWidth="850.0">
+                              <children>
+                                 <NumberTextField fx:id="readyEnergy" prefWidth="425.0" promptText="Energy to be ready" />
+                                 <NumberTextField fx:id="procreationEnergy" prefWidth="425.0" promptText="Energy for reporduction" />
+                              </children>
+                           </HBox>
+                           <HBox prefHeight="22.0" prefWidth="850.0">
+                              <children>
+                                 <NumberTextField fx:id="minMutation" prefWidth="425.0" promptText="Minimal Number of Mutation" />
+                                 <NumberTextField fx:id="maxMutation" prefWidth="425.0" promptText="Maximal Number of Mutation" />
+                              </children>
+                           </HBox>
+                           <HBox prefHeight="37.0" prefWidth="850.0">
+                              <children>
+                                 <NumberTextField alignment="CENTER" prefWidth="850.0" promptText="Number of Genes" />
+                              </children>
+                           </HBox>
+                        </children>
+                     </VBox>
                   </children>
-               </HBox>
-               <HBox prefHeight="15.0" prefWidth="850.0">
+               </VBox>
+               <VBox prefHeight="250.0" prefWidth="313.0">
                   <children>
-                     <NumberTextField fx:id="animalEnergy" prefWidth="425.0" promptText="Starting Animal Energy" />
-                     <NumberTextField fx:id="grassEnergy" prefWidth="425.0" promptText="Grass Energy" />
-                  </children></HBox>
-               <HBox prefHeight="22.0" prefWidth="850.0">
-                  <children>
-                     <NumberTextField fx:id="readyEnergy" prefWidth="425.0" promptText="Energy to be ready" />
-                     <NumberTextField fx:id="procreationEnergy" prefWidth="425.0" promptText="Energy for reporduction" />
-                  </children></HBox>
-               <HBox prefHeight="22.0" prefWidth="850.0">
-                  <children>
-                     <NumberTextField fx:id="minMutation" prefWidth="425.0" promptText="Minimal Number of Mutation" />
-                     <NumberTextField fx:id="maxMutation" prefWidth="425.0" promptText="Maximal Number of Mutation" />
-                  </children></HBox>
-               <HBox prefHeight="37.0" prefWidth="850.0">
-                  <children>
-                     <NumberTextField alignment="CENTER" prefWidth="850.0" promptText="Number of Genes" />
-                  </children></HBox>
-            </children>
-         </VBox>
+                     <TextField id="ModeNamer" prefHeight="26.0" prefWidth="170.0" promptText="Name Your Custom Settings" />
+                     <ToolBar prefHeight="40.0" prefWidth="200.0">
+                        <items>
+                           <ChoiceBox id="ModeList" prefHeight="26.0" prefWidth="201.0" />
+                           <Button id="SaveButton" mnemonicParsing="false" onAction="#saveSettings" text="Save" />
+                        </items>
+                     </ToolBar>
+                  </children>
+               </VBox>
+            </children></HBox>
              <Button fx:id="startButton" disable="true" minWidth="100" onAction="#onSimulationStartClicked" text="Start" />
         </VBox>
-   </center>
+   </top>
 </BorderPane>
