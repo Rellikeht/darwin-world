@@ -39,14 +39,14 @@ public abstract class AbstractWorldMap {
     public AbstractWorldMap(SimulationSettings settings) {
         this.settings = settings;
 
-        grass = new HashSet<>(settings.getInitialGrassAmount());
-        animals = new HashMap<>(settings.getInitialAnimalAmount());
+        grass = new HashSet<>(settings.get("InitialGrassAmount"));
+        animals = new HashMap<>(settings.get("InitialAnimalAmount"));
         listeners = new LinkedHashSet<>();
         lowerLeft = new Vector2d(0, 0);
-        upperRight = new Vector2d(settings.getMapWidth()-1, settings.getMapHeight()-1);
+        upperRight = new Vector2d(settings.get("MapWidth")-1, settings.get("MapHeight")-1);
 
-        jungleStart = (upperRight.getY() - lowerLeft.getY() - settings.getJungleSize()) / 2;
-        jungleEnd = jungleStart + settings.getJungleSize();
+        jungleStart = (upperRight.getY() - lowerLeft.getY() - settings.get("JungleSize")) / 2;
+        jungleEnd = jungleStart + settings.get("JungleSize");
         underEquator = new RandomPositionGenerator(
                 lowerLeft,
                 new Vector2d(upperRight.getX(), jungleStart)
@@ -62,8 +62,8 @@ public abstract class AbstractWorldMap {
 
         this.id = curId;
         curId += 1;
-        size = settings.getMapWidth()*settings.getMapHeight();
-        grassPlace(settings.getInitialGrassAmount());
+        size = settings.get("MapWidth")*settings.get("MapHeight");
+        grassPlace(settings.get("InitialGrassAmount"));
     }
 
     public void nextDay() {
@@ -110,7 +110,7 @@ public abstract class AbstractWorldMap {
     }
 
     public void grassPlace() {
-        grassPlace(settings.getDailyGrassAmount());
+        grassPlace(settings.get("DailyGrassAmount"));
     }
 
     public void place(Animal animal)  {
@@ -196,7 +196,7 @@ public abstract class AbstractWorldMap {
             if (!animals.get(position).isEmpty()) {
                 Queue<Animal> fittest = getFittestAt(position);
                 Animal animal = fittest.peek();
-                animal.eatGrass(settings.getGrassEnergy());
+                animal.eatGrass(settings.get("GrassEnergy"));
                 grass.remove(position);
 
                 // Bo mi się nie chce ifów robić, a to i tak zadziała xd
@@ -215,8 +215,8 @@ public abstract class AbstractWorldMap {
                 Queue<Animal> fittest = getFittestAt(position);
                 Animal a1 = fittest.peek();
                 Animal a2 = fittest.peek();
-                if (a1.getEnergy() >= settings.getEnergyNeededForProcreation() &&
-                    a2.getEnergy() >= settings.getEnergyNeededForProcreation()) {
+                if (a1.getEnergy() >= settings.get("EnergyNeededForProcreation") &&
+                    a2.getEnergy() >= settings.get("EnergyNeededForProcreation")) {
                     place(reproducing(a1, a2));
                 }
             }
@@ -226,32 +226,33 @@ public abstract class AbstractWorldMap {
     }
 
     protected Animal reproducing(Animal animal1, Animal animal2) {
-        animal1.loseEnergy(settings.getEnergyTakenByProcreation());
-        animal2.loseEnergy(settings.getEnergyTakenByProcreation());
+        animal1.loseEnergy(settings.get("EnergyTakenByProcreation"));
+        animal2.loseEnergy(settings.get("EnergyTakenByProcreation"));
 
         Vector2d position = animal1.getPosition();
         Genome genome = new Genome(
                 animal1.getGenes(), animal2.getGenes(),
                 animal1.getEnergy(), animal2.getEnergy(),
-                settings.getMinAmountOfMutations(),
-                settings.getMaxAmountOfMutations(),
-                settings.isMutationRandom()
+                settings.get("MinAmountOfMutations"),
+                settings.get("MaxAmountOfMutations"),
+                settings.get("isMutationRandom")
         );
 
         return new Animal(
                 position, Direction.randomDirection(),
-                2*settings.getEnergyTakenByProcreation(),
+                2*settings.get("EnergyTakenByProcreation"),
                 genome, day, animal1, animal2
         );
     }
 
     int getGrassAmount() { return grass.size(); }
     int getFreeSquares() {
-        // TODO nie wiem, jak dokładnie interpretować wolne pola
-        return size - getGrassAmount();
+        Set<Vector2d> occupied = new HashSet<>(grass);
+        animals.forEach((pos, list) -> {if (!list.isEmpty()) occupied.add(pos);});
+        return size - (occupied.size());
     }
 
-    public int getId() { return this.id; }
+    int getId() { return this.id; }
     public Vector2d getLowerLeft() { return lowerLeft; }
     public Vector2d getUpperRight() { return upperRight; }
 

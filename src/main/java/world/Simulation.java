@@ -13,15 +13,15 @@ public class Simulation implements Runnable {
 
     public Simulation(SimulationSettings settings) {
         this.settings = settings;
-        if (settings.isMapBasic()) {
+        if (settings.get("isMapBasic") == 1) {
             map = new EarthMap(settings);
         } else {
             map = new HellMap(settings);
         }
 
         Vector2d maxPos = map.getUpperRight();
-        for (int i = 0; i < settings.getInitialAnimalAmount(); i++) {
-            Genome genome = new Genome(settings.getGenomeLength());
+        for (int i = 0; i < settings.get("InitialAnimalAmount"); i++) {
+            Genome genome = new Genome(settings.get("GenomeLength"));
 
             Animal animal = new Animal(
                     new Vector2d(
@@ -29,7 +29,7 @@ public class Simulation implements Runnable {
                             random.nextInt(maxPos.getY()+1)
                     ),
                     Direction.randomDirection(),
-                    settings.getInitialAnimalEnergy(),
+                    settings.get("InitialAnimalEnergy"),
                     genome
             );
 
@@ -51,13 +51,13 @@ public class Simulation implements Runnable {
 
         map.nextDay();
         map.moveAnimals();
-        wait(settings.getTickTime());
+        wait(settings.get("TickTime"));
         map.doEating();
-        wait(settings.getTickTime());
+        wait(settings.get("TickTime"));
         map.doReproduction();
-        wait(settings.getTickTime());
+        wait(settings.get("TickTime"));
         map.grassPlace();
-        wait(settings.getTickTime());
+        wait(settings.get("TickTime"));
     }
 
     public void run() {
@@ -74,7 +74,13 @@ public class Simulation implements Runnable {
     public void removeListener(MapChangeListener listener) {
         map.removeListener(listener);
     }
-    public AbstractWorldMap getMap() { return map; }
+
     public SimulationStats getStats() { return stats; }
+    //public AbstractWorldMap getMap() { return map; }
+    public String getAt(Vector2d position) {
+        return map.getAt(position);
+    }
+    public Vector2d getLowerLeft() { return map.getLowerLeft(); }
+    public Vector2d getUpperRight() { return map.getUpperRight(); }
 
 }
