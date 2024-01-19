@@ -11,26 +11,10 @@ import javafx.stage.Stage;
 import world.model.AbstractWorldMap;
 import world.model.MapChangeListener;
 
-public class GamePresenter extends Application implements MapChangeListener {
+public class GamePresenter implements MapChangeListener {
     @FXML
     private GridPane mapGrid;
     private Simulation simulation;
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getClassLoader().getResource("game.fxml"));
-        BorderPane viewRoot = loader.load();
-        configureStage(primaryStage, viewRoot);
-        primaryStage.show();
-        simulation.run();
-    }
-    private void configureStage(Stage primaryStage, BorderPane viewRoot) {
-        Scene scene = new Scene(viewRoot);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Simulation app");
-        primaryStage.minWidthProperty().bind(viewRoot.minWidthProperty());
-        primaryStage.minHeightProperty().bind(viewRoot.minHeightProperty());
-    }
     public void drawMap(String message) {
         Platform.runLater(() -> {
             GridMapDrawer drawer = new GridMapDrawer(mapGrid, simulation);
@@ -41,5 +25,7 @@ public class GamePresenter extends Application implements MapChangeListener {
     public void mapChanged(AbstractWorldMap worldMap, String message) {
         drawMap(message);
     }
-
+    public void setSimulation(Simulation simulation){
+        this.simulation=simulation;
+    }
 }

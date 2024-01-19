@@ -104,9 +104,7 @@ public class SimulationPresenter extends Application implements MapChangeListene
         uploadSetting(procreationEnergy, "EnergyTakenByProcreation");
         uploadSetting(minMutation, "MinAmountOfMutations");
         uploadSetting(maxMutation, "MaxAmountOfMutations");
-
     }
-
     // TODO Dość bekowa konstrukcja, bo tu wszystko się o symulację rozgrywa xd
     @Override
     public void mapChanged(AbstractWorldMap worldMap, String message) {
@@ -118,12 +116,21 @@ public class SimulationPresenter extends Application implements MapChangeListene
     public void setNormalMutation(){settings.set("MutationRandom", 0);}
     public void setSpecialMutation(){settings.set("MutationRandom", 1);}
     public void onSimulationStartClicked(ActionEvent actionEvent) throws Exception {
-        if(!isBasic) {
+        if (!isBasic) {
             uploadSettings();
         }
+        simulation = new Simulation(settings);
+        FXMLLoader loader = new FXMLLoader();
+        Stage gameStage = new Stage();
+        loader.setLocation(getClass().getClassLoader().getResource("game.fxml"));
+        BorderPane viewRoot = loader.load();
+        configureStage(gameStage, viewRoot);
+        gameStage.show();
+        GamePresenter presenter = loader.getController();
+        presenter.setSimulation(simulation);
+        simulation.addListener(presenter);
+        simulation.run();
     }
-
-
     private void configureStage(Stage primaryStage, BorderPane viewRoot) {
         Scene scene = new Scene(viewRoot);
         primaryStage.setScene(scene);
