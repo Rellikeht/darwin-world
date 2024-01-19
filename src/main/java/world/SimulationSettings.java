@@ -2,17 +2,20 @@ package world;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class SimulationSettings {
 
-    //private static String transformName(String name) {
-    //    return name.toLowerCase();
-    //}
+    private static String inputName(String name) {
+        return name.toLowerCase();
+    }
+    private static String outputName(String name) {
+        // TODO camel case
+        return name;
+    }
 
     private static final Map<String, Integer> defaultSettings = new HashMap<>();
     private static void addSetting(String name, int defaultValue) {
-        defaultSettings.put(name, defaultValue);
+        defaultSettings.put(inputName(name), defaultValue);
     }
 
     static {
@@ -44,11 +47,13 @@ public class SimulationSettings {
 
     // TODO błedy ???
     public int get(String name) {
-        return settings.get(name);
+        return settings.get(inputName(name));
     }
+
     void set(String name, int value) {
-        if (settings.containsKey(name)) {
-            settings.put(name, value);
+        String transformedName = inputName(name);
+        if (settings.containsKey(transformedName)) {
+            settings.put(transformedName, value);
         }
     }
 

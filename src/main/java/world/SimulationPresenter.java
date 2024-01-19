@@ -78,33 +78,33 @@ public class SimulationPresenter extends Application implements MapChangeListene
         });
     };
 
-    private void uploadSetting(TextField field, Function<Integer, Void> setting) {
+    private void uploadSetting(TextField field, String name) {
         try {
-            setting.apply(Integer.parseInt(staringGrass.getText()));
+            settings.set(name, Integer.parseInt(staringGrass.getText()));
         } catch (Exception ignored) {}
     }
 
     private void uploadSettings() {
         try {
             int widthNum = Integer.parseInt(mapWidth.getText());
-            if (widthNum > 0) settings.setMapWidth(widthNum);
+            if (widthNum > 0) settings.set("MapWidth", widthNum);
         } catch (Exception ignored) {}
 
         try {
             int heightNum = Integer.parseInt(mapHeight.getText());
-            if (heightNum > 0) settings.setMapHeight(heightNum);
+            if (heightNum > 0) settings.set("MapHeight", heightNum);
         } catch (Exception ignored) {}
 
-        uploadSetting(staringGrass, settings::setInitialGrassAmount);
-        uploadSetting(dailyGrass, settings::setDailyGrassAmount);
-        uploadSetting(jungleSize, settings::setJungleSize);
-        uploadSetting(animalNumber, settings::setInitialAnimalAmount);
-        uploadSetting(animalEnergy, settings::setInitialAnimalEnergy);
-        uploadSetting(grassEnergy, settings::setGrassEnergy);
-        uploadSetting(readyEnergy, settings::setEnergyNeededForProcreation);
-        uploadSetting(procreationEnergy, settings::setEnergyTakenByProcreation);
-        uploadSetting(minMutation, settings::setMinAmountOfMutations);
-        uploadSetting(maxMutation, settings::setMaxAmountOfMutations);
+        uploadSetting(staringGrass, "InitialGrassAmount");
+        uploadSetting(dailyGrass, "DailyGrassAmount");
+        uploadSetting(jungleSize, "JungleSize");
+        uploadSetting(animalNumber, "InitialAnimalAmount");
+        uploadSetting(animalEnergy, "InitialAnimalEnergy");
+        uploadSetting(grassEnergy, "GrassEnergy");
+        uploadSetting(readyEnergy, "EnergyNeededForProcreation");
+        uploadSetting(procreationEnergy, "EnergyTakenByProcreation");
+        uploadSetting(minMutation, "MinAmountOfMutations");
+        uploadSetting(maxMutation, "MaxAmountOfMutations");
 
     }
 
@@ -112,10 +112,10 @@ public class SimulationPresenter extends Application implements MapChangeListene
     public void mapChanged(AbstractWorldMap worldMap, String message) {
         drawMap(message);
     }
-    public void setHellMap(){settings.setMapBasic(false);}
-    public void setEarthMap(){settings.setMapBasic(true);}
-    public void setNormalMutation(){settings.setMutationRandom(false);}
-    public void setSpecialMutation(){settings.setMutationRandom(true);}
+    public void setHellMap(){settings.set("MapBasic", 0);}
+    public void setEarthMap(){settings.set("MapBasic", 1);}
+    public void setNormalMutation(){settings.set("MutationRandom", 0);}
+    public void setSpecialMutation(){settings.set("MutationRandom", 1);}
     public void onSimulationStartClicked(ActionEvent actionEvent) {
         if(!isBasic) {
             uploadSettings();

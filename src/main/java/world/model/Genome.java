@@ -19,7 +19,7 @@ public class Genome {
             Genome genome1, Genome genome2,
             int energy1, int energy2,
             int minAmountOfMutations, int maxAmountOfMutations,
-            boolean isMutationRandom
+            int isMutationRandom
     ) {
         this(genome1.getLength());
         int proportions = length*(energy2/energy1);
@@ -43,7 +43,7 @@ public class Genome {
             }
         }
 
-        if(isMutationRandom){
+        if(isMutationRandom == 1){
             for(int i=0;i<mutateNumber;i++) {
                 int genIndex = random.nextInt(genes.length);
                 int newGene = random.nextInt(8);
