@@ -59,13 +59,20 @@ public class GridMapDrawer {
     }
 
     private void drawAxis() {
-        addToMapGrid("y/x", 0, 0);
+        Label label = new Label("y/x");
+        GridPane.setHalignment(label, HPos.CENTER);
+        mapGrid.add(label, 0, 0 );
         for (int x = lowerLeft.getX(); x <= upperRight.getX(); x++) {
-            addToMapGrid(Integer.toString(x), 1-lowerLeft.getX() + x, 0);
+            label = new Label(Integer.toString(x));
+            GridPane.setHalignment(label, HPos.CENTER);
+            mapGrid.add(label, 1-lowerLeft.getX() + x, 0 );
         }
         for (int y = upperRight.getY(); y >= lowerLeft.getY(); y--) {
-            addToMapGrid(Integer.toString(y), 0, upperRight.getY() - y + 1);
+            label = new Label(Integer.toString(y));
+            GridPane.setHalignment(label, HPos.CENTER);
+            mapGrid.add(label, 0, upperRight.getY() - y + 1 );
         }
+
     }
 
     private void drawWorldElements() {
@@ -73,6 +80,8 @@ public class GridMapDrawer {
             for (int y = lowerLeft.getY(); y <= upperRight.getY(); y++) {
                 Vector2d position = new Vector2d(1 - lowerLeft.getX() + x, 1 + upperRight.getY() -  y);
                 int element = simulation.getAt(position);
+                System.out.println(position.toString());
+                System.out.println(element);
                 switch(element) {
                     case -2 -> {
                     }
