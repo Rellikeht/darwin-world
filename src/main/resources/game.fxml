@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane minHeight="550.0" minWidth="850.0"
+            xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="world.GamePresenter">
+    <VBox alignment="CENTER">
+
+    <GridPane fx:id="mapGrid" alignment="CENTER" gridLinesVisible="true" />
+    </VBox>
+
+</BorderPane>

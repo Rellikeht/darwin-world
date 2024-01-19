@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -13,6 +14,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import world.model.AbstractWorldMap;
 import world.model.MapChangeListener;
+
+import java.io.IOException;
 
 public class SimulationPresenter extends Application implements MapChangeListener {
 
@@ -65,7 +68,7 @@ public class SimulationPresenter extends Application implements MapChangeListene
     private Simulation simulation;
     private SimulationSettings settings = new SimulationSettings();
     private boolean isBasic = false;
-
+    private GamePresenter presenter;
     public void drawMap(String message) {
         Platform.runLater(() -> {
             GridMapDrawer drawer = new GridMapDrawer(mapGrid, simulation);
@@ -114,21 +117,15 @@ public class SimulationPresenter extends Application implements MapChangeListene
     public void setEarthMap(){settings.set("MapBasic", 1);}
     public void setNormalMutation(){settings.set("MutationRandom", 0);}
     public void setSpecialMutation(){settings.set("MutationRandom", 1);}
-    public void onSimulationStartClicked(ActionEvent actionEvent) {
+    public void onSimulationStartClicked(ActionEvent actionEvent) throws Exception {
         if(!isBasic) {
             uploadSettings();
         }
-        simulation = new Simulation(settings);
-        simulation.addListener(this);
-        mutationBar.setVisible(false);
-        mapBar.setVisible(false);
-        textBox.setVisible(false);
-        startButton.setDisable(true);
-        simulation.run();
     }
 
+
     private void configureStage(Stage primaryStage, BorderPane viewRoot) {
-        var scene = new Scene(viewRoot);
+        Scene scene = new Scene(viewRoot);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Simulation app");
         primaryStage.minWidthProperty().bind(viewRoot.minWidthProperty());
@@ -157,7 +154,6 @@ public class SimulationPresenter extends Application implements MapChangeListene
         loader.setLocation(getClass().getClassLoader().getResource("simulation.fxml"));
         BorderPane viewRoot = loader.load();
         configureStage(primaryStage, viewRoot);
-
         //SimulationPresenter presenter = loader.getController();
         primaryStage.show();
 

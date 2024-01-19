@@ -99,7 +99,7 @@
                      <ToolBar prefHeight="40.0" prefWidth="200.0">
                         <items>
                            <ChoiceBox id="ModeList" prefHeight="26.0" prefWidth="201.0" />
-                           <Button id="SaveButton" mnemonicParsing="false" onAction="#saveSettings" text="Save" />
+                           <Button id="SaveButton" mnemonicParsing="false" text="Save" />
                         </items>
                      </ToolBar>
                   </children>
