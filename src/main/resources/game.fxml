@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.canvas.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <BorderPane minHeight="550.0" minWidth="846.0" prefHeight="552.0" prefWidth="846.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="world.GamePresenter">
@@ -10,6 +10,52 @@
        <GridPane fx:id="mapGrid" alignment="CENTER" gridLinesVisible="true" prefHeight="510.0" prefWidth="846.0" />
    </center>
    <bottom>
-      <GridPane fx:id="controller" alignment="CENTER" prefHeight="0.0" prefWidth="846.0" BorderPane.alignment="CENTER"/>
+      <GridPane fx:id="controller" alignment="CENTER" prefHeight="0.0" prefWidth="846.0" BorderPane.alignment="CENTER" />
    </bottom>
+   <right>
+      <VBox prefHeight="552.0" prefWidth="132.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox>
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="132.0" text="Genome" />
+                  <TextField editable="false" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="140.0" text="Genome Part" />
+                  <TextField editable="false" />
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="134.0" text="Energy" />
+                  <TextField editable="false" />
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="140.0" text="Eated" />
+                  <TextField editable="false" />
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="137.0" text="Children" />
+                  <TextField editable="false" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="145.0" text="Ascendants" />
+                  <TextField editable="false" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="137.0" text="Day of Life" />
+                  <TextField editable="false" />
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="145.0" text="Day of Death" />
+                  <TextField editable="false" />
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </right>
+   <left>
+      <VBox prefHeight="200.0" prefWidth="132.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" prefHeight="18.0" prefWidth="135.0" text="Animals" />
+            <TextField editable="false" />
+            <Label alignment="CENTER" prefHeight="18.0" prefWidth="153.0" text="Plants" />
+            <TextField editable="false" />
+            <Label alignment="CENTER" prefHeight="18.0" prefWidth="156.0" text="Free" />
+            <TextField editable="false" />
+            <Label alignment="CENTER" prefHeight="18.0" prefWidth="153.0" text="Popular Genome" />
+            <TextField editable="false" />
+            <Label alignment="CENTER" prefHeight="18.0" prefWidth="139.0" text="Average Energy" />
+            <TextField editable="false" />
+            <Label alignment="CENTER" prefHeight="18.0" prefWidth="160.0" text="Average Lifetime" />
+            <TextField editable="false" prefHeight="10.0" prefWidth="132.0" />
+            <Label alignment="CENTER" prefHeight="18.0" prefWidth="139.0" text="Average Children" />
+            <TextField editable="false" />
+         </children>
+      </VBox>
+   </left>
 </BorderPane>
