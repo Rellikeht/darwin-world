@@ -2,7 +2,6 @@ package world;
 
 import world.model.*;
 
-import java.util.Map;
 import java.util.Random;
 
 public class Simulation implements Runnable {
@@ -52,18 +51,18 @@ public class Simulation implements Runnable {
 
         map.nextDay();
         map.moveAnimals();
-        wait(settings.get("TickTime"));
+        //wait(settings.get("TickTime"));
         map.doEating();
-        wait(settings.get("TickTime"));
+        //wait(settings.get("TickTime"));
         map.doReproduction();
-        wait(settings.get("TickTime"));
+        //wait(settings.get("TickTime"));
         map.grassPlace();
         wait(settings.get("TickTime"));
     }
 
     public void run() {
         int i=0;
-        while (i < 1) {
+        while (i < 10) {
             System.out.println(i);
             frame();
             i++;
@@ -78,12 +77,13 @@ public class Simulation implements Runnable {
     }
 
     public SimulationStats getStats() { return stats; }
-    //public AbstractWorldMap getMap() { return map; }
-    public int getAt(Vector2d position) {
-        int energy = settings.get("energyNeededForProcreation")/5;
-        return map.getAt(position,energy);
-    }
-    public Vector2d getLowerLeft() { return map.getLowerLeft(); }
-    public Vector2d getUpperRight() { return map.getUpperRight(); }
+    public AbstractWorldMap getMap() { return map; }
+    public SimulationSettings getSettings() { return settings; }
+
+    // TODO Ło panie
+    //public int getAt(Vector2d position) {
+    //    int energy = settings.get("energyNeededForProcreation")/5;
+    //    return map.getAt(position,energy);
+    //}
 
 }

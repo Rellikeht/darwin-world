@@ -9,8 +9,7 @@ public class SimulationSettings {
         return name.toLowerCase();
     }
     private static String outputName(String name) {
-        // TODO camel case
-        return name;
+        return name; // TODO camel case if this will be used
     }
 
     private static final Map<String, Integer> defaultSettings = new HashMap<>();
@@ -21,24 +20,26 @@ public class SimulationSettings {
 
     static {
 
-        addSetting("mapHeight", 10);
-        addSetting("mapWidth", 10);
-        addSetting("initialGrassAmount", 3);
-        addSetting("dailyGrassAmount", 20);
-        addSetting("jungleSize", 5);
-        addSetting("initialAnimalAmount", 15);
-        addSetting("initialAnimalEnergy", 5);
-        addSetting("grassEnergy", 20);
-        addSetting("energyTakenByProcreation", 30);
-        addSetting("energyNeededForProcreation", 500);
-        addSetting("energyTakenByMovement", 5);
-        addSetting("minAmountOfMutations", 0);
-        addSetting("maxAmountOfMutations", 100);
-        addSetting("genomeLength", 10);
-        addSetting("isMutationRandom", 0);
-        addSetting("isMapBasic", 1);
-        addSetting("tickTime", 300);
-        addSetting("portalEnergy", 10);
+        addSetting("mapHeight", 20); // 10
+        addSetting("mapWidth", 20); // 10
+        addSetting("initialGrassAmount", 15); // 3
+        addSetting("dailyGrassAmount", 20); // 20
+        addSetting("jungleSize", 6); // 5
+        addSetting("initialAnimalAmount", 10); // 15
+        addSetting("initialAnimalEnergy", 40); // 5
+        addSetting("grassEnergy", 30); // 20
+        addSetting("energyTakenByProcreation", 30); // 30
+        addSetting("energyNeededForProcreation", 50); // 500
+        addSetting("energyTakenByMovement", 5); // 5
+        addSetting("genomeLength", 15); // 10
+        addSetting("minAmountOfMutations", 0); // 0
+        addSetting("maxAmountOfMutations", 12); // 100
+        addSetting("isMutationRandom", 0); // 0
+        addSetting("isMapBasic", 1); // 1
+        addSetting("portalEnergy", 10); // 10
+
+        addSetting("tickTime", 400); // 300
+        addSetting("energyColorStep", 50);
     }
 
     // TODO błedy ???

@@ -4,6 +4,9 @@ import java.util.Random;
 
 public class Animal implements Comparable<Animal> {
 
+    // Bo czemu nie
+    private final Random random = new Random();
+
     // Atrybuty
     private Direction direction;
     public Direction getDirection() { return this.direction; }
@@ -67,14 +70,7 @@ public class Animal implements Comparable<Animal> {
     // 1-linijkowy getter
     private Integer dayOfDeath;
     public Integer getDayOfDeath() { return dayOfDeath; }
-    void die(int day) {
-        this.dayOfDeath = day;
-    }
-    public int getColor(){
-        return (this.energy);
-    }
-    // Bo czemu nie
-    private final Random random = new Random();
+    void die(int day) { this.dayOfDeath = day; }
 
     public Animal(
             Vector2d position, Direction direction, int energy,

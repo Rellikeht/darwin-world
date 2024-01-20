@@ -5,18 +5,14 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import world.model.AbstractWorldMap;
 import world.model.MapChangeListener;
-
-import java.io.IOException;
 
 public class SimulationPresenter extends Application implements MapChangeListener {
 
@@ -67,10 +63,12 @@ public class SimulationPresenter extends Application implements MapChangeListene
     private TextField maxMutation;
     @FXML
     private VBox customBox;
+
     private Simulation simulation;
-    private SimulationSettings settings = new SimulationSettings();
+    private final SimulationSettings settings = new SimulationSettings();
     private boolean isBasic = false;
     private GamePresenter presenter;
+
     public void drawMap(String message) {
         Platform.runLater(() -> {
             GridMapDrawer drawer = new GridMapDrawer(mapGrid, simulation);
@@ -81,7 +79,7 @@ public class SimulationPresenter extends Application implements MapChangeListene
 
     private void uploadSetting(TextField field, String name) {
         try {
-            settings.set(name, Integer.parseInt(staringGrass.getText()));
+            settings.set(name, Integer.parseInt(field.getText()));
         } catch (Exception ignored) {}
     }
 
@@ -129,10 +127,15 @@ public class SimulationPresenter extends Application implements MapChangeListene
         configureStage(gameStage, viewRoot);
         gameStage.show();
         GamePresenter presenter = loader.getController();
+
         presenter.setSimulation(simulation);
         simulation.addListener(presenter);
-        simulation.run();
+        // meh
+        Thread thread = new Thread(simulation);
+        thread.start();
+        //simulation.run();
     }
+
     private void configureStage(Stage primaryStage, BorderPane viewRoot) {
         Scene scene = new Scene(viewRoot);
         primaryStage.setScene(scene);

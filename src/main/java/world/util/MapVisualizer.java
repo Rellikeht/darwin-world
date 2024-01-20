@@ -57,8 +57,8 @@ public class MapVisualizer {
 
     // Słabo ale stabilnie
     private String drawObject(Vector2d currentPosition) {
-//        String obj = map.getAt(currentPosition);
-//        if (obj.length() == 1) { return obj; }
+        String obj = map.getStringAt(currentPosition);
+        if (obj.length() == 1) { return obj; }
         return EMPTY_CELL;
     }
 }

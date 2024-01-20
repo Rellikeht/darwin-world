@@ -3,7 +3,6 @@ package world.model;
 import world.SimulationSettings;
 import world.util.MapVisualizer;
 
-import java.security.DigestInputStream;
 import java.util.*;
 
 public abstract class AbstractWorldMap {
@@ -134,7 +133,6 @@ public abstract class AbstractWorldMap {
     }
 
     public String toString() { return visualizer.draw(lowerLeft, upperRight); }
-
     public void addListener(MapChangeListener listener) { listeners.add(listener); }
     public void removeListener(MapChangeListener listener) { listeners.remove(listener); }
     protected void mapChanged(String message) {
@@ -143,34 +141,33 @@ public abstract class AbstractWorldMap {
         }
     }
 
-    public int getAt(Vector2d position,int energy) {
+    public boolean isGrassAt(Vector2d position) { return grass.contains(position); }
+    public Animal getAnimalAt(Vector2d position) {
+        List<Animal> animalList = animals.get(position);
+        if (animalList != null && !animalList.isEmpty()) {
+            return animalList.get(0);
+        }
+        return null;
+    }
+
+    public String getStringAt(Vector2d position) {
         List<Animal> animalsAt = animals.get(position);
-        if (animalsAt != null && !animalsAt.isEmpty()) {
-            Animal animal = animalsAt.get(0);
-            int animalEnergy=animal.getEnergy();
-            int direction = animal.getDirection().getNumber();
-            if ( animalEnergy< energy) {
-                return 0+direction;
-            }
-            if (animalEnergy < 2 * energy) {
-                return 8+direction;
-            }
-            if (animalEnergy < 3 * energy) {
-                return 16+direction;
-            }
-            if (animalEnergy < 4 * energy) {
-                return 24+direction;
-            } else {
-                return 32+direction;
+        if (animalsAt != null) {
+            if (animalsAt.size() == 1) {
+                return animalsAt.get(0).toString();
+            } else if (animalsAt.size() > 1 && animalsAt.size() < 10) {
+                return Integer.toString(animalsAt.size());
+            } else if (animalsAt.size() >= 10) {
+                return "#";
             }
         }
-        if (grass.contains(position)) {
-            return -1;
-        }
-        return -2;
+
+        if (grass.contains(position)) { return "*"; }
+        return "";
     }
 
     public void moveAnimals() {
+        // TODO ruch coś nie chce działać
         for(Animal animal: allAnimals()) {
             animal.activateGene();
             Direction direction = animal.getDirection();
@@ -268,13 +265,9 @@ public abstract class AbstractWorldMap {
     public Vector2d getLowerLeft() { return lowerLeft; }
     public Vector2d getUpperRight() { return upperRight; }
 
-    int getAvgLifespan() {
-        return deadAnimalsLifespanSum/deadAnimalsAmount;
-    }
+    int getAvgLifespan() { return deadAnimalsLifespanSum/deadAnimalsAmount; }
     int getAnimalsAmount() { return animalsAmount; }
-    Map<Genome, Integer> getMostPopularGenomes() {
-        return mostPopularGenomes;
-    }
+    Map<Genome, Integer> getMostPopularGenomes() { return mostPopularGenomes; }
 
     int getAvgChildrenAmount() {
         int childrenAmount = 0;

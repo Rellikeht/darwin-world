@@ -15,8 +15,8 @@ public enum Direction {
 
     private final Vector2d vector;
     private final int number;
-    private static final int amount = Direction.values().length;
     private static final Random random = new Random();
+    private static final int amount = Direction.values().length;
 
     private static final String[] arrows = {
             "↑", "↗", "→", "↘", "↓", "↙", "←", "↖",

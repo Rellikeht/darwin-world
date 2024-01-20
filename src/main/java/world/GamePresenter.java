@@ -1,13 +1,8 @@
 package world;
 
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 import world.model.AbstractWorldMap;
 import world.model.MapChangeListener;
 
@@ -25,7 +20,5 @@ public class GamePresenter implements MapChangeListener {
     public void mapChanged(AbstractWorldMap worldMap, String message) {
         drawMap(message);
     }
-    public void setSimulation(Simulation simulation){
-        this.simulation=simulation;
-    }
+    public void setSimulation(Simulation simulation){ this.simulation = simulation; }
 }
