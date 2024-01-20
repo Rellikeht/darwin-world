@@ -80,7 +80,6 @@ public class GamePresenter implements MapChangeListener {
         height = upperRight.getY() - lowerLeft.getY() + 1;
     }
     private void setCells(){
-        System.out.println(upperRight.getY());
         CELL_WIDTH=400/ upperRight.getX();
         CELL_HEIGHT=400/ upperRight.getX();
     }

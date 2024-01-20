@@ -205,9 +205,6 @@ public abstract class AbstractWorldMap {
             animalsAtAfter.add(animal);
             animals.put(beforePosition, animalsAtBefore);
             animals.put(afterPosition, animalsAtAfter);
-            System.out.println(beforePosition);
-            System.out.println(afterPosition);
-            System.out.println(animal);
         }
 
         mapChanged("Animals moved");

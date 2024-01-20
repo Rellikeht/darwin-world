@@ -2,6 +2,8 @@ package world;
 
 import world.model.*;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Random;
 
 public class Simulation implements Runnable {
@@ -58,20 +60,20 @@ public class Simulation implements Runnable {
 
         map.nextDay();
         map.moveAnimals();
-        //wait(settings.get("TickTime"));
+        wait(settings.get("TickTime"));
         map.doEating();
         //wait(settings.get("TickTime"));
         map.doReproduction();
         //wait(settings.get("TickTime"));
         map.grassPlace();
         wait(settings.get("TickTime"));
+        saveStatisticsToCSV("Statistics.csv");
     }
 
     public void run() {
         int i=0;
         while(map.getAnimalsAmount()>0) {
             if(running) {
-                System.out.println(i);
                 frame();
                 i++;
                 day++;
@@ -91,5 +93,21 @@ public class Simulation implements Runnable {
     public SimulationStats getStats() { return stats; }
     public AbstractWorldMap getMap() { return map; }
     public SimulationSettings getSettings() { return settings; }
+
+    public void saveStatisticsToCSV(String filePath) {
+        try (FileWriter writer = new FileWriter(filePath)) {
+            writer.write("AnimalsNumber,PlantsNumber,FreeZones,PopularGenome,AvgEnergy,AvgLife,AvgChildren\n");
+            writer.write(String.format("%s,%s,%s,%s,%s,%s,%s\n",
+                    map.getAnimalsAmount(),
+                    map.getGrassAmount(),
+                    map.getFreeSquares(),
+                    map.getMostPopularGenome(),
+                    map.getAvgAnimalEnergy(),
+                    map.getAvgLifespan(),
+                    map.getAvgChildrenAmount()));
+        } catch (IOException e) {
+            System.err.println("Error saving statistics to CSV: " + e.getMessage());
+        }
+    }
 
 }
