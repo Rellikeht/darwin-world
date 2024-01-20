@@ -105,7 +105,7 @@ public class Animal implements Comparable<Animal> {
 
     void move() {
         Vector2d dirVector = direction.toUnitVector();
-        position.add(dirVector);
+        position=position.add(dirVector);
     }
 
     @Override

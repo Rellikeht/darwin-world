@@ -177,6 +177,7 @@ public abstract class AbstractWorldMap {
             List<Animal> animalsAtBefore = animals.getOrDefault(beforePosition, new ArrayList<>());
             animals.remove(beforePosition);
             animalsAtBefore.remove(animal);
+            animal.move();
             specialAnimalMovement(animal, dirVector);
 
             Vector2d afterPosition = animal.getPosition();

@@ -20,8 +20,8 @@ public class SimulationSettings {
 
     static {
 
-        addSetting("mapHeight", 20); // 10
-        addSetting("mapWidth", 20); // 10
+        addSetting("mapHeight", 7); // 10
+        addSetting("mapWidth", 7); // 10
         addSetting("initialGrassAmount", 15); // 3
         addSetting("dailyGrassAmount", 20); // 20
         addSetting("jungleSize", 6); // 5
