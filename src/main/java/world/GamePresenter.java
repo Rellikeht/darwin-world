@@ -17,8 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 public class GamePresenter implements MapChangeListener {
-    private static final int CELL_WIDTH = 40;
-    private static final int CELL_HEIGHT = 40;
+
     @FXML
     public NumberTextField animalGenome;
     @FXML
@@ -59,6 +58,8 @@ public class GamePresenter implements MapChangeListener {
     private  Vector2d lowerLeft, upperRight;
     private  int width, height;
     private Animal chosenAnimal;
+    private static int CELL_WIDTH = 40;
+    private static int CELL_HEIGHT = 40;
 
 
     public void drawMap(String message) {
@@ -78,7 +79,13 @@ public class GamePresenter implements MapChangeListener {
         width = upperRight.getX() - lowerLeft.getX() + 1;
         height = upperRight.getY() - lowerLeft.getY() + 1;
     }
+    private void setCells(){
+        System.out.println(upperRight.getY());
+        CELL_WIDTH=400/ upperRight.getX();
+        CELL_HEIGHT=400/ upperRight.getX();
+    }
     public void draw() {
+        setCells();
         clearGrid();
         setCellsSizes();
         drawAxis();
@@ -91,7 +98,6 @@ public class GamePresenter implements MapChangeListener {
     }
 
     private void clearGrid() {
-//        System.out.println(mapGrid);
         mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0)); // hack to retain visible grid lines
         mapGrid.getColumnConstraints().clear();
         mapGrid.getRowConstraints().clear();
@@ -127,24 +133,23 @@ public class GamePresenter implements MapChangeListener {
     private void drawButtons(){
         Image stopImage = new Image("Stop.png");
         Image startImage = new Image("Start.png");
-        Canvas canvas = createCanvas(stopImage);
+        Canvas canvas = createButtonCanvas(stopImage);
         canvas.setOnMouseClicked(e -> stopButton());
         controller.add(canvas,10, 0);
-        canvas = createCanvas(startImage);
+        canvas = createButtonCanvas(startImage);
         canvas.setOnMouseClicked(e -> startButton());
         controller.add(canvas,0, 0);
     }
     private void stopButton(){
         simulation.stop();
-        popularAnimal(true);
         jungleCels(true);
-        System.out.println("stop");
+        popularAnimal(true);
     }
     private void startButton(){
         simulation.start();
-        popularAnimal(false);
         jungleCels(false);
-        System.out.println("start");
+        popularAnimal(false);
+
     }
     private void jungleCels(boolean flag){
         if(flag){
@@ -152,10 +157,6 @@ public class GamePresenter implements MapChangeListener {
             Vector2d upperRight=map.getUpperRight();
             int jungleStart = (upperRight.getY() - lowerLeft.getY() - settings.get("JungleSize")) / 2;
             int jungleEnd = jungleStart + settings.get("JungleSize");
-            System.out.println("jungleStart");
-            System.out.println(jungleStart);
-            System.out.println("jungleEnd");
-            System.out.println(jungleEnd);
             for(int y=jungleStart;y<jungleEnd+1;y++){
                 for(int x=lowerLeft.getX();x<upperRight.getX()+1;x++){
                     Vector2d position = new Vector2d(1 - lowerLeft.getX() + x, 1 + upperRight.getY() - y);
@@ -174,9 +175,9 @@ public class GamePresenter implements MapChangeListener {
             Genome popularGenome=map.getMostPopularGenome();
             Map<Vector2d,List<Animal>> animals=map.getAnimals();
             for(List<Animal> animalList:animals.values()){
-                for(Animal animal:animalList){
-                    if(animal.getGenes().equals(popularGenome)){
-                        Vector2d position=animal.getPosition();
+                for(Animal popAnimal:animalList){
+                    if(popAnimal.getGenes().equals(popularGenome)){
+                        Vector2d position=popAnimal.getPosition();
                         mapGrid.add(canvas, position.getX()+1, upperRight.getY()-position.getY()+1);
                     }
                 }
@@ -210,8 +211,6 @@ public class GamePresenter implements MapChangeListener {
         animalShow(chosenAnimal);
     }
     private void drawWorldElements() {
-//        System.out.println(lowerLeft.getX());
-//        System.out.println(upperRight.getY());
         for (int x = lowerLeft.getX()-1; x <= upperRight.getX(); x++) {
             for (int y = lowerLeft.getY(); y <= upperRight.getY()+1; y++) {
                 Vector2d position = new Vector2d(1 - lowerLeft.getX() + x, 1 + upperRight.getY() - y);
@@ -224,13 +223,17 @@ public class GamePresenter implements MapChangeListener {
                 } else if (map.isGrassAt(position)) {
                     Image grassImage = ImageLoader.getGrassImage();
                     Canvas canvas = createCanvas(grassImage);
-                    System.out.println(upperRight.getY()-position.getY()+1);
                     mapGrid.add(canvas, position.getX()+1, upperRight.getY()-position.getY()+1);
                 }
             }
         }
     }
-
+    private Canvas createButtonCanvas(Image image) {
+        Canvas canvas = new Canvas(40, 40);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.drawImage(image, 0, 0, 40, 40);
+        return canvas;
+    }
     private Canvas createCanvas(Image image) {
         Canvas canvas = new Canvas(CELL_WIDTH, CELL_HEIGHT);
         GraphicsContext gc = canvas.getGraphicsContext2D();

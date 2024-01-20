@@ -69,12 +69,15 @@ public class Simulation implements Runnable {
 
     public void run() {
         int i=0;
-        while(true) {
+        while(map.getAnimalsAmount()>0) {
             if(running) {
                 System.out.println(i);
                 frame();
                 i++;
                 day++;
+            }
+            else{
+                System.out.println();
             }
         }
     }

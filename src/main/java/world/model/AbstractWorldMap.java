@@ -127,7 +127,6 @@ public abstract class AbstractWorldMap {
         animalsAt.add(animal);
         animals.put(animal.getPosition(), animalsAt);
         animalsAmount += 1;
-
         Genome genome = animal.getGenes();
         Integer count = mostPopularGenomes.getOrDefault(genome, 0);
         mostPopularGenomes.put(genome, count + 1);
@@ -196,7 +195,6 @@ public abstract class AbstractWorldMap {
             Direction direction = animal.getDirection();
             Vector2d dirVector = direction.toUnitVector();
             Vector2d beforePosition = animal.getPosition();
-
             List<Animal> animalsAtBefore = animals.getOrDefault(beforePosition, new ArrayList<>());
             animals.remove(beforePosition);
             animalsAtBefore.remove(animal);
