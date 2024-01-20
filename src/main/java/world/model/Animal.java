@@ -57,9 +57,16 @@ public class Animal implements Comparable<Animal> {
     private void addOffspring() {
         this.offspringsAmount += 1;
         if (parent1 != null) parent1.addOffspring();
-        if (parent2 != null) parent2.addOffspring();
-    }
 
+        if (parent2 != null) {
+            if (parent1!=null) {
+                if (!parent1.equals(parent2)) {
+                    parent2.addOffspring();
+                }
+            else {parent2.addOffspring();}
+            }
+        }
+    }
     //   * ile dni już żyje (jeżeli żyje),
     private final int dayOfBirth;
     public int getDayOfBirth() { return dayOfBirth; }

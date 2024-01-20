@@ -22,7 +22,7 @@ public class Genome {
             int isMutationRandom
     ) {
         this(genome1.getLength());
-        int proportions = length*(energy2/energy1);
+        int proportions = length * (energy2 / energy1);
         int mutateNumber = random.nextInt(maxAmountOfMutations-minAmountOfMutations)+minAmountOfMutations;
 
         if(random.nextInt(2) == 0) {
@@ -65,7 +65,14 @@ public class Genome {
             }
         }
     }
+    public String toString(){
+        String stringGenome=new String();
+        for(int i=0;i<length;i++){
+            stringGenome+=String.valueOf(getGene(i));
+        }
 
+        return stringGenome;
+    }
     public int getGene(int i){ return genes[i]; }
     public int getLength() { return genes.length; }
 

@@ -236,8 +236,6 @@ public abstract class AbstractWorldMap {
     }
 
     protected Animal reproducing(Animal animal1, Animal animal2) {
-        animal1.loseEnergy(settings.get("EnergyTakenByProcreation"));
-        animal2.loseEnergy(settings.get("EnergyTakenByProcreation"));
 
         Vector2d position = animal1.getPosition();
         Genome genome = new Genome(
@@ -247,7 +245,8 @@ public abstract class AbstractWorldMap {
                 settings.get("MaxAmountOfMutations"),
                 settings.get("isMutationRandom")
         );
-
+        animal1.loseEnergy(settings.get("EnergyTakenByProcreation"));
+        animal2.loseEnergy(settings.get("EnergyTakenByProcreation"));
         return new Animal(
                 position, Direction.randomDirection(),
                 2*settings.get("EnergyTakenByProcreation"),
@@ -255,22 +254,22 @@ public abstract class AbstractWorldMap {
         );
     }
 
-    int getGrassAmount() { return grass.size(); }
-    int getFreeSquares() {
+    public int getGrassAmount() { return grass.size(); }
+    public int getFreeSquares() {
         Set<Vector2d> occupied = new HashSet<>(grass);
         animals.forEach((pos, list) -> {if (!list.isEmpty()) occupied.add(pos);});
         return size - (occupied.size());
     }
 
-    int getId() { return this.id; }
+    public int getId() { return this.id; }
     public Vector2d getLowerLeft() { return lowerLeft; }
     public Vector2d getUpperRight() { return upperRight; }
 
-    int getAvgLifespan() { return deadAnimalsLifespanSum/deadAnimalsAmount; }
-    int getAnimalsAmount() { return animalsAmount; }
-    Map<Genome, Integer> getMostPopularGenomes() { return mostPopularGenomes; }
+    public int getAvgLifespan() {return (deadAnimalsAmount>0) ? deadAnimalsLifespanSum/deadAnimalsAmount : deadAnimalsLifespanSum; }
+    public int getAnimalsAmount() { return animalsAmount; }
+    public Map<Genome, Integer> getMostPopularGenomes() { return mostPopularGenomes; }
 
-    int getAvgChildrenAmount() {
+    public int getAvgChildrenAmount() {
         int childrenAmount = 0;
         for (Animal animal: allAnimals()) {
             childrenAmount += animal.getChildrenAmount();
@@ -278,7 +277,7 @@ public abstract class AbstractWorldMap {
         return childrenAmount/animalsAmount;
     }
 
-    int getAvgAnimalEnergy() {
+    public int getAvgAnimalEnergy() {
         int animalEnergySum = 0;
         for (Animal animal: allAnimals()) {
             animalEnergySum += animal.getEnergy();

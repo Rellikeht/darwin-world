@@ -11,6 +11,7 @@ public class Simulation implements Runnable {
     private final SimulationStats stats;
     private final Random random = new Random();
     private boolean running=true;
+    private int day=0;
 
     public Simulation(SimulationSettings settings) {
         this.settings = settings;
@@ -73,9 +74,11 @@ public class Simulation implements Runnable {
                 System.out.println(i);
                 frame();
                 i++;
+                day++;
             }
         }
     }
+    public int getDay(){return day;}
     public void addListener(MapChangeListener listener) {
         map.addListener(listener);
     }

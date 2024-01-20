@@ -3,6 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import world.model.NumberTextField?>
 <BorderPane minHeight="550.0" minWidth="846.0" prefHeight="552.0" prefWidth="846.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="world.GamePresenter">
     <VBox alignment="CENTER">
     </VBox>
@@ -18,21 +19,21 @@
             <VBox>
                <children>
                   <Label alignment="CENTER" prefHeight="18.0" prefWidth="132.0" text="Genome" />
-                  <TextField editable="false" />
+                  <NumberTextField fx:id="animalGenome" editable="false" />
                   <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="140.0" text="Genome Part" />
-                  <TextField editable="false" />
+                  <NumberTextField fx:id="animalPart" editable="false" />
                   <Label alignment="CENTER" prefHeight="18.0" prefWidth="134.0" text="Energy" />
-                  <TextField editable="false" />
+                  <NumberTextField fx:id="animalEnergy" editable="false" />
                   <Label alignment="CENTER" prefHeight="18.0" prefWidth="140.0" text="Eated" />
-                  <TextField editable="false" />
+                  <NumberTextField fx:id="animalEated" editable="false" />
                   <Label alignment="CENTER" prefHeight="18.0" prefWidth="137.0" text="Children" />
-                  <TextField editable="false" />
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="145.0" text="Ascendants" />
-                  <TextField editable="false" />
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="137.0" text="Day of Life" />
-                  <TextField editable="false" />
+                  <NumberTextField fx:id="animalChildren" editable="false" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="145.0" text="Ascentands" />
+                  <NumberTextField fx:id="animalAscentands" editable="false" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="137.0" text="Days of Life" />
+                  <NumberTextField fx:id="animalLife" editable="false" />
                   <Label alignment="CENTER" prefHeight="18.0" prefWidth="145.0" text="Day of Death" />
-                  <TextField editable="false" />
+                  <NumberTextField fx:id="animalDeath" editable="false" />
                </children>
             </VBox>
          </children>
@@ -42,19 +43,19 @@
       <VBox prefHeight="200.0" prefWidth="132.0" BorderPane.alignment="CENTER">
          <children>
             <Label alignment="CENTER" prefHeight="18.0" prefWidth="135.0" text="Animals" />
-            <TextField editable="false" />
+            <NumberTextField fx:id="animalsNumber" editable="false" />
             <Label alignment="CENTER" prefHeight="18.0" prefWidth="153.0" text="Plants" />
-            <TextField editable="false" />
+            <NumberTextField fx:id="plantsNumber" editable="false" />
             <Label alignment="CENTER" prefHeight="18.0" prefWidth="156.0" text="Free" />
-            <TextField editable="false" />
+            <NumberTextField fx:id="freeZones" editable="false" />
             <Label alignment="CENTER" prefHeight="18.0" prefWidth="153.0" text="Popular Genome" />
-            <TextField editable="false" />
+            <NumberTextField fx:id="popularGenome" editable="false" />
             <Label alignment="CENTER" prefHeight="18.0" prefWidth="139.0" text="Average Energy" />
-            <TextField editable="false" />
+            <NumberTextField fx:id="avgEnergy" editable="false" />
             <Label alignment="CENTER" prefHeight="18.0" prefWidth="160.0" text="Average Lifetime" />
-            <TextField editable="false" prefHeight="10.0" prefWidth="132.0" />
+            <NumberTextField fx:id="avgLife"  editable="false" prefHeight="10.0" prefWidth="132.0" />
             <Label alignment="CENTER" prefHeight="18.0" prefWidth="139.0" text="Average Children" />
-            <TextField editable="false" />
+            <NumberTextField fx:id="avgChildren"  editable="false" />
          </children>
       </VBox>
    </left>
