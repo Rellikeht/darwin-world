@@ -20,12 +20,12 @@ public class SimulationSettings {
 
     static {
 
-        addSetting("mapHeight", 7); // 10
-        addSetting("mapWidth", 7); // 10
-        addSetting("initialGrassAmount", 15); // 3
-        addSetting("dailyGrassAmount", 20); // 20
+        addSetting("mapHeight", 10); // 10
+        addSetting("mapWidth", 10); // 10
+        addSetting("initialGrassAmount", 1); // 3
+        addSetting("dailyGrassAmount", 2); // 20
         addSetting("jungleSize", 6); // 5
-        addSetting("initialAnimalAmount", 10); // 15
+        addSetting("initialAnimalAmount", 1); // 15
         addSetting("initialAnimalEnergy", 40); // 5
         addSetting("grassEnergy", 30); // 20
         addSetting("energyTakenByProcreation", 30); // 30
@@ -38,7 +38,7 @@ public class SimulationSettings {
         addSetting("isMapBasic", 1); // 1
         addSetting("portalEnergy", 10); // 10
 
-        addSetting("tickTime", 400); // 300
+        addSetting("tickTime", 4000); // 300
         addSetting("energyColorStep", 50);
     }
 
