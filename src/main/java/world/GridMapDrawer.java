@@ -11,7 +11,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import world.model.AbstractWorldMap;
 import world.model.Animal;
+import world.model.MapChangeListener;
 import world.model.Vector2d;
+
+import java.util.Set;
 
 public class GridMapDrawer {
     private static final int CELL_WIDTH = 40;
@@ -87,15 +90,10 @@ public class GridMapDrawer {
         Image startImage = new Image("Start.png");
         Canvas canvas = createCanvas(stopImage);
         canvas.setOnMouseClicked(e -> stopButton());
-
         controller.add(canvas,10, 0);
-
         canvas = createCanvas(startImage);
         canvas.setOnMouseClicked(e -> startButton());
-
         controller.add(canvas,0, 0);
-
-
     }
     private void stopButton(){
         simulation.stop();
@@ -104,12 +102,9 @@ public class GridMapDrawer {
     private void startButton(){
         simulation.start();
         System.out.println("start");
-
-
     }
     private void animalPressed(int x,int y){
         Animal animal = map.getAnimalAt(new Vector2d(x,y));
-        System.out.println(animal);
     }
     private void drawWorldElements() {
         for (int x = lowerLeft.getX(); x <= upperRight.getX(); x++) {

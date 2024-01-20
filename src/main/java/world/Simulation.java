@@ -76,14 +76,12 @@ public class Simulation implements Runnable {
             }
         }
     }
-
     public void addListener(MapChangeListener listener) {
         map.addListener(listener);
     }
     public void removeListener(MapChangeListener listener) {
         map.removeListener(listener);
     }
-
     public SimulationStats getStats() { return stats; }
     public AbstractWorldMap getMap() { return map; }
     public SimulationSettings getSettings() { return settings; }
