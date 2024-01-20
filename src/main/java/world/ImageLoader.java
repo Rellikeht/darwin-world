@@ -9,7 +9,7 @@ public class ImageLoader {
     private static final String extension = "png";
     private static final int directions = Direction.values().length;
     private static final int variants = 4;
-    public static String selectAnimalImage(int direction, int variant) {
+    private static String selectAnimalImage(int direction, int variant) {
         return "%s%d%d.%s".formatted(nameBase, direction, variant, extension);
     }
 

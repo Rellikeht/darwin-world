@@ -105,12 +105,11 @@ public class SimulationPresenter extends Application implements MapChangeListene
         uploadSetting(minMutation, "MinAmountOfMutations");
         uploadSetting(maxMutation, "MaxAmountOfMutations");
     }
-    // TODO Dość bekowa konstrukcja, bo tu wszystko się o symulację rozgrywa xd
+
     @Override
     public void mapChanged(AbstractWorldMap worldMap, String message) {
         drawMap(message);
     }
-
     public void setHellMap(){settings.set("MapBasic", 0);}
     public void setEarthMap(){settings.set("MapBasic", 1);}
     public void setNormalMutation(){settings.set("MutationRandom", 0);}

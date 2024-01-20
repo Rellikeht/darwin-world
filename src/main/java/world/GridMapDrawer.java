@@ -2,7 +2,6 @@ package world;
 
 import javafx.geometry.HPos;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -84,13 +83,14 @@ public class GridMapDrawer {
                 Animal animal = map.getAnimalAt(position);
 
                 if (animal != null) {
-                    System.out.printf(
-                            "%s - %s - %d\n",
-                            position.toString(),
-                            animal.toString(),
-                            animal.getEnergy()
-                    );
+                    //System.out.printf(
+                    //        "%s - %s - %d\n",
+                    //        position.toString(),
+                    //        animal.toString(),
+                    //        animal.getEnergy()
+                    //);
 
+                    // TODO nie wiem, czy energia jest dobrze
                     ImageView view = ImageLoader.getAnimalView(
                             animal.getDirection(),
                             Math.max(0, animal.getEnergy()/settings.get("energyColorStep") - 1)
@@ -102,7 +102,6 @@ public class GridMapDrawer {
                     ImageView view = ImageLoader.getGrassView();
                     GridPane.setHalignment(view, HPos.CENTER);
                     mapGrid.add(view, position.getX(), position.getY());
-                    System.out.printf("%s - grass\n", position.toString());
                 }
             }
         }

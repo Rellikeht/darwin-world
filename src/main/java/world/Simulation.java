@@ -43,7 +43,6 @@ public class Simulation implements Runnable {
     public Simulation() { this(new SimulationSettings()); }
     private void wait(int milliseconds) {
         try { Thread.sleep(milliseconds); }
-        // Nie wiem, czy by tego jakoś lepiej nie trzeba
         catch (InterruptedException e) { throw new RuntimeException(e); }
     }
 
@@ -79,11 +78,5 @@ public class Simulation implements Runnable {
     public SimulationStats getStats() { return stats; }
     public AbstractWorldMap getMap() { return map; }
     public SimulationSettings getSettings() { return settings; }
-
-    // TODO Ło panie
-    //public int getAt(Vector2d position) {
-    //    int energy = settings.get("energyNeededForProcreation")/5;
-    //    return map.getAt(position,energy);
-    //}
 
 }

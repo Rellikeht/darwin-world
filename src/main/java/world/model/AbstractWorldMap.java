@@ -191,6 +191,7 @@ public abstract class AbstractWorldMap {
 
     protected void specialAnimalMovement(Animal animal, Vector2d vector) {
         // TODO powyciągać dalej, implementacje nie są za ładne
+        // TODO nie wiem w sumie który special movement jest używany w move xd
     }
 
     protected Queue<Animal> getFittestAt(Vector2d position) {
