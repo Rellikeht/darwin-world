@@ -69,13 +69,13 @@ public class SimulationPresenter extends Application implements MapChangeListene
     private boolean isBasic = false;
     private GamePresenter presenter;
 
-    public void drawMap(String message) {
-        Platform.runLater(() -> {
-            GridMapDrawer drawer = new GridMapDrawer(mapGrid, simulation);
-            drawer.draw();
-            moveInfoLabel.setText(message);
-        });
-    };
+//    public void drawMap(String message) {
+//        Platform.runLater(() -> {
+//            GridMapDrawer drawer = new GridMapDrawer(mapGrid, simulation);
+//            drawer.draw();
+//            moveInfoLabel.setText(message);
+//        });
+//    };
 
     private void uploadSetting(TextField field, String name) {
         try {
@@ -108,7 +108,7 @@ public class SimulationPresenter extends Application implements MapChangeListene
 
     @Override
     public void mapChanged(AbstractWorldMap worldMap, String message) {
-        drawMap(message);
+//        drawMap(message);
     }
     public void setHellMap(){settings.set("MapBasic", 0);}
     public void setEarthMap(){settings.set("MapBasic", 1);}
@@ -126,7 +126,6 @@ public class SimulationPresenter extends Application implements MapChangeListene
         configureStage(gameStage, viewRoot);
         gameStage.show();
         GamePresenter presenter = loader.getController();
-
         presenter.setSimulation(simulation);
         simulation.addListener(presenter);
         // meh

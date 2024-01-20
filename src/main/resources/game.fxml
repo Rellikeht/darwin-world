@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.layout.*?>
 
@@ -11,15 +10,6 @@
        <GridPane fx:id="mapGrid" alignment="CENTER" gridLinesVisible="true" prefHeight="510.0" prefWidth="846.0" />
    </center>
    <bottom>
-      <HBox alignment="CENTER" prefHeight="30.0" prefWidth="846.0" BorderPane.alignment="CENTER">
-         <children>
-            <Canvas height="41.0" width="105.0" />
-            <Canvas height="51.0" width="114.0" />
-         </children>
-         <cursor>
-            <Cursor fx:constant="W_RESIZE" />
-         </cursor>
-      </HBox>
+      <GridPane fx:id="controller" alignment="CENTER" prefHeight="0.0" prefWidth="846.0" BorderPane.alignment="CENTER"/>
    </bottom>
-
 </BorderPane>

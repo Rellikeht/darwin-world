@@ -10,7 +10,7 @@ public class Simulation implements Runnable {
     private final SimulationSettings settings;
     private final SimulationStats stats;
     private final Random random = new Random();
-    private boolean Start = true;
+    private boolean running=true;
 
     public Simulation(SimulationSettings settings) {
         this.settings = settings;
@@ -46,6 +46,12 @@ public class Simulation implements Runnable {
         try { Thread.sleep(milliseconds); }
         catch (InterruptedException e) { throw new RuntimeException(e); }
     }
+    public void stop(){
+        running=false;
+    }
+    public void start(){
+        running=true;
+    }
 
     private void frame() {
 
@@ -62,11 +68,12 @@ public class Simulation implements Runnable {
 
     public void run() {
         int i=0;
-        while (i < 10) {
-            if(Start)
-            System.out.println(i);
-            frame();
-            i++;
+        while(true) {
+            if(running) {
+                System.out.println(i);
+                frame();
+                i++;
+            }
         }
     }
 

@@ -5,29 +5,30 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import world.model.AbstractWorldMap;
 import world.model.Animal;
 import world.model.Vector2d;
 
-import java.util.Objects;
-
 public class GridMapDrawer {
     private static final int CELL_WIDTH = 40;
     private static final int CELL_HEIGHT = 40;
-
+    private final Simulation simulation;
+    private final GridPane controller;
     private final GridPane mapGrid;
     private final AbstractWorldMap map;
     private final SimulationSettings settings;
     private final Vector2d lowerLeft, upperRight;
     private final int width, height;
 
-    public GridMapDrawer(GridPane mapGrid, Simulation simulation) {
+    public GridMapDrawer(GridPane mapGrid, GridPane controller, Simulation simulation) {
         this.mapGrid = mapGrid;
+        this.controller = controller;
         map = simulation.getMap();
+        this.simulation=simulation;
         settings = simulation.getSettings();
         lowerLeft = map.getLowerLeft();
         upperRight = map.getUpperRight();
@@ -44,6 +45,7 @@ public class GridMapDrawer {
         setCellsSizes();
         drawAxis();
         drawWorldElements();
+        drawButtons();
     }
 
     private void clearGrid() {
@@ -80,6 +82,31 @@ public class GridMapDrawer {
         }
 
     }
+    private void drawButtons(){
+        Image stopImage = new Image("Stop.png");
+        Image startImage = new Image("Start.png");
+        Canvas canvas = createCanvas(stopImage);
+        canvas.setOnMouseClicked(e -> stopButton());
+
+        controller.add(canvas,10, 0);
+
+        canvas = createCanvas(startImage);
+        canvas.setOnMouseClicked(e -> startButton());
+
+        controller.add(canvas,0, 0);
+
+
+    }
+    private void stopButton(){
+        simulation.stop();
+        System.out.println("stop");
+    }
+    private void startButton(){
+        simulation.start();
+        System.out.println("start");
+
+
+    }
     private void animalPressed(int x,int y){
         Animal animal = map.getAnimalAt(new Vector2d(x,y));
         System.out.println(animal);
@@ -95,19 +122,19 @@ public class GridMapDrawer {
 
 
                     Image animalImage = ImageLoader.getAnimalImage(animal.getDirection(), Math.max(0, animal.getEnergy() / settings.get("energyColorStep") - 1));
-                    Canvas canvas = createCanvas(animalImage, position.getX(), position.getY());
+                    Canvas canvas = createCanvas(animalImage);
                     canvas.setOnMouseClicked(e -> animalPressed(position.getX(), position.getY()));
                     mapGrid.add(canvas, position.getX(), position.getY());
                 } else if (map.isGrassAt(position)) {
                     Image grassImage = ImageLoader.getGrassImage();
-                    Canvas canvas = createCanvas(grassImage, position.getX(), position.getY());
+                    Canvas canvas = createCanvas(grassImage);
                     mapGrid.add(canvas, position.getX(), position.getY());
                 }
             }
         }
     }
 
-    private Canvas createCanvas(Image image, int x, int y) {
+    private Canvas createCanvas(Image image) {
         Canvas canvas = new Canvas(CELL_WIDTH, CELL_HEIGHT);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.drawImage(image, 0, 0, CELL_WIDTH, CELL_HEIGHT);
