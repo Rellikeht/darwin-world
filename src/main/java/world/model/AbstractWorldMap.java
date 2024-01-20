@@ -43,7 +43,7 @@ public abstract class AbstractWorldMap {
         animals = new HashMap<>(settings.get("InitialAnimalAmount"));
         listeners = new LinkedHashSet<>();
         lowerLeft = new Vector2d(0, 0);
-        upperRight = new Vector2d(settings.get("MapWidth")-1, settings.get("MapHeight")-1);
+        upperRight = new Vector2d(settings.get("MapWidth") - 1, settings.get("MapHeight") - 1);
 
         jungleStart = (upperRight.getY() - lowerLeft.getY() - settings.get("JungleSize")) / 2;
         jungleEnd = jungleStart + settings.get("JungleSize");
@@ -53,22 +53,22 @@ public abstract class AbstractWorldMap {
         );
         equator = new RandomPositionGenerator(
                 new Vector2d(lowerLeft.getX(), jungleStart),
-                new Vector2d(upperRight.getX(), jungleEnd+1)
+                new Vector2d(upperRight.getX(), jungleEnd + 1)
         );
         overEquator = new RandomPositionGenerator(
-                new Vector2d(lowerLeft.getX(), jungleEnd+1),
+                new Vector2d(lowerLeft.getX(), jungleEnd + 1),
                 upperRight
         );
 
         this.id = curId;
         curId += 1;
-        size = settings.get("MapWidth")*settings.get("MapHeight");
+        size = settings.get("MapWidth") * settings.get("MapHeight");
         grassPlace(settings.get("InitialGrassAmount"));
     }
 
     public void nextDay() {
-        for(Animal animal: allAnimals()) {
-            if(animal.getEnergy()<=0){
+        for (Animal animal : allAnimals()) {
+            if (animal.getEnergy() <= 0) {
                 animals.get(animal.getPosition()).remove(animal);
                 animal.die(day);
 
@@ -78,7 +78,7 @@ public abstract class AbstractWorldMap {
 
                 Genome genome = animal.getGenes();
                 int count = mostPopularGenomes.get(genome);
-                mostPopularGenomes.put(genome, count-1);
+                mostPopularGenomes.put(genome, count - 1);
                 //animalEnergySum -= animal.getEnergy();
             }
         }
@@ -88,14 +88,22 @@ public abstract class AbstractWorldMap {
     protected void grassPlace(int N) {
         // It's definitely a kind of magic
         List<RandomPositionGenerator> generators = new ArrayList<>(10);
-        if (underEquator.hasNext()) { generators.add(underEquator); }
-        if (overEquator.hasNext()) { generators.add(overEquator); }
+        if (underEquator.hasNext()) {
+            generators.add(underEquator);
+        }
+        if (overEquator.hasNext()) {
+            generators.add(overEquator);
+        }
         if (equator.hasNext()) {
-            for (int i = 0; i < 8; i++) { generators.add(equator); }
+            for (int i = 0; i < 8; i++) {
+                generators.add(equator);
+            }
         }
 
-        if (generators.isEmpty()) { return; }
-        for(int i=0;i<N;i++) {
+        if (generators.isEmpty()) {
+            return;
+        }
+        for (int i = 0; i < N; i++) {
             int grassProbability = random.nextInt(generators.size());
             RandomPositionGenerator generator = generators.get(grassProbability);
 
@@ -103,6 +111,7 @@ public abstract class AbstractWorldMap {
             if (generator.hasNext()) {
                 Vector2d grassPosition = generator.next();
                 grass.add(grassPosition);
+                ;
             }
         }
 
@@ -113,7 +122,7 @@ public abstract class AbstractWorldMap {
         grassPlace(settings.get("DailyGrassAmount"));
     }
 
-    public void place(Animal animal)  {
+    public void place(Animal animal) {
         List<Animal> animalsAt = animals.getOrDefault(animal.getPosition(), new ArrayList<>());
         animalsAt.add(animal);
         animals.put(animal.getPosition(), animalsAt);
@@ -121,7 +130,7 @@ public abstract class AbstractWorldMap {
 
         Genome genome = animal.getGenes();
         Integer count = mostPopularGenomes.getOrDefault(genome, 0);
-        mostPopularGenomes.put(genome, count+1);
+        mostPopularGenomes.put(genome, count + 1);
         //animalEnergySum += animal.getEnergy();
     }
 
@@ -132,16 +141,28 @@ public abstract class AbstractWorldMap {
                 .toList();
     }
 
-    public String toString() { return visualizer.draw(lowerLeft, upperRight); }
-    public void addListener(MapChangeListener listener) { listeners.add(listener); }
-    public void removeListener(MapChangeListener listener) { listeners.remove(listener); }
+    public String toString() {
+        return visualizer.draw(lowerLeft, upperRight);
+    }
+
+    public void addListener(MapChangeListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeListener(MapChangeListener listener) {
+        listeners.remove(listener);
+    }
+
     protected void mapChanged(String message) {
         for (MapChangeListener listener : listeners) {
             listener.mapChanged(this, message);
         }
     }
 
-    public boolean isGrassAt(Vector2d position) { return grass.contains(position); }
+    public boolean isGrassAt(Vector2d position) {
+        return grass.contains(position);
+    }
+
     public Animal getAnimalAt(Vector2d position) {
         List<Animal> animalList = animals.get(position);
         if (animalList != null && !animalList.isEmpty()) {
@@ -162,13 +183,15 @@ public abstract class AbstractWorldMap {
             }
         }
 
-        if (grass.contains(position)) { return "*"; }
+        if (grass.contains(position)) {
+            return "*";
+        }
         return "";
     }
 
     public void moveAnimals() {
         // TODO ruch coś nie chce działać
-        for(Animal animal: allAnimals()) {
+        for (Animal animal : allAnimals()) {
             animal.activateGene();
             Direction direction = animal.getDirection();
             Vector2d dirVector = direction.toUnitVector();
@@ -184,6 +207,9 @@ public abstract class AbstractWorldMap {
             animalsAtAfter.add(animal);
             animals.put(beforePosition, animalsAtBefore);
             animals.put(afterPosition, animalsAtAfter);
+            System.out.println(beforePosition);
+            System.out.println(afterPosition);
+            System.out.println(animal);
         }
 
         mapChanged("Animals moved");
@@ -202,12 +228,14 @@ public abstract class AbstractWorldMap {
     }
 
     public void doEating() {
-        for (Vector2d position: animals.keySet()) {
+        for (Vector2d position : animals.keySet()) {
             if (!animals.get(position).isEmpty()) {
                 Queue<Animal> fittest = getFittestAt(position);
                 Animal animal = fittest.peek();
-                animal.eatGrass(settings.get("GrassEnergy"));
-                grass.remove(position);
+                if (grass.contains(position)) {
+                    animal.eatGrass(settings.get("GrassEnergy"));
+                    grass.remove(position);
+                }
 
                 // Bo mi się nie chce ifów robić, a to i tak zadziała xd
                 underEquator.free(position);
@@ -220,13 +248,13 @@ public abstract class AbstractWorldMap {
     }
 
     public void doReproduction() {
-        for (Vector2d position: animals.keySet()) {
+        for (Vector2d position : animals.keySet()) {
             if (animals.get(position).size() > 1) {
                 Queue<Animal> fittest = getFittestAt(position);
                 Animal a1 = fittest.peek();
                 Animal a2 = fittest.peek();
                 if (a1.getEnergy() >= settings.get("EnergyNeededForProcreation") &&
-                    a2.getEnergy() >= settings.get("EnergyNeededForProcreation")) {
+                        a2.getEnergy() >= settings.get("EnergyNeededForProcreation")) {
                     place(reproducing(a1, a2));
                 }
             }
@@ -249,40 +277,96 @@ public abstract class AbstractWorldMap {
         animal2.loseEnergy(settings.get("EnergyTakenByProcreation"));
         return new Animal(
                 position, Direction.randomDirection(),
-                2*settings.get("EnergyTakenByProcreation"),
+                2 * settings.get("EnergyTakenByProcreation"),
                 genome, day, animal1, animal2
         );
     }
 
-    public int getGrassAmount() { return grass.size(); }
+    public int getGrassAmount() {
+        return grass.size();
+    }
+
     public int getFreeSquares() {
         Set<Vector2d> occupied = new HashSet<>(grass);
-        animals.forEach((pos, list) -> {if (!list.isEmpty()) occupied.add(pos);});
+        animals.forEach((pos, list) -> {
+            if (!list.isEmpty()) occupied.add(pos);
+        });
         return size - (occupied.size());
     }
 
-    public int getId() { return this.id; }
-    public Vector2d getLowerLeft() { return lowerLeft; }
-    public Vector2d getUpperRight() { return upperRight; }
+    public int getId() {
+        return this.id;
+    }
 
-    public int getAvgLifespan() {return (deadAnimalsAmount>0) ? deadAnimalsLifespanSum/deadAnimalsAmount : deadAnimalsLifespanSum; }
-    public int getAnimalsAmount() { return animalsAmount; }
-    public Map<Genome, Integer> getMostPopularGenomes() { return mostPopularGenomes; }
+    public Vector2d getLowerLeft() {
+        return lowerLeft;
+    }
 
+    public Vector2d getUpperRight() {
+        return upperRight;
+    }
+
+    public int getAvgLifespan() {
+        return (deadAnimalsAmount > 0) ? deadAnimalsLifespanSum / deadAnimalsAmount : deadAnimalsLifespanSum;
+    }
+
+    public int getAnimalsAmount() {
+        return animalsAmount;
+    }
+    public Map<Vector2d,List<Animal>> getAnimals(){
+        return animals;
+    }
+    public Map<Genome, Integer> getMostPopularGenomes() {
+        return mostPopularGenomes;
+    }
+    public Genome getMostPopularGenome(){
+        int maxi=0;
+        Genome popularGenome=new Genome(settings.get("genomeLength"));
+        for(Genome genome:mostPopularGenomes.keySet()){
+            if (mostPopularGenomes.get(genome)>maxi){
+                popularGenome=genome;
+                maxi=mostPopularGenomes.get(genome);
+            }
+        }
+        return popularGenome;
+    }
     public int getAvgChildrenAmount() {
         int childrenAmount = 0;
-        for (Animal animal: allAnimals()) {
+        for (Animal animal : allAnimals()) {
             childrenAmount += animal.getChildrenAmount();
         }
-        return childrenAmount/animalsAmount;
+        return animalsAmount > 0 ? childrenAmount / animalsAmount : 0;
     }
 
     public int getAvgAnimalEnergy() {
         int animalEnergySum = 0;
-        for (Animal animal: allAnimals()) {
+        for (Animal animal : allAnimals()) {
             animalEnergySum += animal.getEnergy();
         }
-        return animalEnergySum/animalsAmount;
+        return animalsAmount > 0 ? animalEnergySum / animalsAmount : 0;
     }
 
+//    private setMostPopularGenome() {
+//        Map<Genome, Integer> animalGenomes = new HashMap<>();
+//        Genome popularGenome=new Genome(settings.get("genomeLength"));
+//        for (List<Animal> animalsList : animals.values()) {
+//            for (Animal animal : animalsList) {
+//                Genome genome = animal.getGenes();
+//                if (animalGenomes.containsKey(genome)) {
+//                    animalGenomes.replace(genome, animalGenomes.get(genome) + 1);
+//                } else {
+//                    animalGenomes.put(genome, 1);
+//                }
+//            }
+//        }
+//        int maxi = 0;
+//
+//        for (Genome genome : animalGenomes.keySet()) {
+//            if (animalGenomes.get(genome) > maxi) {
+//                maxi = animalGenomes.get(genome);
+//                popularGenome = genome;
+//            }
+//        }
+//        mostPopularGenome=popularGenome;
+//    }
 }

@@ -9,7 +9,7 @@ public class EarthMap extends AbstractWorldMap {
         if (animal.getPosition().add(vector).getX()>upperRight.getX()) {
             animal.move();
             animal.loseEnergy(settings.get("EnergyTakenByMovement"));
-            animal.setPosition(new Vector2d(1,animal.getPosition().getY()));
+            animal.setPosition(new Vector2d(0,animal.getPosition().getY()));
         }
         else if (animal.getPosition().add(vector).getX()<lowerLeft.getX()) {
             animal.move();
