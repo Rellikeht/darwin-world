@@ -1,7 +1,10 @@
 package world;
 
 import javafx.geometry.HPos;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -9,6 +12,8 @@ import javafx.scene.layout.RowConstraints;
 import world.model.AbstractWorldMap;
 import world.model.Animal;
 import world.model.Vector2d;
+
+import java.util.Objects;
 
 public class GridMapDrawer {
     private static final int CELL_WIDTH = 40;
@@ -75,36 +80,37 @@ public class GridMapDrawer {
         }
 
     }
-
+    private void animalPressed(int x,int y){
+        Animal animal = map.getAnimalAt(new Vector2d(x,y));
+        System.out.println(animal);
+    }
     private void drawWorldElements() {
         for (int x = lowerLeft.getX(); x <= upperRight.getX(); x++) {
             for (int y = lowerLeft.getY(); y <= upperRight.getY(); y++) {
                 Vector2d position = new Vector2d(1 - lowerLeft.getX() + x, 1 + upperRight.getY() -  y);
                 Animal animal = map.getAnimalAt(position);
-
                 if (animal != null) {
-                    //System.out.printf(
-                    //        "%s - %s - %d\n",
-                    //        position.toString(),
-                    //        animal.toString(),
-                    //        animal.getEnergy()
-                    //);
+                    System.out.println(position);
+                    System.out.println(animal);
 
-                    // TODO nie wiem, czy energia jest dobrze
-                    ImageView view = ImageLoader.getAnimalView(
-                            animal.getDirection(),
-                            Math.max(0, animal.getEnergy()/settings.get("energyColorStep") - 1)
-                    );
-                    GridPane.setHalignment(view, HPos.CENTER);
-                    mapGrid.add(view, position.getX(), position.getY());
 
+                    Image animalImage = ImageLoader.getAnimalImage(animal.getDirection(), Math.max(0, animal.getEnergy() / settings.get("energyColorStep") - 1));
+                    Canvas canvas = createCanvas(animalImage, position.getX(), position.getY());
+                    canvas.setOnMouseClicked(e -> animalPressed(position.getX(), position.getY()));
+                    mapGrid.add(canvas, position.getX(), position.getY());
                 } else if (map.isGrassAt(position)) {
-                    ImageView view = ImageLoader.getGrassView();
-                    GridPane.setHalignment(view, HPos.CENTER);
-                    mapGrid.add(view, position.getX(), position.getY());
+                    Image grassImage = ImageLoader.getGrassImage();
+                    Canvas canvas = createCanvas(grassImage, position.getX(), position.getY());
+                    mapGrid.add(canvas, position.getX(), position.getY());
                 }
             }
         }
     }
 
+    private Canvas createCanvas(Image image, int x, int y) {
+        Canvas canvas = new Canvas(CELL_WIDTH, CELL_HEIGHT);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.drawImage(image, 0, 0, CELL_WIDTH, CELL_HEIGHT);
+        return canvas;
+    }
 }

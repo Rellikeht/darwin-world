@@ -10,6 +10,7 @@ public class Simulation implements Runnable {
     private final SimulationSettings settings;
     private final SimulationStats stats;
     private final Random random = new Random();
+    private boolean Start = true;
 
     public Simulation(SimulationSettings settings) {
         this.settings = settings;
@@ -62,6 +63,7 @@ public class Simulation implements Runnable {
     public void run() {
         int i=0;
         while (i < 10) {
+            if(Start)
             System.out.println(i);
             frame();
             i++;

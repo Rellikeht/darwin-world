@@ -17,10 +17,13 @@ public class ImageLoader {
     public static ImageView getGrassView() {
         return new ImageView(grassImage);
     }
-
+    public static Image getGrassImage(){return grassImage;}
     private static final Image[][] animalImages = new Image[directions][variants];
     public static ImageView getAnimalView(Direction direction, int variant) {
         return new ImageView(animalImages[direction.getNumber()][Math.min(variant, variants-1)]);
+    }
+    public static Image getAnimalImage(Direction direction, int variant) {
+        return animalImages[direction.getNumber()][Math.min(variant, variants-1)];
     }
 
     static {
