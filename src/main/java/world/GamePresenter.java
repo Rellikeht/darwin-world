@@ -62,7 +62,7 @@ public class GamePresenter implements MapChangeListener {
     private static int CELL_HEIGHT = 40;
     private boolean jungleCells=false;
     private boolean popularAnimal=false;
-
+    private boolean buttonFlag=true;
 
     public void drawMap(String message) {
         //                GridMapDrawer drawer = new GridMapDrawer(mapGrid,controller, simulation);
@@ -91,6 +91,10 @@ public class GamePresenter implements MapChangeListener {
         clearGrid();
         setCellsSizes();
         drawAxis();
+        if(buttonFlag){
+            drawButtons();
+            buttonFlag=false;
+        }
         if(jungleCells){
             drawJungleCels();
         }
@@ -98,7 +102,6 @@ public class GamePresenter implements MapChangeListener {
         if(popularAnimal){
             drawPopularAnimal();
         }
-        drawButtons();
         if(chosenAnimal!=null){
             animalShow(chosenAnimal);
         }
@@ -153,11 +156,13 @@ public class GamePresenter implements MapChangeListener {
         simulation.stop();
         jungleCells=true;
         popularAnimal=true;
+        draw();
     }
     private void startButton(){
         simulation.start();
         jungleCells=false;
         popularAnimal=false;
+        draw();
     }
 
     private void drawJungleCels(){
@@ -185,6 +190,7 @@ public class GamePresenter implements MapChangeListener {
         map.allAnimals().forEach(animal -> {
             if(animal.getGenes().equals(popularGenome)) {
                 Vector2d position = animal.getPosition();
+                canvas.setOnMouseClicked(e -> animalPressed(position));
                 mapGrid.add(canvas, position.getX() + 1, upperRight.getY() - position.getY() + 1);
             }
         });
