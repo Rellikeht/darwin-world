@@ -15,7 +15,7 @@ import world.model.MapChangeListener;
 
 import java.io.IOException;
 
-public class SimulationPresenter extends Application implements MapChangeListener {
+public class SimulationPresenter extends Application {
 
     public VBox textBox;
     public ToolBar mapBar;
@@ -68,15 +68,6 @@ public class SimulationPresenter extends Application implements MapChangeListene
 
     private final SimulationSettings settings = new SimulationSettings();
     private boolean isBasic = false;
-    private GamePresenter presenter;
-
-//    public void drawMap(String message) {
-//        Platform.runLater(() -> {
-//            GridMapDrawer drawer = new GridMapDrawer(mapGrid, simulation);
-//            drawer.draw();
-//            moveInfoLabel.setText(message);
-//        });
-//    };
 
     private void uploadSetting(TextField field, String name) {
         try {
@@ -107,10 +98,6 @@ public class SimulationPresenter extends Application implements MapChangeListene
         uploadSetting(maxMutation, "MaxAmountOfMutations");
     }
 
-    @Override
-    public void mapChanged(AbstractWorldMap worldMap, String message) {
-//        drawMap(message);
-    }
     public void setHellMap(){settings.set("MapBasic", 0);}
     public void setEarthMap(){settings.set("MapBasic", 1);}
     public void setNormalMutation(){settings.set("MutationRandom", 0);}
@@ -135,7 +122,7 @@ public class SimulationPresenter extends Application implements MapChangeListene
         GamePresenter presenter = loader.getController();
         presenter.setSimulation(simulation);
         simulation.addListener(presenter);
-        // meh
+
         Thread thread = new Thread(simulation);
         thread.start();
         gameStage.setOnCloseRequest(e -> {
@@ -146,7 +133,6 @@ public class SimulationPresenter extends Application implements MapChangeListene
                 e1.printStackTrace();
             }
         });
-        //simulation.run();
     }
 
     private void configureStage(Stage primaryStage, BorderPane viewRoot) {
@@ -181,7 +167,6 @@ public class SimulationPresenter extends Application implements MapChangeListene
         loader.setLocation(getClass().getClassLoader().getResource("simulation.fxml"));
         BorderPane viewRoot = loader.load();
         configureStage(primaryStage, viewRoot);
-        //SimulationPresenter presenter = loader.getController();
         primaryStage.setOnCloseRequest(e -> {
             System.out.println("test");
             try {

@@ -5,13 +5,8 @@ import java.util.Map;
 
 public class SimulationSettings {
 
-    private static String inputName(String name) {
-        return name.toLowerCase();
-    }
-    private static String outputName(String name) {
-        return name; // TODO camel case if this will be used
-    }
-
+    // Enum byłby ładniejszy :(
+    private static String inputName(String name) { return name.toLowerCase(); }
     private static final Map<String, Integer> defaultSettings = new HashMap<>();
     private final Map<String, Integer> settings;
     private static void addSetting(String name, int defaultValue) {
@@ -38,11 +33,10 @@ public class SimulationSettings {
         addSetting("isMapBasic", 1);
         addSetting("portalEnergy", 10);
 
-        addSetting("tickTime", 100);
+        addSetting("tickTime", 200);
         addSetting("energyColorStep", 80);
     }
 
-    // TODO błedy ???
     public int get(String name) {
         return settings.get(inputName(name));
     }
@@ -67,7 +61,6 @@ public class SimulationSettings {
             int mapWidth, int mapHeight,
             int initialGrassAmount, int jungleSize
     ) {
-
         this();
         set("mapWidth", mapWidth);
         set("mapHeight", mapHeight);

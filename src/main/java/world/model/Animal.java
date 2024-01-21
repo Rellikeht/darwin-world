@@ -48,25 +48,24 @@ public class Animal implements Comparable<Animal> {
     }
 
     //   * ile posiada dzieci,
-    private int childrenAmount = 0;
+    protected int childrenAmount = 0;
     public int getChildrenAmount() { return childrenAmount; }
 
     //   * ile posiada potomków (niekoniecznie będących bezpośrednio dziećmi),
     private int offspringsAmount = 0;
     public int getOffspringsAmount() { return offspringsAmount; }
+    private boolean wasOffspringAdded = false;
+    private void resetOffspringAddition() {
+        wasOffspringAdded = false;
+        if (parent1 != null) parent1.resetOffspringAddition();
+        if (parent2 != null) parent2.resetOffspringAddition();
+    }
     private void addOffspring() {
-        // TODO to jest źle, wychodzą chore liczby xd
-        this.offspringsAmount += 1;
+        if (wasOffspringAdded) return;
+        offspringsAmount += 1;
+        wasOffspringAdded = true;
         if (parent1 != null) parent1.addOffspring();
-
-        if (parent2 != null) {
-            if (parent1!=null) {
-                if (!parent1.equals(parent2)) {
-                    parent2.addOffspring();
-                }
-            else {parent2.addOffspring();}
-            }
-        }
+        if (parent2 != null) parent2.addOffspring();
     }
 
     //   * ile dni już żyje (jeżeli żyje),
@@ -99,37 +98,41 @@ public class Animal implements Comparable<Animal> {
             parent2.childrenAmount += 1;
             parent2.addOffspring();
         }
+        resetOffspringAddition();
 
         currentGeneNumber = random.nextInt(genes.getLength());
     }
 
-    public Animal(
-            Vector2d position, int energy, Genome genes
-    ) {
+    public Animal(Vector2d position, int energy, Genome genes, int dayOfBirth) {
+        this(position, energy, genes, dayOfBirth, null, null);
+    }
+
+    public Animal(Vector2d position, int energy, Genome genes) {
         this(position, energy, genes, 0, null, null);
     }
 
     void move() {
         Vector2d dirVector = direction.toUnitVector();
-        position=position.add(dirVector);
+        position = position.add(dirVector);
     }
 
     @Override
     public int compareTo(Animal other) {
-        // Porównujemy po parametrze 1
         int result = Integer.compare(other.getEnergy(), getEnergy());
         if (result == 0) {
             result = Integer.compare(getDayOfBirth(), other.getDayOfBirth());
             if (result == 0){
                 result = Integer.compare(other.getChildrenAmount(), getChildrenAmount());
-                if (result==0){
-                    result = random.nextInt(3)-1;
-                }
+                if (result == 0) result = random.nextInt(3)-1;
             }
         }
         return result;
     }
 
     public String toString() { return this.direction.toString(); }
-
+    public String getInfo() {
+        return "[(energy: %d) (birth: %d) (children: %d)]".formatted(
+                energy, dayOfBirth, childrenAmount
+        );
+    }
 }

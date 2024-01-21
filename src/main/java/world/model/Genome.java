@@ -1,6 +1,8 @@
 package world.model;
 
+import java.util.Arrays;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class Genome {
     private final int[] genes;
@@ -34,7 +36,7 @@ public class Genome {
             }
         }
 
-        else{
+        else {
             for (int i = 0; i < proportions; i++) {
                 genes[i] = genome1.getGene(i);
             }
@@ -66,12 +68,9 @@ public class Genome {
         }
     }
     public String toString(){
-        String stringGenome=new String();
-        for(int i=0;i<length;i++){
-            stringGenome+=String.valueOf(getGene(i));
-        }
-
-        return stringGenome;
+        return Arrays.stream(genes)
+                .mapToObj(Integer::toString)
+                .collect(Collectors.joining());
     }
     public int getGene(int i){ return genes[i]; }
     public int getLength() { return genes.length; }
@@ -83,4 +82,6 @@ public class Genome {
                 otherGenome.length == this.length &&
                 otherGenome.genes == this.genes;
     }
+    @Override
+    public int hashCode() { return Arrays.hashCode(genes); }
 }

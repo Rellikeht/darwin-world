@@ -5,6 +5,7 @@ import world.SimulationSettings;
 public class HellMap extends AbstractWorldMap {
     public HellMap(SimulationSettings settings) { super(settings); }
 
+    @Override
     protected void specialAnimalMovement(Animal animal, Vector2d vector){
         if (animal.getPosition().add(vector).getX()>upperRight.getX() ||
             animal.getPosition().add(vector).getX()<lowerLeft.getX()) {

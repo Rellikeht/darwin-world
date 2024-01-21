@@ -65,13 +65,14 @@ public class GamePresenter implements MapChangeListener {
     private boolean buttonFlag=true;
 
     public void drawMap(String message) {
-        //                GridMapDrawer drawer = new GridMapDrawer(mapGrid,controller, simulation);
         Platform.runLater(this::draw);
-        }
-        @Override
+    }
+
+    @Override
     public void mapChanged(AbstractWorldMap worldMap, String message) {
         drawMap(message);
     }
+
     public void setSimulation(Simulation simulation){
         this.simulation = simulation;
         stats = simulation.getStats();
@@ -82,29 +83,25 @@ public class GamePresenter implements MapChangeListener {
         width = upperRight.getX() - lowerLeft.getX() + 1;
         height = upperRight.getY() - lowerLeft.getY() + 1;
     }
+
     private void setCells(){
-        CELL_WIDTH=400/ upperRight.getX();
-        CELL_HEIGHT=400/ upperRight.getX();
+        CELL_WIDTH=400 / upperRight.getX();
+        CELL_HEIGHT=400 / upperRight.getX();
     }
+
     public void draw() {
         setCells();
         clearGrid();
         setCellsSizes();
         drawAxis();
-        if(buttonFlag){
+        if(buttonFlag) {
             drawButtons();
             buttonFlag=false;
         }
-        if(jungleCells){
-            drawJungleCels();
-        }
+        if(jungleCells) drawJungleCels();
         drawWorldElements();
-        if(popularAnimal){
-            drawPopularAnimal();
-        }
-        if(chosenAnimal!=null){
-            animalShow(chosenAnimal);
-        }
+        if(popularAnimal) drawPopularAnimal();
+        if(chosenAnimal!=null) animalShow(chosenAnimal);
         drawStatistics();
     }
 
@@ -179,7 +176,6 @@ public class GamePresenter implements MapChangeListener {
                 mapGrid.add(canvas, position.getX(), upperRight.getY()-position.getY()+3);
             }
         }
-
     }
 
     private void drawPopularAnimal(){
@@ -194,8 +190,6 @@ public class GamePresenter implements MapChangeListener {
                 mapGrid.add(canvas, position.getX() + 1, upperRight.getY() - position.getY() + 1);
             }
         });
-
-//            mapGrid.add(canvas, position.getX()+1, upperRight.getY()-position.getY()+1);
     }
 
     private void drawStatistics(){
@@ -235,11 +229,16 @@ public class GamePresenter implements MapChangeListener {
             for (int y = lowerLeft.getY(); y <= upperRight.getY()+1; y++) {
                 Vector2d position = new Vector2d(1 - lowerLeft.getX() + x, 1 + upperRight.getY() - y);
                 Animal animal = map.getAnimalAt(position);
+
                 if (animal != null) {
-                    Image animalImage = ImageLoader.getAnimalImage(animal.getDirection(), Math.max(0, animal.getEnergy() / settings.get("energyColorStep") - 1));
+                    Image animalImage = ImageLoader.getAnimalImage(
+                            animal.getDirection(),
+                            Math.max(0, animal.getEnergy() / settings.get("energyColorStep") - 1)
+                    );
                     Canvas canvas = createCanvas(animalImage);
                     canvas.setOnMouseClicked(e -> animalPressed(position));
                     mapGrid.add(canvas, position.getX()+1, upperRight.getY()-position.getY()+1);
+
                 } else if (map.isGrassAt(position)) {
                     Image grassImage = ImageLoader.getGrassImage();
                     Canvas canvas = createCanvas(grassImage);
@@ -255,6 +254,7 @@ public class GamePresenter implements MapChangeListener {
         gc.drawImage(image, 0, 0, 40, 40);
         return canvas;
     }
+
     private Canvas createCanvas(Image image) {
         Canvas canvas = new Canvas(CELL_WIDTH, CELL_HEIGHT);
         GraphicsContext gc = canvas.getGraphicsContext2D();

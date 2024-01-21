@@ -2,37 +2,32 @@ package world.model;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.PriorityQueue;
+import java.util.Vector;
 
 class AnimalTest {
 
     @Test
     void compareTo() {
-        Animal animal1 = new Animal(
-                new Vector2d(1,1),
-                Direction.randomDirection(),
-                10,
-                new Genome(7)
-        );
+        Vector2d pos = new Vector2d(1,1);
+        Animal[] animals = new Animal[] {
+                new Animal(pos, 5, new Genome(7)),
+                new Animal(pos, 10, new Genome(7)),
+                new Animal(pos, 10, new Genome(7)),
+                new Animal(pos, 10, new Genome(7)),
+                new Animal(pos, 10, new Genome(7), 2),
+        };
+        animals[1].childrenAmount = 1;
+        animals[2].childrenAmount = 3;
 
-        Animal animal2 = new Animal(
-                new Vector2d(1,1),
-                Direction.randomDirection(),
-                10,
-                new Genome(7)
-        );
+        PriorityQueue<Animal> queue = new PriorityQueue<>(20);
+        queue.addAll(Arrays.asList(animals));
+        while (!queue.isEmpty()) System.out.println(queue.poll().getInfo());
 
-        //PriorityQueue<Animal> queue = new PriorityQueue<>(10,new FittestComparator());
-        PriorityQueue<Animal> queue = new PriorityQueue<>(10);
-        queue.add(animal2);
-        queue.add(animal1);
+        //System.out.println();
+        // To nie leci w kolejności :(
+        //queue.forEach(animal -> System.out.println(animal.getInfo()));
 
-        System.out.println(animal1.getDirection());
-        System.out.println(animal2.getDirection());
-        System.out.println(queue);
-        System.out.println(queue.peek());
-
-        queue.remove(queue.peek());
-        System.out.println(queue.peek());
     }
 }

@@ -5,6 +5,7 @@ import world.SimulationSettings;
 public class EarthMap extends AbstractWorldMap {
     public EarthMap(SimulationSettings settings) { super(settings); }
 
+    @Override
     protected void specialAnimalMovement(Animal animal, Vector2d vector){
         if (animal.getPosition().add(vector).getX()>upperRight.getX()) {
             animal.move();

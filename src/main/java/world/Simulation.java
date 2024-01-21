@@ -93,11 +93,9 @@ public class Simulation implements Runnable {
     }
 
     public void run() {
-        //int i = 0;
         while(stats.getAnimalsAmount()>0) {
             if(running) {
                 frame();
-                //i++;
             }
             else{
                 System.out.println();
@@ -106,7 +104,7 @@ public class Simulation implements Runnable {
         }
     }
 
-    public int getDay(){ return map.getDay(); }
+    public int getDay() { return map.getDay(); }
     public void addListener(MapChangeListener listener) {
         map.addListener(listener);
     }

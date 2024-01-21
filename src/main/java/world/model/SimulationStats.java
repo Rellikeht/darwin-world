@@ -19,19 +19,7 @@ public class SimulationStats {
     //    * liczby wolnych pól,
     public int getFreeSquares() { return map.getFreeSquares(); }
 
-    //    * najpopularniejszych genotypów,
-    //SortedMap<Integer, Genome> getMostPopularGenomes() {
-    //    Map<Genome, Integer> mapGenomes = map.getMostPopularGenomes();
-    //    SortedMap<Integer, Genome> genomes = new TreeMap<>();
-    //    mapGenomes.forEach((genome, count) -> genomes.put(count, genome));
-    //    return genomes;
-    //}
-
     public Genome getMostPopularGenome() {
-        // Concurrent Modification Exception ???
-        //SortedMap<Integer, Genome> genomes = getMostPopularGenomes();
-        //return genomes.get(genomes.firstKey());
-
         AtomicReference<Genome> genome = new AtomicReference<>();
         int count = 0;
         map.getMostPopularGenomes().forEach((curGenome, curCount) -> {
@@ -51,13 +39,13 @@ public class SimulationStats {
     //    * średniej liczby dzieci dla żyjących zwierzaków (wartość uwzględnia wszystkie powstałe zwierzaki, a nie tylko zwierzaki powstałe w danej epoce).
     public int getAvgChildrenAmount() {
         if (map.getAnimalsAmount() == 0) return 0;
-        return map.allAnimals().mapToInt(Animal::getChildrenAmount).sum() / map.getAnimalsAmount();
+        return map.getChildrenAmountSum()/map.getAnimalsAmount();
     }
 
     //    * średniego poziomu energii dla żyjących zwierzaków,
     public int getAvgAnimalEnergy() {
         if (map.getAnimalsAmount() == 0) return 0;
-        return map.allAnimals().mapToInt(Animal::getEnergy).sum()/ map.getAnimalsAmount();
+        return map.allAnimals().mapToInt(Animal::getEnergy).sum()/map.getAnimalsAmount();
     }
 
 }
