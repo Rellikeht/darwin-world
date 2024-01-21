@@ -1,8 +1,6 @@
 package world.model;
 
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class SimulationStats {
     private final AbstractWorldMap map;
@@ -22,16 +20,24 @@ public class SimulationStats {
     public int getFreeSquares() { return map.getFreeSquares(); }
 
     //    * najpopularniejszych genotypów,
-    public SortedMap<Integer, Genome> getMostPopularGenomes() {
-        Map<Genome, Integer> mapGenomes = map.getMostPopularGenomes();
-        SortedMap<Integer, Genome> genomes = new TreeMap<>();
-        mapGenomes.forEach((genome, count) -> genomes.put(count, genome));
-        return genomes;
-    }
-    // TODO Concurrent Modification Exception
+    //SortedMap<Integer, Genome> getMostPopularGenomes() {
+    //    Map<Genome, Integer> mapGenomes = map.getMostPopularGenomes();
+    //    SortedMap<Integer, Genome> genomes = new TreeMap<>();
+    //    mapGenomes.forEach((genome, count) -> genomes.put(count, genome));
+    //    return genomes;
+    //}
+
     public Genome getMostPopularGenome() {
-        SortedMap<Integer, Genome> genomes = getMostPopularGenomes();
-        return genomes.get(genomes.firstKey());
+        // Concurrent Modification Exception ???
+        //SortedMap<Integer, Genome> genomes = getMostPopularGenomes();
+        //return genomes.get(genomes.firstKey());
+
+        AtomicReference<Genome> genome = new AtomicReference<>();
+        int count = 0;
+        map.getMostPopularGenomes().forEach((curGenome, curCount) -> {
+            if (curCount >= count) genome.set(curGenome);
+        });
+        return genome.get();
     }
 
     //    * średniej długości życia zwierzaków dla martwych zwierzaków (wartość uwzględnia wszystkie nieżyjące zwierzaki - od początku symulacji),

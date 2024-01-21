@@ -37,19 +37,18 @@ public class RandomPositionGenerator implements Iterator<Vector2d> {
     public boolean hasNext() {
         return positions.size() > without.size();
     }
+    public boolean hasNext(int N) {
+        return positions.size() - without.size() >= N;
+    }
 
     @Override
     public Vector2d next() {
         int i = random.nextInt(positions.size());
         Vector2d val = positions.get(i);
-
-        while (true) {
-            if (without.contains(val)) {
-                i = (i+1)%positions.size();
-                val = positions.get(i);
-            } else { break; }
+        while (without.contains(val)) {
+            i = (i+1)%positions.size();
+            val = positions.get(i);
         }
-
         without.add(val);
         return val;
     }

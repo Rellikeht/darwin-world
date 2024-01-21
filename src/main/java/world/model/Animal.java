@@ -55,6 +55,7 @@ public class Animal implements Comparable<Animal> {
     private int offspringsAmount = 0;
     public int getOffspringsAmount() { return offspringsAmount; }
     private void addOffspring() {
+        // TODO to jest źle, wychodzą chore liczby xd
         this.offspringsAmount += 1;
         if (parent1 != null) parent1.addOffspring();
 

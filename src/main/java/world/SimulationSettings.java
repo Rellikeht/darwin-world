@@ -38,8 +38,8 @@ public class SimulationSettings {
         addSetting("isMapBasic", 1);
         addSetting("portalEnergy", 10);
 
-        addSetting("tickTime", 300);
-        addSetting("energyColorStep", 50);
+        addSetting("tickTime", 100);
+        addSetting("energyColorStep", 80);
     }
 
     // TODO błedy ???

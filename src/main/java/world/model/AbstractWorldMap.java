@@ -91,31 +91,30 @@ public abstract class AbstractWorldMap {
     protected void grassPlace(int N) {
         // It's definitely a kind of magic
         List<RandomPositionGenerator> generators = new ArrayList<>(10);
-        if (underEquator.hasNext()) {
-            generators.add(underEquator);
-        }
-        if (overEquator.hasNext()) {
-            generators.add(overEquator);
-        }
-        if (equator.hasNext()) {
-            for (int i = 0; i < 8; i++) {
-                generators.add(equator);
-            }
+
+        // Heurystyka, co poradzić
+        if (underEquator.hasNext(N/2)) { generators.add(underEquator); }
+        if (overEquator.hasNext(N/2)) { generators.add(overEquator); }
+        if (equator.hasNext(N/2)) {
+            for (int i = 0; i < 8; i++) { generators.add(equator); }
         }
 
-        if (generators.isEmpty()) {
-            return;
-        }
-        for (int i = 0; i < N; i++) {
+        //if (underEquator.hasNext()) { generators.add(underEquator); }
+        //if (overEquator.hasNext()) { generators.add(overEquator); }
+        //if (equator.hasNext()) {
+        //    for (int i = 0; i < 8; i++) { generators.add(equator); }
+        //}
+
+        if (generators.isEmpty()) { return; }
+        for (int i = N; i > 0; i--) {
             int grassProbability = random.nextInt(generators.size());
             RandomPositionGenerator generator = generators.get(grassProbability);
 
             // TODO Tu trzeba przysiąść i to lepiej zrobić, ale to jak będzie za dużo czasu
-            if (generator.hasNext()) {
+            if (generator.hasNext(N/3)) {
                 Vector2d grassPosition = generator.next();
                 grass.add(grassPosition);
-                ;
-            }
+            } else { generators.removeIf(g -> g == generator); }
         }
 
         mapChanged("We have some new grass");
@@ -215,16 +214,23 @@ public abstract class AbstractWorldMap {
     }
 
     protected Queue<Animal> getFittestAt(Vector2d position) {
-        List<Animal> animals = this.animals.get(position);
+        return getFittest(animals.get(position));
+    }
+
+    protected Queue<Animal> getFittest(List<Animal> animals) {
         PriorityQueue<Animal> queue = new PriorityQueue<>(animals.size());
         queue.addAll(animals);
         return queue;
     }
 
     public void doEating() {
-        for (Vector2d position : animals.keySet()) {
-            if (!animals.get(position).isEmpty()) {
-                Queue<Animal> fittest = getFittestAt(position);
+        //for (Vector2d position : animals.keySet()) {
+        //    if (!animals.get(position).isEmpty()) {
+        //        Queue<Animal> fittest = getFittestAt(position);
+
+        animals.forEach((position, list) -> {
+            if (!list.isEmpty()) {
+                Queue<Animal> fittest = getFittest(list);
                 Animal animal = fittest.peek();
                 if (grass.contains(position)) {
                     animal.eatGrass(settings.get("GrassEnergy"));
@@ -236,29 +242,37 @@ public abstract class AbstractWorldMap {
                 equator.free(position);
                 overEquator.free(position);
             }
-        }
+        //}
+        });
 
         mapChanged("Eating done");
     }
 
     public void doReproduction() {
-        for (Vector2d position : animals.keySet()) {
-            if (animals.get(position).size() > 1) {
-                Queue<Animal> fittest = getFittestAt(position);
+        animals.forEach((position, list) -> {
+            if (list.size() == 2) {
+                Animal a1 = list.get(0);
+                Animal a2 = list.get(1);
+                if (a1.getEnergy() >= settings.get("EnergyNeededForProcreation") &&
+                        a2.getEnergy() >= settings.get("EnergyNeededForProcreation")) {
+                    if (a1.getEnergy() > a2.getEnergy()) place(reproducing(a1, a2));
+                    else place(reproducing(a2, a1));
+                }
+            } else if (list.size() > 2) {
+                Queue<Animal> fittest = getFittest(list);
                 Animal a1 = fittest.peek();
                 Animal a2 = fittest.peek();
                 if (a1.getEnergy() >= settings.get("EnergyNeededForProcreation") &&
-                    a2.getEnergy() >= settings.get("EnergyNeededForProcreation")) {
+                        a2.getEnergy() >= settings.get("EnergyNeededForProcreation")) {
                     place(reproducing(a1, a2));
                 }
             }
-        }
+        });
 
         mapChanged("Reproduction done");
     }
 
     protected Animal reproducing(Animal animal1, Animal animal2) {
-
         Vector2d position = animal1.getPosition();
         Genome genome = new Genome(
                 animal1.getGenes(), animal2.getGenes(),

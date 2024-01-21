@@ -12,6 +12,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import world.model.*;
 
+import java.util.Objects;
+
 public class GamePresenter implements MapChangeListener {
 
     @FXML
@@ -208,9 +210,15 @@ public class GamePresenter implements MapChangeListener {
         grassEaten.setText(String.valueOf(animal.getGrassEaten()));
         animalChildren.setText(String.valueOf(animal.getChildrenAmount()));
         animalAscendants.setText(String.valueOf(animal.getOffspringsAmount()));
-        animalLife.setText(String.valueOf(simulation.getDay()-animal.getDayOfBirth()));
+        animalLife.setText(String.valueOf(
+                Objects.requireNonNullElse(
+                        animal.getDayOfDeath(),
+                        simulation.getDay()
+                )-animal.getDayOfBirth())
+        );
         animalDeath.setText(String.valueOf(animal.getDayOfDeath()));
     }
+
     private void animalPressed(Vector2d position){
         Animal chosenAnimal = map.getAnimalAt(position);
         animalShow(chosenAnimal);

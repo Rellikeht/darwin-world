@@ -8,11 +8,40 @@ import java.util.Random;
 
 public class Simulation implements Runnable {
 
+    private static final String CSV_FILE = "Statistics.csv";
     private final AbstractWorldMap map;
     private final SimulationSettings settings;
     private final SimulationStats stats;
     private boolean running = true;
-    private int day = 0;
+
+    private void writeToCSV(String filePath, String content) {
+        try (FileWriter writer = new FileWriter(filePath)) {
+            writer.write(content);
+        } catch (IOException e) {
+            System.err.println("Error saving statistics to CSV: " + e.getMessage());
+        }
+    }
+    private void writeToCSV(String content) { writeToCSV(CSV_FILE, content); }
+
+    private void appendToCSV(String filePath, String content) {
+        try (FileWriter writer = new FileWriter(filePath, true)) {
+            writer.write(content);
+        } catch (IOException e) {
+            System.err.println("Error saving statistics to CSV: " + e.getMessage());
+        }
+    }
+    private void appendToCSV(String content) { appendToCSV(CSV_FILE, content); }
+
+    private void saveStatisticsToCSV() {
+        appendToCSV(String.format("%s,%s,%s,%s,%s,%s,%s\n",
+                stats.getAnimalsAmount(),
+                stats.getGrassAmount(),
+                stats.getFreeSquares(),
+                stats.getMostPopularGenome(),
+                stats.getAvgAnimalEnergy(),
+                stats.getAvgLifespan(),
+                stats.getAvgChildrenAmount()));
+    }
 
     public Simulation(SimulationSettings settings) {
         this.settings = settings;
@@ -39,6 +68,7 @@ public class Simulation implements Runnable {
         }
 
         stats = new SimulationStats(map);
+        writeToCSV("AnimalsNumber,PlantsNumber,FreeZones,PopularGenome,AvgEnergy,AvgLife,AvgChildren\n");
     }
 
     public Simulation() { this(new SimulationSettings()); }
@@ -54,12 +84,12 @@ public class Simulation implements Runnable {
         map.moveAnimals();
         wait(settings.get("TickTime"));
         map.doEating();
-        //wait(settings.get("TickTime"));
+        wait(settings.get("TickTime"));
         map.doReproduction();
-        //wait(settings.get("TickTime"));
+        wait(settings.get("TickTime"));
         map.grassPlace();
         wait(settings.get("TickTime"));
-        saveStatisticsToCSV("Statistics.csv");
+        saveStatisticsToCSV();
     }
 
     public void run() {
@@ -86,21 +116,5 @@ public class Simulation implements Runnable {
     public SimulationStats getStats() { return stats; }
     public AbstractWorldMap getMap() { return map; }
     public SimulationSettings getSettings() { return settings; }
-
-    public void saveStatisticsToCSV(String filePath) {
-        try (FileWriter writer = new FileWriter(filePath)) {
-            writer.write("AnimalsNumber,PlantsNumber,FreeZones,PopularGenome,AvgEnergy,AvgLife,AvgChildren\n");
-            writer.write(String.format("%s,%s,%s,%s,%s,%s,%s\n",
-                    stats.getAnimalsAmount(),
-                    stats.getGrassAmount(),
-                    stats.getFreeSquares(),
-                    stats.getMostPopularGenome(),
-                    stats.getAvgAnimalEnergy(),
-                    stats.getAvgLifespan(),
-                    stats.getAvgChildrenAmount()));
-        } catch (IOException e) {
-            System.err.println("Error saving statistics to CSV: " + e.getMessage());
-        }
-    }
 
 }
