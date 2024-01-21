@@ -134,23 +134,23 @@ public class SimulationPresenter extends Application implements MapChangeListene
         BorderPane viewRoot = loader.load();
         configureStage(gameStage, viewRoot);
         gameStage.show();
-        gameStage.setOnCloseRequest(new EventHandler<WindowEvent>()
-        {
-            public void handle(WindowEvent e){
-                System.out.println("test");
-                try {
-                    stop();
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });
         GamePresenter presenter = loader.getController();
         presenter.setSimulation(simulation);
         simulation.addListener(presenter);
         // meh
         Thread thread = new Thread(simulation);
         thread.start();
+        gameStage.setOnCloseRequest(new EventHandler<WindowEvent>()
+        {
+            public void handle(WindowEvent e){
+                System.out.println("test");
+                try {
+                    thread.stop();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
         //simulation.run();
     }
 
