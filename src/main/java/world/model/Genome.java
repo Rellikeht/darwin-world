@@ -24,7 +24,7 @@ public class Genome {
             int isMutationRandom
     ) {
         this(genome1.getLength());
-        int proportions = length * (energy2 / energy1);
+        int proportions = length * (energy2 / (energy1+energy2));
         int mutateNumber = random.nextInt(maxAmountOfMutations-minAmountOfMutations)+minAmountOfMutations;
 
         if(random.nextInt(2) == 0) {
