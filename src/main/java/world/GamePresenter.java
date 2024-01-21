@@ -61,6 +61,8 @@ public class GamePresenter implements MapChangeListener {
     private Animal chosenAnimal;
     private static int CELL_WIDTH = 40;
     private static int CELL_HEIGHT = 40;
+    private boolean jungleCells=false;
+    private boolean popularAnimal=false;
 
 
     public void drawMap(String message) {
@@ -90,7 +92,13 @@ public class GamePresenter implements MapChangeListener {
         clearGrid();
         setCellsSizes();
         drawAxis();
+        if(jungleCells){
+            drawJungleCels();
+        }
         drawWorldElements();
+        if(popularAnimal){
+            drawPopularAnimal();
+        }
         drawButtons();
         if(chosenAnimal!=null){
             animalShow(chosenAnimal);
@@ -144,49 +152,47 @@ public class GamePresenter implements MapChangeListener {
 
     private void stopButton(){
         simulation.stop();
-        jungleCels(true);
-        popularAnimal(true);
+        jungleCells=true;
+        popularAnimal=true;
     }
     private void startButton(){
         simulation.start();
-        jungleCels(false);
-        popularAnimal(false);
+        jungleCells=false;
+        popularAnimal=false;
     }
 
-    private void jungleCels(boolean flag){
-        if(flag){
-            Vector2d lowerLeft=map.getLowerLeft();
-            Vector2d upperRight=map.getUpperRight();
-            int jungleStart = (upperRight.getY() - lowerLeft.getY() - settings.get("JungleSize")) / 2;
-            int jungleEnd = jungleStart + settings.get("JungleSize");
-            for(int y=jungleStart;y<jungleEnd+1;y++){
-                for(int x=lowerLeft.getX();x<upperRight.getX()+1;x++){
-                    Vector2d position = new Vector2d(1 - lowerLeft.getX() + x, 1 + upperRight.getY() - y);
-                    Image animalImage = ImageLoader.getAnimalImage();
-                    Canvas canvas = createCanvas(animalImage);
-                    canvas.setOnMouseClicked(e -> animalPressed(position.getX(), position.getY()));
-                    mapGrid.add(canvas, position.getX(), upperRight.getY()-position.getY()+3);
+    private void drawJungleCels(){
+        Vector2d lowerLeft=map.getLowerLeft();
+        Vector2d upperRight=map.getUpperRight();
+        int jungleStart = (upperRight.getY() - lowerLeft.getY() - settings.get("JungleSize")) / 2;
+        int jungleEnd = jungleStart + settings.get("JungleSize");
+        for(int y=jungleStart;y<jungleEnd+1;y++){
+            for(int x=lowerLeft.getX();x<upperRight.getX()+1;x++){
+                Vector2d position = new Vector2d(1 - lowerLeft.getX() + x, 1 + upperRight.getY() - y);
+                Image animalImage = ImageLoader.getAnimalImage();
+                Canvas canvas = createCanvas(animalImage);
+                canvas.setOnMouseClicked(e -> animalPressed(position.getX(), position.getY()));
+                mapGrid.add(canvas, position.getX(), upperRight.getY()-position.getY()+3);
+            }
+        }
+
+    }
+
+    private void drawPopularAnimal(){
+        Image popularImage = ImageLoader.getPopularImage();
+        Canvas canvas = createCanvas(popularImage);
+        Genome popularGenome = stats.getMostPopularGenome();
+        Map<Vector2d,List<Animal>> animals=map.getAnimals();
+        for(List<Animal> animalList:animals.values()){
+            for(Animal popAnimal:animalList){
+                if(popAnimal.getGenes().equals(popularGenome)){
+                    Vector2d position=popAnimal.getPosition();
+                    mapGrid.add(canvas, position.getX()+1, upperRight.getY()-position.getY()+1);
                 }
             }
         }
-    }
-
-    private void popularAnimal(boolean flag){
-        if(flag){
-            Image popularImage = ImageLoader.getPopularImage();
-            Canvas canvas = createCanvas(popularImage);
-            Genome popularGenome = stats.getMostPopularGenome();
-            Map<Vector2d,List<Animal>> animals=map.getAnimals();
-            for(List<Animal> animalList:animals.values()){
-                for(Animal popAnimal:animalList){
-                    if(popAnimal.getGenes().equals(popularGenome)){
-                        Vector2d position=popAnimal.getPosition();
-                        mapGrid.add(canvas, position.getX()+1, upperRight.getY()-position.getY()+1);
-                    }
-                }
-            }
 //            mapGrid.add(canvas, position.getX()+1, upperRight.getY()-position.getY()+1);
-        }
+
     }
 
     private void drawStatistics(){

@@ -38,7 +38,7 @@ public class SimulationSettings {
         addSetting("isMapBasic", 1); // 1
         addSetting("portalEnergy", 10); // 10
 
-        addSetting("tickTime", 4000); // 300
+        addSetting("tickTime", 400); // 300
         addSetting("energyColorStep", 50);
     }
 

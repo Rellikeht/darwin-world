@@ -2,6 +2,7 @@ package world;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,6 +11,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import world.model.AbstractWorldMap;
 import world.model.MapChangeListener;
 
@@ -20,6 +22,7 @@ public class SimulationPresenter extends Application implements MapChangeListene
     public VBox textBox;
     public ToolBar mapBar;
     public ToolBar mutationBar;
+    public VBox saveBox;
     @FXML
     private Button Basic;
     @FXML
@@ -114,6 +117,7 @@ public class SimulationPresenter extends Application implements MapChangeListene
     public void setEarthMap(){settings.set("MapBasic", 1);}
     public void setNormalMutation(){settings.set("MutationRandom", 0);}
     public void setSpecialMutation(){settings.set("MutationRandom", 1);}
+
     public void onSimulationStartClicked(ActionEvent actionEvent) throws IOException {
         Simulation simulation;
 
@@ -130,6 +134,17 @@ public class SimulationPresenter extends Application implements MapChangeListene
         BorderPane viewRoot = loader.load();
         configureStage(gameStage, viewRoot);
         gameStage.show();
+        gameStage.setOnCloseRequest(new EventHandler<WindowEvent>()
+        {
+            public void handle(WindowEvent e){
+                System.out.println("test");
+                try {
+                    stop();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
         GamePresenter presenter = loader.getController();
         presenter.setSimulation(simulation);
         simulation.addListener(presenter);
@@ -152,6 +167,7 @@ public class SimulationPresenter extends Application implements MapChangeListene
         mapBar.setVisible(true);
         startButton.setDisable(false);
         textBox.setVisible(true);
+        saveBox.setVisible(true);
         isBasic = false;
     }
 
@@ -160,6 +176,7 @@ public class SimulationPresenter extends Application implements MapChangeListene
         mapBar.setVisible(false);
         startButton.setDisable(false);
         textBox.setVisible(false);
+        saveBox.setVisible(false);
         isBasic = true;
     }
 
@@ -170,6 +187,18 @@ public class SimulationPresenter extends Application implements MapChangeListene
         BorderPane viewRoot = loader.load();
         configureStage(primaryStage, viewRoot);
         //SimulationPresenter presenter = loader.getController();
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>()
+        {
+            public void handle(WindowEvent e){
+                System.out.println("test");
+                try {
+                    System.exit(0);
+                }
+                catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
         primaryStage.show();
 
     }

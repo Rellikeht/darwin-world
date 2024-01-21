@@ -93,10 +93,12 @@
                      </VBox>
                   </children>
                </VBox>
-               <VBox prefHeight="250.0" prefWidth="313.0">
+               <VBox fx:id="saveBox" prefHeight="250.0" prefWidth="313.0" visible="false">
                   <children>
-                     <TextField id="ModeNamer" prefHeight="26.0" prefWidth="170.0" promptText="Name Your Custom Settings" />
-                     <ToolBar prefHeight="40.0" prefWidth="200.0">
+                     <Label prefHeight="18.0" prefWidth="324.0" text="Zapisywanie zostanie dodane w kolejnym patchu" />
+                     <Label prefHeight="18.0" prefWidth="303.0" text="Dziękujemy za Cierpliwość" />
+                     <TextField id="ModeNamer" disable="true" prefHeight="26.0" prefWidth="170.0" promptText="Name Your Custom Settings" />
+                     <ToolBar disable="true" prefHeight="40.0" prefWidth="200.0">
                         <items>
                            <ChoiceBox id="ModeList" prefHeight="26.0" prefWidth="201.0" />
                            <Button id="SaveButton" mnemonicParsing="false" text="Save" />
