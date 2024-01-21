@@ -11,9 +11,8 @@ public class Simulation implements Runnable {
     private final AbstractWorldMap map;
     private final SimulationSettings settings;
     private final SimulationStats stats;
-    private final Random random = new Random();
-    private boolean running=true;
-    private int day=0;
+    private boolean running = true;
+    private int day = 0;
 
     public Simulation(SimulationSettings settings) {
         this.settings = settings;
@@ -27,14 +26,13 @@ public class Simulation implements Runnable {
         for (int i = 0; i < settings.get("InitialAnimalAmount"); i++) {
             Genome genome = new Genome(settings.get("GenomeLength"));
 
+            Random random = new Random();
             Animal animal = new Animal(
                     new Vector2d(
                             random.nextInt(maxPos.getX()+1),
                             random.nextInt(maxPos.getY()+1)
                     ),
-                    Direction.randomDirection(),
-                    settings.get("InitialAnimalEnergy"),
-                    genome
+                    settings.get("InitialAnimalEnergy"), genome
             );
 
             map.place(animal);
@@ -48,15 +46,10 @@ public class Simulation implements Runnable {
         try { Thread.sleep(milliseconds); }
         catch (InterruptedException e) { throw new RuntimeException(e); }
     }
-    public void stop(){
-        running=false;
-    }
-    public void start(){
-        running=true;
-    }
+    public void stop(){running = false;}
+    public void start(){running = true;}
 
     private void frame() {
-
         map.nextDay();
         map.moveAnimals();
         wait(settings.get("TickTime"));
@@ -70,20 +63,20 @@ public class Simulation implements Runnable {
     }
 
     public void run() {
-        int i=0;
+        //int i = 0;
         while(stats.getAnimalsAmount()>0) {
             if(running) {
                 frame();
-                i++;
-                day++;
+                //i++;
             }
             else{
                 System.out.println();
+                wait(settings.get("TickTime"));
             }
         }
     }
 
-    public int getDay(){return day;}
+    public int getDay(){ return map.getDay(); }
     public void addListener(MapChangeListener listener) {
         map.addListener(listener);
     }

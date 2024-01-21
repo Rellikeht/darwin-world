@@ -2,7 +2,6 @@ package world;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -11,7 +10,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import world.model.AbstractWorldMap;
 import world.model.MapChangeListener;
 
@@ -140,15 +138,12 @@ public class SimulationPresenter extends Application implements MapChangeListene
         // meh
         Thread thread = new Thread(simulation);
         thread.start();
-        gameStage.setOnCloseRequest(new EventHandler<WindowEvent>()
-        {
-            public void handle(WindowEvent e){
-                System.out.println("test");
-                try {
-                    thread.stop();
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
+        gameStage.setOnCloseRequest(e -> {
+            System.out.println("test");
+            try {
+                thread.interrupt();
+            } catch (Exception e1) {
+                e1.printStackTrace();
             }
         });
         //simulation.run();
@@ -187,16 +182,13 @@ public class SimulationPresenter extends Application implements MapChangeListene
         BorderPane viewRoot = loader.load();
         configureStage(primaryStage, viewRoot);
         //SimulationPresenter presenter = loader.getController();
-        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>()
-        {
-            public void handle(WindowEvent e){
-                System.out.println("test");
-                try {
-                    System.exit(0);
-                }
-                catch (Exception e1) {
-                    e1.printStackTrace();
-                }
+        primaryStage.setOnCloseRequest(e -> {
+            System.out.println("test");
+            try {
+                System.exit(0);
+            }
+            catch (Exception e1) {
+                e1.printStackTrace();
             }
         });
         primaryStage.show();

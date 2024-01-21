@@ -28,18 +28,30 @@ public class SimulationStats {
         mapGenomes.forEach((genome, count) -> genomes.put(count, genome));
         return genomes;
     }
+    // TODO Concurrent Modification Exception
     public Genome getMostPopularGenome() {
         SortedMap<Integer, Genome> genomes = getMostPopularGenomes();
         return genomes.get(genomes.firstKey());
     }
 
-    //    * średniego poziomu energii dla żyjących zwierzaków,
-    public int getAvgAnimalEnergy() { return map.getAvgAnimalEnergy(); }
-
     //    * średniej długości życia zwierzaków dla martwych zwierzaków (wartość uwzględnia wszystkie nieżyjące zwierzaki - od początku symulacji),
-    public int getAvgLifespan() { return map.getAvgLifespan(); }
+    public int getAvgLifespan() {
+        if (map.getDeadAnimalsAmount() > 0) {
+            return map.getDeadAnimalsLifespanSum() / map.getDeadAnimalsAmount();
+        }
+        return 0;
+    }
 
     //    * średniej liczby dzieci dla żyjących zwierzaków (wartość uwzględnia wszystkie powstałe zwierzaki, a nie tylko zwierzaki powstałe w danej epoce).
-    public int getAvgChildrenAmount() { return map.getAvgChildrenAmount(); }
+    public int getAvgChildrenAmount() {
+        if (map.getAnimalsAmount() == 0) return 0;
+        return map.allAnimals().mapToInt(Animal::getChildrenAmount).sum() / map.getAnimalsAmount();
+    }
+
+    //    * średniego poziomu energii dla żyjących zwierzaków,
+    public int getAvgAnimalEnergy() {
+        if (map.getAnimalsAmount() == 0) return 0;
+        return map.allAnimals().mapToInt(Animal::getEnergy).sum()/ map.getAnimalsAmount();
+    }
 
 }

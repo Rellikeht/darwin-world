@@ -4,12 +4,15 @@ import world.SimulationSettings;
 import world.util.MapVisualizer;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Stream;
 
 public abstract class AbstractWorldMap {
 
     // Elementy
     protected final Set<Vector2d> grass;
-    protected final Map<Vector2d, List<Animal>> animals;
+    protected final ConcurrentMap<Vector2d, List<Animal>> animals;
     protected final Vector2d upperRight, lowerLeft;
     protected final int jungleStart;
     protected final int jungleEnd;
@@ -40,7 +43,7 @@ public abstract class AbstractWorldMap {
         this.settings = settings;
 
         grass = new HashSet<>(settings.get("InitialGrassAmount"));
-        animals = new HashMap<>(settings.get("InitialAnimalAmount"));
+        animals = new ConcurrentHashMap<>(settings.get("InitialAnimalAmount"));
         listeners = new LinkedHashSet<>();
         lowerLeft = new Vector2d(0, 0);
         upperRight = new Vector2d(settings.get("MapWidth") - 1, settings.get("MapHeight") - 1);
@@ -67,7 +70,7 @@ public abstract class AbstractWorldMap {
     }
 
     public void nextDay() {
-        for (Animal animal : allAnimals()) {
+        allAnimals().toList().forEach(animal -> {
             if (animal.getEnergy() <= 0) {
                 animals.get(animal.getPosition()).remove(animal);
                 animal.die(day);
@@ -81,7 +84,7 @@ public abstract class AbstractWorldMap {
                 mostPopularGenomes.put(genome, count - 1);
                 //animalEnergySum -= animal.getEnergy();
             }
-        }
+        });
         day += 1;
     }
 
@@ -133,11 +136,9 @@ public abstract class AbstractWorldMap {
         //animalEnergySum += animal.getEnergy();
     }
 
-    protected Collection<Animal> allAnimals() {
+    public Stream<Animal> allAnimals() {
         // Przyjemne, trzeba przyznać
-        return animals.values().stream()
-                .flatMap(List::stream)
-                .toList();
+        return animals.values().stream().flatMap(List::stream);
     }
 
     public String toString() {
@@ -189,7 +190,7 @@ public abstract class AbstractWorldMap {
     }
 
     public void moveAnimals() {
-        for (Animal animal : allAnimals()) {
+        allAnimals().toList().forEach(animal -> {
             animal.activateGene();
             Direction direction = animal.getDirection();
             Vector2d dirVector = direction.toUnitVector();
@@ -204,7 +205,7 @@ public abstract class AbstractWorldMap {
             animalsAtAfter.add(animal);
             animals.put(beforePosition, animalsAtBefore);
             animals.put(afterPosition, animalsAtAfter);
-        }
+        });
 
         mapChanged("Animals moved");
     }
@@ -247,7 +248,7 @@ public abstract class AbstractWorldMap {
                 Animal a1 = fittest.peek();
                 Animal a2 = fittest.peek();
                 if (a1.getEnergy() >= settings.get("EnergyNeededForProcreation") &&
-                        a2.getEnergy() >= settings.get("EnergyNeededForProcreation")) {
+                    a2.getEnergy() >= settings.get("EnergyNeededForProcreation")) {
                     place(reproducing(a1, a2));
                 }
             }
@@ -269,8 +270,7 @@ public abstract class AbstractWorldMap {
         animal1.loseEnergy(settings.get("EnergyTakenByProcreation"));
         animal2.loseEnergy(settings.get("EnergyTakenByProcreation"));
         return new Animal(
-                position, Direction.randomDirection(),
-                2 * settings.get("EnergyTakenByProcreation"),
+                position, 2 * settings.get("EnergyTakenByProcreation"),
                 genome, day, animal1, animal2
         );
     }
@@ -284,44 +284,14 @@ public abstract class AbstractWorldMap {
         return size - (occupied.size());
     }
 
-    public int getId() {
-        return this.id;
-    }
+    public int getId() { return this.id; }
+    public int getDay() { return day; }
+    public Vector2d getLowerLeft() {return lowerLeft;}
+    public Vector2d getUpperRight() {return upperRight;}
 
-    public Vector2d getLowerLeft() {
-        return lowerLeft;
-    }
-
-    public Vector2d getUpperRight() {
-        return upperRight;
-    }
-
-    int getAvgLifespan() {
-        return (deadAnimalsAmount > 0) ? deadAnimalsLifespanSum / deadAnimalsAmount : deadAnimalsLifespanSum;
-    }
+    int getDeadAnimalsAmount() { return deadAnimalsAmount; }
+    int getDeadAnimalsLifespanSum() { return deadAnimalsLifespanSum; }
     int getAnimalsAmount() { return animalsAmount; }
-
-    public Map<Vector2d,List<Animal>> getAnimals(){
-        return animals;
-    }
-    Map<Genome, Integer> getMostPopularGenomes() {
-        return mostPopularGenomes;
-    }
-
-    int getAvgChildrenAmount() {
-        int childrenAmount = 0;
-        for (Animal animal : allAnimals()) {
-            childrenAmount += animal.getChildrenAmount();
-        }
-        return animalsAmount > 0 ? childrenAmount / animalsAmount : 0;
-    }
-
-    int getAvgAnimalEnergy() {
-        int animalEnergySum = 0;
-        for (Animal animal : allAnimals()) {
-            animalEnergySum += animal.getEnergy();
-        }
-        return animalsAmount > 0 ? animalEnergySum / animalsAmount : 0;
-    }
+    Map<Genome, Integer> getMostPopularGenomes() { return mostPopularGenomes; }
 
 }

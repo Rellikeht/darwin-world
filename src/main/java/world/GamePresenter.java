@@ -12,9 +12,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import world.model.*;
 
-import java.util.List;
-import java.util.Map;
-
 public class GamePresenter implements MapChangeListener {
 
     @FXML
@@ -171,7 +168,7 @@ public class GamePresenter implements MapChangeListener {
                 Vector2d position = new Vector2d(1 - lowerLeft.getX() + x, 1 + upperRight.getY() - y);
                 Image animalImage = ImageLoader.getAnimalImage();
                 Canvas canvas = createCanvas(animalImage);
-                canvas.setOnMouseClicked(e -> animalPressed(position.getX(), position.getY()));
+                canvas.setOnMouseClicked(e -> animalPressed(position));
                 mapGrid.add(canvas, position.getX(), upperRight.getY()-position.getY()+3);
             }
         }
@@ -182,17 +179,15 @@ public class GamePresenter implements MapChangeListener {
         Image popularImage = ImageLoader.getPopularImage();
         Canvas canvas = createCanvas(popularImage);
         Genome popularGenome = stats.getMostPopularGenome();
-        Map<Vector2d,List<Animal>> animals=map.getAnimals();
-        for(List<Animal> animalList:animals.values()){
-            for(Animal popAnimal:animalList){
-                if(popAnimal.getGenes().equals(popularGenome)){
-                    Vector2d position=popAnimal.getPosition();
-                    mapGrid.add(canvas, position.getX()+1, upperRight.getY()-position.getY()+1);
-                }
-            }
-        }
-//            mapGrid.add(canvas, position.getX()+1, upperRight.getY()-position.getY()+1);
 
+        map.allAnimals().forEach(animal -> {
+            if(animal.getGenes().equals(popularGenome)) {
+                Vector2d position = animal.getPosition();
+                mapGrid.add(canvas, position.getX() + 1, upperRight.getY() - position.getY() + 1);
+            }
+        });
+
+//            mapGrid.add(canvas, position.getX()+1, upperRight.getY()-position.getY()+1);
     }
 
     private void drawStatistics(){
@@ -216,8 +211,8 @@ public class GamePresenter implements MapChangeListener {
         animalLife.setText(String.valueOf(simulation.getDay()-animal.getDayOfBirth()));
         animalDeath.setText(String.valueOf(animal.getDayOfDeath()));
     }
-    private void animalPressed(int x, int y){
-        Animal chosenAnimal = map.getAnimalAt(new Vector2d(x,y));
+    private void animalPressed(Vector2d position){
+        Animal chosenAnimal = map.getAnimalAt(position);
         animalShow(chosenAnimal);
     }
 
@@ -229,7 +224,7 @@ public class GamePresenter implements MapChangeListener {
                 if (animal != null) {
                     Image animalImage = ImageLoader.getAnimalImage(animal.getDirection(), Math.max(0, animal.getEnergy() / settings.get("energyColorStep") - 1));
                     Canvas canvas = createCanvas(animalImage);
-                    canvas.setOnMouseClicked(e -> animalPressed(position.getX(), position.getY()));
+                    canvas.setOnMouseClicked(e -> animalPressed(position));
                     mapGrid.add(canvas, position.getX()+1, upperRight.getY()-position.getY()+1);
                 } else if (map.isGrassAt(position)) {
                     Image grassImage = ImageLoader.getGrassImage();

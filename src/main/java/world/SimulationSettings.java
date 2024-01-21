@@ -20,25 +20,25 @@ public class SimulationSettings {
 
     static {
 
-        addSetting("mapHeight", 10); // 10
-        addSetting("mapWidth", 10); // 10
-        addSetting("initialGrassAmount", 1); // 3
-        addSetting("dailyGrassAmount", 2); // 20
-        addSetting("jungleSize", 6); // 5
-        addSetting("initialAnimalAmount", 1); // 15
-        addSetting("initialAnimalEnergy", 40); // 5
-        addSetting("grassEnergy", 30); // 20
-        addSetting("energyTakenByProcreation", 30); // 30
-        addSetting("energyNeededForProcreation", 50); // 500
-        addSetting("energyTakenByMovement", 5); // 5
-        addSetting("genomeLength", 15); // 10
-        addSetting("minAmountOfMutations", 0); // 0
-        addSetting("maxAmountOfMutations", 12); // 100
-        addSetting("isMutationRandom", 0); // 0
-        addSetting("isMapBasic", 1); // 1
-        addSetting("portalEnergy", 10); // 10
+        addSetting("mapHeight", 30); // 10
+        addSetting("mapWidth", 30); // 10
+        addSetting("initialGrassAmount", 40); // 3
+        addSetting("dailyGrassAmount", 20);
+        addSetting("jungleSize", 9); // 5
+        addSetting("initialAnimalAmount", 20); // 15
+        addSetting("initialAnimalEnergy", 120); // 5
+        addSetting("grassEnergy", 40); // 20
+        addSetting("energyTakenByProcreation", 40); // 30
+        addSetting("energyNeededForProcreation", 60); // 500
+        addSetting("energyTakenByMovement", 5);
+        addSetting("genomeLength", 20); // 10
+        addSetting("minAmountOfMutations", 0);
+        addSetting("maxAmountOfMutations", 16); // 100
+        addSetting("isMutationRandom", 0);
+        addSetting("isMapBasic", 1);
+        addSetting("portalEnergy", 10);
 
-        addSetting("tickTime", 400); // 300
+        addSetting("tickTime", 300);
         addSetting("energyColorStep", 50);
     }
 

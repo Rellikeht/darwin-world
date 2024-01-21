@@ -67,24 +67,22 @@ public class Animal implements Comparable<Animal> {
             }
         }
     }
+
     //   * ile dni już żyje (jeżeli żyje),
     private final int dayOfBirth;
     public int getDayOfBirth() { return dayOfBirth; }
 
     //   * którego dnia zmarło (jeżeli żywot już skończyło).
-    // Nie jestem pewien, czy to dobry pomysł, ale ogólnie
-    // jak tu jest null to jest żywy i to nam pozwala na
-    // 1-linijkowy getter
     private Integer dayOfDeath;
     public Integer getDayOfDeath() { return dayOfDeath; }
     void die(int day) { this.dayOfDeath = day; }
 
     public Animal(
-            Vector2d position, Direction direction, int energy,
-            Genome genes, int dayOfBirth, Animal parent1, Animal parent2
+            Vector2d position, int energy, Genome genes,
+            int dayOfBirth, Animal parent1, Animal parent2
     ) {
         this.position = position;
-        this.direction = direction;
+        this.direction = Direction.randomDirection();
         this.genes = genes;
         this.energy = energy;
 
@@ -105,9 +103,9 @@ public class Animal implements Comparable<Animal> {
     }
 
     public Animal(
-            Vector2d position, Direction direction, int energy, Genome genes
+            Vector2d position, int energy, Genome genes
     ) {
-        this(position, direction, energy, genes, 0, null, null);
+        this(position, energy, genes, 0, null, null);
     }
 
     void move() {
