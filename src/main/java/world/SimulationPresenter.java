@@ -1,7 +1,6 @@
 package world;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +12,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import world.model.AbstractWorldMap;
 import world.model.MapChangeListener;
+
+import java.io.IOException;
 
 public class SimulationPresenter extends Application implements MapChangeListener {
 
@@ -64,7 +65,6 @@ public class SimulationPresenter extends Application implements MapChangeListene
     @FXML
     private VBox customBox;
 
-    private Simulation simulation;
     private final SimulationSettings settings = new SimulationSettings();
     private boolean isBasic = false;
     private GamePresenter presenter;
@@ -114,11 +114,16 @@ public class SimulationPresenter extends Application implements MapChangeListene
     public void setEarthMap(){settings.set("MapBasic", 1);}
     public void setNormalMutation(){settings.set("MutationRandom", 0);}
     public void setSpecialMutation(){settings.set("MutationRandom", 1);}
-    public void onSimulationStartClicked(ActionEvent actionEvent) throws Exception {
+    public void onSimulationStartClicked(ActionEvent actionEvent) throws IOException {
+        Simulation simulation;
+
         if (!isBasic) {
             uploadSettings();
+            simulation = new Simulation(new SimulationSettings(settings));
+        } else {
+            simulation = new Simulation(new SimulationSettings());
         }
-        simulation = new Simulation(settings);
+
         FXMLLoader loader = new FXMLLoader();
         Stage gameStage = new Stage();
         loader.setLocation(getClass().getClassLoader().getResource("game.fxml"));
@@ -159,7 +164,7 @@ public class SimulationPresenter extends Application implements MapChangeListene
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getClassLoader().getResource("simulation.fxml"));
         BorderPane viewRoot = loader.load();

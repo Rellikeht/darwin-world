@@ -24,12 +24,12 @@
                   <NumberTextField fx:id="animalPart" editable="false" />
                   <Label alignment="CENTER" prefHeight="18.0" prefWidth="134.0" text="Energy" />
                   <NumberTextField fx:id="animalEnergy" editable="false" />
-                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="140.0" text="Eated" />
-                  <NumberTextField fx:id="animalEated" editable="false" />
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="140.0" text="Grass Eaten" />
+                  <NumberTextField fx:id="grassEaten" editable="false" />
                   <Label alignment="CENTER" prefHeight="18.0" prefWidth="137.0" text="Children" />
                   <NumberTextField fx:id="animalChildren" editable="false" />
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="145.0" text="Ascentands" />
-                  <NumberTextField fx:id="animalAscentands" editable="false" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="145.0" text="Ascendants" />
+                  <NumberTextField fx:id="animalAscendants" editable="false" />
                   <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="137.0" text="Days of Life" />
                   <NumberTextField fx:id="animalLife" editable="false" />
                   <Label alignment="CENTER" prefHeight="18.0" prefWidth="145.0" text="Day of Death" />

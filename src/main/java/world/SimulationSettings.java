@@ -54,6 +54,10 @@ public class SimulationSettings {
         }
     }
 
+    public SimulationSettings(SimulationSettings settings) {
+        this.settings = new HashMap<>(settings.settings);
+    }
+
     public SimulationSettings() {
         settings = new HashMap<>(defaultSettings);
     }

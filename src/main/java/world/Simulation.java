@@ -43,7 +43,6 @@ public class Simulation implements Runnable {
         stats = new SimulationStats(map);
     }
 
-    // Wszystko domyślne
     public Simulation() { this(new SimulationSettings()); }
     private void wait(int milliseconds) {
         try { Thread.sleep(milliseconds); }
@@ -72,7 +71,7 @@ public class Simulation implements Runnable {
 
     public void run() {
         int i=0;
-        while(map.getAnimalsAmount()>0) {
+        while(stats.getAnimalsAmount()>0) {
             if(running) {
                 frame();
                 i++;
@@ -83,6 +82,7 @@ public class Simulation implements Runnable {
             }
         }
     }
+
     public int getDay(){return day;}
     public void addListener(MapChangeListener listener) {
         map.addListener(listener);
@@ -98,13 +98,13 @@ public class Simulation implements Runnable {
         try (FileWriter writer = new FileWriter(filePath)) {
             writer.write("AnimalsNumber,PlantsNumber,FreeZones,PopularGenome,AvgEnergy,AvgLife,AvgChildren\n");
             writer.write(String.format("%s,%s,%s,%s,%s,%s,%s\n",
-                    map.getAnimalsAmount(),
-                    map.getGrassAmount(),
-                    map.getFreeSquares(),
-                    map.getMostPopularGenome(),
-                    map.getAvgAnimalEnergy(),
-                    map.getAvgLifespan(),
-                    map.getAvgChildrenAmount()));
+                    stats.getAnimalsAmount(),
+                    stats.getGrassAmount(),
+                    stats.getFreeSquares(),
+                    stats.getMostPopularGenome(),
+                    stats.getAvgAnimalEnergy(),
+                    stats.getAvgLifespan(),
+                    stats.getAvgChildrenAmount()));
         } catch (IOException e) {
             System.err.println("Error saving statistics to CSV: " + e.getMessage());
         }

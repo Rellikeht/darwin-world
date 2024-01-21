@@ -20,7 +20,7 @@ public class SimulationApp {
         }
     }
 
-    public void start() throws Exception {
+    public void start() throws RuntimeException {
         Application.launch(SimulationPresenter.class);
     }
 

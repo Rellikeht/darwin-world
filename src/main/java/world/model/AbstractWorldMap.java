@@ -189,7 +189,6 @@ public abstract class AbstractWorldMap {
     }
 
     public void moveAnimals() {
-        // TODO ruch coś nie chce działać
         for (Animal animal : allAnimals()) {
             animal.activateGene();
             Direction direction = animal.getDirection();
@@ -212,7 +211,6 @@ public abstract class AbstractWorldMap {
 
     protected void specialAnimalMovement(Animal animal, Vector2d vector) {
         // TODO powyciągać dalej, implementacje nie są za ładne
-        // TODO nie wiem w sumie który special movement jest używany w move xd
     }
 
     protected Queue<Animal> getFittestAt(Vector2d position) {
@@ -277,11 +275,8 @@ public abstract class AbstractWorldMap {
         );
     }
 
-    public int getGrassAmount() {
-        return grass.size();
-    }
-
-    public int getFreeSquares() {
+    int getGrassAmount() { return grass.size(); }
+    int getFreeSquares() {
         Set<Vector2d> occupied = new HashSet<>(grass);
         animals.forEach((pos, list) -> {
             if (!list.isEmpty()) occupied.add(pos);
@@ -301,31 +296,19 @@ public abstract class AbstractWorldMap {
         return upperRight;
     }
 
-    public int getAvgLifespan() {
+    int getAvgLifespan() {
         return (deadAnimalsAmount > 0) ? deadAnimalsLifespanSum / deadAnimalsAmount : deadAnimalsLifespanSum;
     }
+    int getAnimalsAmount() { return animalsAmount; }
 
-    public int getAnimalsAmount() {
-        return animalsAmount;
-    }
     public Map<Vector2d,List<Animal>> getAnimals(){
         return animals;
     }
-    public Map<Genome, Integer> getMostPopularGenomes() {
+    Map<Genome, Integer> getMostPopularGenomes() {
         return mostPopularGenomes;
     }
-    public Genome getMostPopularGenome(){
-        int maxi=0;
-        Genome popularGenome=new Genome(settings.get("genomeLength"));
-        for(Genome genome:mostPopularGenomes.keySet()){
-            if (mostPopularGenomes.get(genome)>maxi){
-                popularGenome=genome;
-                maxi=mostPopularGenomes.get(genome);
-            }
-        }
-        return popularGenome;
-    }
-    public int getAvgChildrenAmount() {
+
+    int getAvgChildrenAmount() {
         int childrenAmount = 0;
         for (Animal animal : allAnimals()) {
             childrenAmount += animal.getChildrenAmount();
@@ -333,7 +316,7 @@ public abstract class AbstractWorldMap {
         return animalsAmount > 0 ? childrenAmount / animalsAmount : 0;
     }
 
-    public int getAvgAnimalEnergy() {
+    int getAvgAnimalEnergy() {
         int animalEnergySum = 0;
         for (Animal animal : allAnimals()) {
             animalEnergySum += animal.getEnergy();
@@ -341,27 +324,4 @@ public abstract class AbstractWorldMap {
         return animalsAmount > 0 ? animalEnergySum / animalsAmount : 0;
     }
 
-//    private setMostPopularGenome() {
-//        Map<Genome, Integer> animalGenomes = new HashMap<>();
-//        Genome popularGenome=new Genome(settings.get("genomeLength"));
-//        for (List<Animal> animalsList : animals.values()) {
-//            for (Animal animal : animalsList) {
-//                Genome genome = animal.getGenes();
-//                if (animalGenomes.containsKey(genome)) {
-//                    animalGenomes.replace(genome, animalGenomes.get(genome) + 1);
-//                } else {
-//                    animalGenomes.put(genome, 1);
-//                }
-//            }
-//        }
-//        int maxi = 0;
-//
-//        for (Genome genome : animalGenomes.keySet()) {
-//            if (animalGenomes.get(genome) > maxi) {
-//                maxi = animalGenomes.get(genome);
-//                popularGenome = genome;
-//            }
-//        }
-//        mostPopularGenome=popularGenome;
-//    }
 }

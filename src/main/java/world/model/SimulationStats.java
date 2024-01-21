@@ -13,7 +13,7 @@ public class SimulationStats {
 
     // 6. Program ma pozwalać na śledzenie następujących statystyk dla aktualnej sytuacji w symulacji:
     //    * liczby wszystkich zwierzaków,
-    public int getAnimalAmount() { return map.getAnimalsAmount(); }
+    public int getAnimalsAmount() { return map.getAnimalsAmount(); }
 
     //    * liczby wszystkich roślin,
     public int getGrassAmount() { return map.getGrassAmount(); }
@@ -27,6 +27,10 @@ public class SimulationStats {
         SortedMap<Integer, Genome> genomes = new TreeMap<>();
         mapGenomes.forEach((genome, count) -> genomes.put(count, genome));
         return genomes;
+    }
+    public Genome getMostPopularGenome() {
+        SortedMap<Integer, Genome> genomes = getMostPopularGenomes();
+        return genomes.get(genomes.firstKey());
     }
 
     //    * średniego poziomu energii dla żyjących zwierzaków,

@@ -33,3 +33,4 @@ fabric.properties
 *.project
 *.settings
 *.swp
+*.csv
