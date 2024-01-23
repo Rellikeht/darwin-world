@@ -34,3 +34,5 @@ fabric.properties
 *.settings
 *.swp
 *.csv
+
+!gradle/wrapper/*
