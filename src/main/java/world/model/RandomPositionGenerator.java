@@ -5,7 +5,7 @@ import java.util.*;
 public class RandomPositionGenerator implements Iterator<Vector2d> {
     //private int amount = 0;
     private final List<Vector2d> positions;
-    private final Set<Vector2d> without;
+    private final Set<Vector2d> without; // bez czego?
     private final Random random = new Random();
 
     private int maxAmount(Vector2d lowerLeft, Vector2d upperRight) {

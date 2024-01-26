@@ -1,4 +1,4 @@
-package world.model;
+package world.model; // to na pewno model?
 
 import javafx.scene.control.TextField;
 

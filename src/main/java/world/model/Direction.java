@@ -5,7 +5,7 @@ import java.util.Random;
 public enum Direction {
 
     D0(0),
-    D45(1),
+    D45(1),  // czemu nie NORTH_EAST?
     D90(2),
     D135(3),
     D180(4),
@@ -14,7 +14,7 @@ public enum Direction {
     D315(7);
 
     private final Vector2d vector;
-    private final int number;
+    private final int number;  // ordinal()
     private static final Random random = new Random();
     private static final int amount = Direction.values().length;
 
@@ -25,25 +25,44 @@ public enum Direction {
             "u", "ur", "r", "dr", "d", "dl", "l", "ul",
     };
 
-    public String toString() { return arrows[this.number]; }
-    public String toLetter() { return letters[this.number]; }
+    public String toString() {
+        return arrows[this.number];
+    }
+
+    public String toLetter() {
+        return letters[this.number];
+    }
 
     Direction(int number) {
         this.number = number;
         this.vector = new Vector2d(
-                (int) Math.round(Math.sin(number*Math.PI/4)),
-                (int) Math.round(Math.cos(number*Math.PI/4))
+                (int) Math.round(Math.sin(number * Math.PI / 4)),
+                (int) Math.round(Math.cos(number * Math.PI / 4))
         );
     }
 
-    public Vector2d toUnitVector() { return vector; }
-    public int getNumber() { return number; }
+    public Vector2d toUnitVector() {
+        return vector;
+    }
 
-    public static Direction getDirection(int i) { return Direction.values()[i]; }
-    public static Direction randomDirection() { return getDirection(random.nextInt(amount)); }
-    public Direction rotate(Direction change) {
+    public int getNumber() {
+        return number;
+    }
+
+    public static Direction getDirection(int i) {
+        return Direction.values()[i];
+    }
+
+    public static Direction randomDirection() {
+        return getDirection(random.nextInt(amount));
+    }
+
+    public Direction rotate(Direction change) { // czy można obrócić kierunek o kierunek?
         return Direction.values()[(this.number + change.number) % Direction.amount];
     }
-    public Direction rotate(int change) { return rotate(getDirection(change)); }
+
+    public Direction rotate(int change) {
+        return rotate(getDirection(change));
+    }
 
 }

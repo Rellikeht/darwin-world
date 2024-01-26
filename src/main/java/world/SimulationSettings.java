@@ -1,4 +1,4 @@
-package world;
+package world; // dużo rzeczy w głównym pakiecie + nazwa powinna mieć charakter odwróconej nazwy domenowej
 
 import java.util.HashMap;
 import java.util.Map;

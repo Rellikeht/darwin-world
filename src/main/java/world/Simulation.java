@@ -21,7 +21,10 @@ public class Simulation implements Runnable {
             System.err.println("Error saving statistics to CSV: " + e.getMessage());
         }
     }
-    private void writeToCSV(String content) { writeToCSV(CSV_FILE, content); }
+
+    private void writeToCSV(String content) {
+        writeToCSV(CSV_FILE, content);
+    }
 
     private void appendToCSV(String filePath, String content) {
         try (FileWriter writer = new FileWriter(filePath, true)) {
@@ -30,9 +33,12 @@ public class Simulation implements Runnable {
             System.err.println("Error saving statistics to CSV: " + e.getMessage());
         }
     }
-    private void appendToCSV(String content) { appendToCSV(CSV_FILE, content); }
 
-    private void saveStatisticsToCSV() {
+    private void appendToCSV(String content) {
+        appendToCSV(CSV_FILE, content);
+    }
+
+    private void saveStatisticsToCSV() {  // czy to zadanie dla symulacji?
         appendToCSV(String.format("%s,%s,%s,%s,%s,%s,%s\n",
                 stats.getAnimalsAmount(),
                 stats.getGrassAmount(),
@@ -43,9 +49,9 @@ public class Simulation implements Runnable {
                 stats.getAvgChildrenAmount()));
     }
 
-    public Simulation(SimulationSettings settings) {
+    public Simulation(SimulationSettings settings) { // dobrze jest zaczynać od konstruktora
         this.settings = settings;
-        if (settings.get("isMapBasic") == 1) {
+        if (settings.get("isMapBasic") == 1) { // 1?
             map = new EarthMap(settings);
         } else {
             map = new HellMap(settings);
@@ -55,11 +61,11 @@ public class Simulation implements Runnable {
         for (int i = 0; i < settings.get("InitialAnimalAmount"); i++) {
             Genome genome = new Genome(settings.get("GenomeLength"));
 
-            Random random = new Random();
+            Random random = new Random(); // co wywołanie?
             Animal animal = new Animal(
                     new Vector2d(
-                            random.nextInt(maxPos.getX()+1),
-                            random.nextInt(maxPos.getY()+1)
+                            random.nextInt(maxPos.getX() + 1),
+                            random.nextInt(maxPos.getY() + 1)
                     ),
                     settings.get("InitialAnimalEnergy"), genome
             );
@@ -71,48 +77,73 @@ public class Simulation implements Runnable {
         writeToCSV("AnimalsNumber,PlantsNumber,FreeZones,PopularGenome,AvgEnergy,AvgLife,AvgChildren\n");
     }
 
-    public Simulation() { this(new SimulationSettings()); }
-    private void wait(int milliseconds) {
-        try { Thread.sleep(milliseconds); }
-        catch (InterruptedException e) { throw new RuntimeException(e); }
+    public Simulation() {
+        this(new SimulationSettings());
     }
-    public void stop(){running = false;}
-    public void start(){running = true;}
 
-    private void frame() {
+    private void wait(int milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void stop() {
+        running = false;
+    }
+
+    public void start() {
+        running = true;
+    }
+
+    private void frame() { // nazwa
+        int tickTime = settings.get("TickTime")
         map.nextDay();
         map.moveAnimals();
-        wait(settings.get("TickTime"));
+        wait(tickTime);
         map.doEating();
-        wait(settings.get("TickTime"));
+        wait(tickTime);
         map.doReproduction();
-        wait(settings.get("TickTime"));
+        wait(tickTime);
         map.grassPlace();
-        wait(settings.get("TickTime"));
+        wait(tickTime);
         saveStatisticsToCSV();
     }
 
     public void run() {
-        while(stats.getAnimalsAmount()>0) {
-            if(running) {
+        while (stats.getAnimalsAmount() > 0) {
+            if (running) {
                 frame();
-            }
-            else{
+            } else {
                 System.out.println();
                 wait(settings.get("TickTime"));
             }
         }
     }
 
-    public int getDay() { return map.getDay(); }
+    public int getDay() {
+        return map.getDay();
+    }
+
     public void addListener(MapChangeListener listener) {
         map.addListener(listener);
     }
+
     public void removeListener(MapChangeListener listener) {
         map.removeListener(listener);
     }
-    public SimulationStats getStats() { return stats; }
-    public AbstractWorldMap getMap() { return map; }
-    public SimulationSettings getSettings() { return settings; }
+
+    public SimulationStats getStats() {
+        return stats;
+    }
+
+    public AbstractWorldMap getMap() {
+        return map;
+    }
+
+    public SimulationSettings getSettings() {
+        return settings;
+    }
 
 }

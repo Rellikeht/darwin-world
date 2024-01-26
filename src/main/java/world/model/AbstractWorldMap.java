@@ -33,7 +33,7 @@ public abstract class AbstractWorldMap {
     //protected int animalEnergySum = 0;
 
     // Reszta
-    protected final Random random = new Random();
+    protected static final Random random = new Random();
     protected final RandomPositionGenerator overEquator, underEquator, equator;
     protected final SimulationSettings settings;
     protected final Set<MapChangeListener> listeners;

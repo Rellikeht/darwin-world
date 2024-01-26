@@ -17,7 +17,7 @@ import java.io.IOException;
 
 public class SimulationPresenter extends Application {
 
-    public VBox textBox;
+    public VBox textBox; // public?
     public ToolBar mapBar;
     public ToolBar mutationBar;
     public VBox saveBox;
@@ -64,7 +64,7 @@ public class SimulationPresenter extends Application {
     @FXML
     private TextField maxMutation;
     @FXML
-    private VBox customBox;
+    private VBox customBox;  // nieużywane
 
     private final SimulationSettings settings = new SimulationSettings();
     private boolean isBasic = false;
@@ -79,7 +79,7 @@ public class SimulationPresenter extends Application {
         try {
             int widthNum = Integer.parseInt(mapWidth.getText());
             if (widthNum > 0) settings.set("MapWidth", widthNum);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {} // ?
 
         try {
             int heightNum = Integer.parseInt(mapHeight.getText());
@@ -129,7 +129,7 @@ public class SimulationPresenter extends Application {
             System.out.println("test");
             try {
                 thread.interrupt();
-            } catch (Exception e1) {
+            } catch (Exception e1) { // ?
                 e1.printStackTrace();
             }
         });

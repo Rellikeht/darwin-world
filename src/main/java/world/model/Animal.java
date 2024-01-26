@@ -5,15 +5,24 @@ import java.util.Random;
 public class Animal implements Comparable<Animal> {
 
     // Bo czemu nie
-    private final Random random = new Random();
+    private static final Random random = new Random();
 
     // Atrybuty
     private Direction direction;
-    public Direction getDirection() { return this.direction; }
+
+    public Direction getDirection() {
+        return this.direction;
+    }
 
     private Vector2d position;
-    public Vector2d getPosition() { return this.position; }
-    void setPosition(Vector2d position) { this.position=position; }
+
+    public Vector2d getPosition() {
+        return this.position;
+    }
+
+    void setPosition(Vector2d position) {
+        this.position = position;
+    }
 
     private final Animal parent1;
     private final Animal parent2;
@@ -24,24 +33,41 @@ public class Animal implements Comparable<Animal> {
     // nam informacje o jego statusie i historii:
     //   * jaki ma genom,
     private final Genome genes;
-    public Genome getGenes() { return genes; }
+
+    public Genome getGenes() { // czemu getGenes, skoro typ to Genome?
+        return genes;
+    }
 
     //   * która jego część jest aktywowana,
     private int currentGeneNumber;
-    public int getCurrentGeneNumber() { return currentGeneNumber; }
-    void activateGene(){
+
+    public int getCurrentGeneNumber() {
+        return currentGeneNumber;
+    }
+
+    void activateGene() {
         direction = Direction.getDirection(genes.getGene(currentGeneNumber));
-        currentGeneNumber = (currentGeneNumber +1)%genes.getLength();
+        currentGeneNumber = (currentGeneNumber + 1) % genes.getLength();
     }
 
     //   * ile ma energii,
     private int energy;
-    public int getEnergy() { return energy; }
-    void loseEnergy(int energy) { this.energy -= energy; }
+
+    public int getEnergy() {
+        return energy;
+    }
+
+    void loseEnergy(int energy) {
+        this.energy -= energy;
+    }
 
     //   * ile zjadł roślin,
     private int grassEaten = 0;
-    public int getGrassEaten() { return grassEaten; }
+
+    public int getGrassEaten() {
+        return grassEaten;
+    }
+
     void eatGrass(int grassEnergy) {
         this.energy += grassEnergy;
         this.grassEaten += 1;
@@ -49,17 +75,26 @@ public class Animal implements Comparable<Animal> {
 
     //   * ile posiada dzieci,
     protected int childrenAmount = 0;
-    public int getChildrenAmount() { return childrenAmount; }
+
+    public int getChildrenAmount() {
+        return childrenAmount;
+    }
 
     //   * ile posiada potomków (niekoniecznie będących bezpośrednio dziećmi),
     private int offspringsAmount = 0;
-    public int getOffspringsAmount() { return offspringsAmount; }
+
+    public int getOffspringsAmount() {
+        return offspringsAmount;
+    }
+
     private boolean wasOffspringAdded = false;
+
     private void resetOffspringAddition() {
         wasOffspringAdded = false;
         if (parent1 != null) parent1.resetOffspringAddition();
         if (parent2 != null) parent2.resetOffspringAddition();
     }
+
     private void addOffspring() {
         if (wasOffspringAdded) return;
         offspringsAmount += 1;
@@ -68,14 +103,23 @@ public class Animal implements Comparable<Animal> {
         if (parent2 != null) parent2.addOffspring();
     }
 
-    //   * ile dni już żyje (jeżeli żyje),
+    //   * ile dni już żyje (jeżeli żyje), // ten komentarz kłamie
     private final int dayOfBirth;
-    public int getDayOfBirth() { return dayOfBirth; }
+
+    public int getDayOfBirth() {
+        return dayOfBirth;
+    }
 
     //   * którego dnia zmarło (jeżeli żywot już skończyło).
     private Integer dayOfDeath;
-    public Integer getDayOfDeath() { return dayOfDeath; }
-    void die(int day) { this.dayOfDeath = day; }
+
+    public Integer getDayOfDeath() {
+        return dayOfDeath;
+    }
+
+    void die(int day) {
+        this.dayOfDeath = day;
+    }
 
     public Animal(
             Vector2d position, int energy, Genome genes,
@@ -121,15 +165,18 @@ public class Animal implements Comparable<Animal> {
         int result = Integer.compare(other.getEnergy(), getEnergy());
         if (result == 0) {
             result = Integer.compare(getDayOfBirth(), other.getDayOfBirth());
-            if (result == 0){
+            if (result == 0) {
                 result = Integer.compare(other.getChildrenAmount(), getChildrenAmount());
-                if (result == 0) result = random.nextInt(3)-1;
+                if (result == 0) result = random.nextInt(3) - 1;
             }
         }
         return result;
     }
 
-    public String toString() { return this.direction.toString(); }
+    public String toString() {
+        return this.direction.toString();
+    }
+
     public String getInfo() {
         return "[(energy: %d) (birth: %d) (children: %d)]".formatted(
                 energy, dayOfBirth, childrenAmount
